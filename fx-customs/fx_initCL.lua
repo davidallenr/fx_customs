@@ -1,8 +1,8 @@
-  -- @Date:   2017-06-11T12:15:17+02:00
+  -- @Date:   2017-07-18
   -- @Project: FX Customs
-  -- @Creator: JinkLeft
-  -- @Last modified time: 2017-07-17
-
+  -- @Owner: Jink Left
+  -- @Last modified time: 2017-07-18
+  
 local FirstJoinProper = false
 -- Load client at 100%
 Citizen.CreateThread(function()
@@ -13,12 +13,12 @@ Citizen.CreateThread(function()
     if NetworkIsSessionStarted() then
 
       if not FirstJoinProper then
-          
-        exports.ft_menuBuilder:Generator(menu) -- Menu is from  config->menu
+          -- Send menu to Menu Generator
+        exports.ft_menuBuilder:Generator(menu)
       end
 
-      
-      if IsControlJustPressed(1, 213) then -- 213 = HOME
+      -- Press F1
+      if IsControlJustPressed(1, 213) then
         if not exports.ft_menuBuilder:IsOpened() and GetLastInputMethod(2) then
           exports.ft_menuBuilder:Open("fx_customs")
         else
