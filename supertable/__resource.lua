@@ -1,0 +1,23 @@
+server_script '@mysql-async/lib/MySQL.lua'
+
+server_export 'Super_First_Run'
+server_export 'Super_Create_User'
+server_export 'Super_Update_Money'
+server_export 'Super_Update_Bank'
+server_export 'Super_Update_Name'
+server_export 'Super_Update_Job'
+server_export 'Super_Update_Model'
+server_export 'Super_Update_Ban'
+server_export 'Super_User_Exists'
+server_export 'Super_Is_Banned'
+server_export 'Super_Get_Steam_ID'
+server_export 'Super_Get_Money'
+server_export 'Super_Get_Bank'
+server_export 'Super_Get_Model'
+server_export 'Super_Get_Job'
+server_export 'Super_Get_Model'
+
+server_script 'supertable.lua'
+client_script 'superclient.lua'
+
+--server_script 'example/test.lua'

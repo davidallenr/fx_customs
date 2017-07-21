@@ -1,10 +1,11 @@
-  -- @Date:   2017-06-11T12:15:17+02:00
+  -- @Date:   2017-07-20
   -- @Project: FX Customs
-  -- @Creator: JinkLeft
-  -- @Last modified time: 2017-07-17
+  -- @Owner: Jink Left
+  -- @Last modified time: 2017-07-20
 
-
-  menu = {
+-------------------------------------------
+---------------[REPAIR MENU]---------------
+menu = {
 
     fx_customs = {
 
@@ -16,7 +17,7 @@
       buttons = {
         { text = "Purchase Upgrades", menu = "fx_main" },
         { text = "Purchase Vehicle Repairs", menu = "fx_repair" },
-        { text = "Close menu", close = true },
+        { text = "Close menu", close = true, eventClient = "fx_customs:LeaveGarage", data = { closed = true }},
       },
 
     },
@@ -26,9 +27,6 @@
       settings = {
         title = "Los Santos Customs",
         menuTitle = "Welcome",
-        red = 33,
-        blue = 33,
-        green = 33,
         back = CallbackBack,
         closable = true,
       },
@@ -50,9 +48,6 @@
       settings = {
         title = "Los Santos Customs",
         menuTitle = "Welcome",
-        red = 33,
-        blue = 33,
-        green = 33,
         back = CallbackBack,
         closable = true,
       },
@@ -69,9 +64,6 @@
       settings = {
         title = "Los Santos Customs",
         menuTitle = "Welcome",
-        red = 33,
-        blue = 33,
-        green = 33,
         back = CallbackBack,
         closable = true,
       },
@@ -88,9 +80,6 @@
       settings = {
         title = "Los Santos Customs",
         menuTitle = "Welcome",
-        red = 33,
-        blue = 33,
-        green = 33,
         back = CallbackBack,
         closable = true,
       },
@@ -112,9 +101,6 @@
       settings = {
         title = "Los Santos Customs",
         menuTitle = "Welcome",
-        red = 33,
-        blue = 33,
-        green = 33,
         back = CallbackBack,
         closable = true,
       },
@@ -153,9 +139,6 @@
       settings = {
         title = "Los Santos Customs",
         menuTitle = "Welcome",
-        red = 33,
-        blue = 33,
-        green = 33,
         back = CallbackBack,
         closable = true,
       },
@@ -187,9 +170,6 @@
       settings = {
         title = "Los Santos Customs",
         menuTitle = "Welcome",
-        red = 33,
-        blue = 33,
-        green = 33,
         back = CallbackBack,
         closable = true,
       },
@@ -219,9 +199,6 @@
       settings = {
         title = "Los Santos Customs",
         menuTitle = "Welcome",
-        red = 33,
-        blue = 33,
-        green = 33,
         back = CallbackBack,
         closable = true,
       },
@@ -255,9 +232,6 @@
       settings = {
         title = "Los Santos Customs",
         menuTitle = "Welcome",
-        red = 33,
-        blue = 33,
-        green = 33,
         back = CallbackBack,
         closable = true,
       },
@@ -282,9 +256,6 @@
       settings = {
         title = "Los Santos Customs",
         menuTitle = "Welcome",
-        red = 33,
-        blue = 33,
-        green = 33,
         back = CallbackBack,
         closable = true,
       },
@@ -323,9 +294,6 @@
       settings = {
         title = "Los Santos Customs",
         menuTitle = "Welcome",
-        red = 33,
-        blue = 33,
-        green = 33,
         back = CallbackBack,
         closable = true,
       },
@@ -360,9 +328,6 @@
       settings = {
         title = "Los Santos Customs",
         menuTitle = "Welcome",
-        red = 33,
-        blue = 33,
-        green = 33,
         back = CallbackBack,
         closable = true,
       },
@@ -391,9 +356,6 @@
       settings = {
         title = "Los Santos Customs",
         menuTitle = "Welcome",
-        red = 33,
-        blue = 33,
-        green = 33,
         back = CallbackBack,
         closable = true,
       },
@@ -421,9 +383,6 @@
       settings = {
         title = "Los Santos Customs",
         menuTitle = "Welcome",
-        red = 33,
-        blue = 33,
-        green = 33,
         back = CallbackBack,
         closable = true,
       },
@@ -452,9 +411,6 @@
         settings = {
           title = "Los Santos Customs",
           menuTitle = "Welcome",
-          red = 33,
-          blue = 33,
-          green = 33,
           back = CallbackBack,
           closable = true,
         },
@@ -471,9 +427,6 @@
       settings = {
           title = "Los Santos Customs",
           menuTitle = "Welcome",
-          red = 33,
-          blue = 33,
-          green = 33,
           back = CallbackBack,
           closable = true,
         },
@@ -523,9 +476,6 @@
       settings = {
           title = "Los Santos Customs",
           menuTitle = "Welcome",
-          red = 33,
-          blue = 33,
-          green = 33,
           back = CallbackBack,
           closable = true,
         },
@@ -546,9 +496,6 @@
       settings = {
         title = "Los Santos Customs",
         menuTitle = "Welcome",
-        red = 33,
-        blue = 33,
-        green = 33,
         back = CallbackBack,
         closable = true,
       },
@@ -569,9 +516,6 @@
       settings = {
         title = "Los Santos Customs",
         menuTitle = "Welcome",
-        red = 33,
-        blue = 33,
-        green = 33,
         back = CallbackBack,
         closable = true,
       },
@@ -662,9 +606,6 @@
       settings = {
         title = "Los Santos Customs",
         menuTitle = "Welcome",
-        red = 33,
-        blue = 33,
-        green = 33,
         back = CallbackBack,
         closable = true,
       },
@@ -683,9 +624,6 @@
       settings = {
         title = "Los Santos Customs",
         menuTitle = "Welcome",
-        red = 33,
-        blue = 33,
-        green = 33,
         back = CallbackBack,
         closable = true,
       },
@@ -719,9 +657,6 @@
       settings = {
         title = "Los Santos Customs",
         menuTitle = "Welcome",
-        red = 33,
-        blue = 33,
-        green = 33,
         back = CallbackBack,
         closable = true,
       },
@@ -810,9 +745,6 @@
           settings = {
             title = "Los Santos Customs",
             menuTitle = "Welcome",
-            red = 33,
-            blue = 33,
-            green = 33,
             back = CallbackBack,
             closable = true,
           },
@@ -833,9 +765,6 @@
           settings = {
             title = "Los Santos Customs",
             menuTitle = "Welcome",
-            red = 33,
-            blue = 33,
-            green = 33,
             back = CallbackBack,
             closable = true,
           },
@@ -854,9 +783,6 @@
           settings = {
             title = "Los Santos Customs",
             menuTitle = "Welcome",
-            red = 33,
-            blue = 33,
-            green = 33,
             back = CallbackBack,
             closable = true,
           },
@@ -874,9 +800,6 @@
           settings = {
             title = "Los Santos Customs",
             menuTitle = "Welcome",
-            red = 33,
-            blue = 33,
-            green = 33,
             back = CallbackBack,
             closable = true,
           },
@@ -892,9 +815,6 @@
           settings = {
             title = "Los Santos Customs",
             menuTitle = "Welcome",
-            red = 33,
-            blue = 33,
-            green = 33,
             back = CallbackBack,
             closable = true,
           },
@@ -913,9 +833,6 @@
           settings = {
             title = "Los Santos Customs",
             menuTitle = "Welcome",
-            red = 33,
-            blue = 33,
-            green = 33,
             back = CallbackBack,
             closable = true,
           },
@@ -933,9 +850,6 @@
           settings = {
             title = "Los Santos Customs",
             menuTitle = "Welcome",
-            red = 33,
-            blue = 33,
-            green = 33,
             back = CallbackBack,
             closable = true,
           },
@@ -956,9 +870,6 @@
         settings = {
           title = "Los Santos Customs",
           menuTitle = "Welcome",
-          red = 33,
-          blue = 33,
-          green = 33,
           back = CallbackBack,
           closable = true,
         },
@@ -974,9 +885,6 @@
           settings = {
             title = "Los Santos Customs",
             menuTitle = "Welcome",
-            red = 33,
-            blue = 33,
-            green = 33,
             back = CallbackBack,
             closable = true,
           },
@@ -992,9 +900,6 @@
           settings = {
             title = "Los Santos Customs",
             menuTitle = "Welcome",
-            red = 33,
-            blue = 33,
-            green = 33,
             back = CallbackBack,
             closable = true,
           },
@@ -1010,9 +915,6 @@
           settings = {
             title = "Los Santos Customs",
             menuTitle = "Welcome",
-            red = 33,
-            blue = 33,
-            green = 33,
             back = CallbackBack,
             closable = true,
           },
@@ -1028,9 +930,6 @@
           settings = {
             title = "Los Santos Customs",
             menuTitle = "Welcome",
-            red = 33,
-            blue = 33,
-            green = 33,
             back = CallbackBack,
             closable = true,
           },
@@ -1057,9 +956,6 @@
       settings = {
         title = "Los Santos Customs",
         menuTitle = "Welcome",
-        red = 33,
-        blue = 33,
-        green = 33,
         back = CallbackBack,
         closable = true,
       },
