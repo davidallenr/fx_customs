@@ -47,7 +47,7 @@ function GetUserBank(player, resultCallBack)
     return exports['supertable']:Super_Get_Bank(player, resultCallBack)
 end
 
-function GetJob(player, resultCallBack)
+function GetUserJob(player, resultCallBack)
     return exports['supertable']:Super_Get_Job(player, resultCallBack)
 end
 
@@ -58,4 +58,5 @@ end
 function GetUserSteamID(player)
     return exports['supertable']:Super_Get_Steam_ID(player)
 end
+
 

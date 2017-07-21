@@ -18,6 +18,6 @@ server_export 'Super_Get_Job'
 server_export 'Super_Get_Model'
 
 server_script 'supertable.lua'
-server_script 'superwrapper.lua'
+client_script 'superclient.lua'
 
 --server_script 'example/test.lua'

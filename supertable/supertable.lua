@@ -45,9 +45,11 @@ function Super_Create_User(player)
 end
 
 function Super_Update_Money(player, amount)
+    
     local steamid = Super_Get_Steam_ID(player)
+    print(amount)
     local tempamount = amount
-
+   
     local sql = "UPDATE supertable SET money = money + @money WHERE steamid = @id"
     local param = {id = steamid, money = tempamount}
     
@@ -188,3 +190,50 @@ function Update_Table_PlayerModel()
     
     MySQL.Async.execute(sql, param)
 end
+
+-- Register Events
+
+RegisterServerEvent('UpdateMoney')
+AddEventHandler('UpdateMoney', function(amount)
+    Super_Update_Money(source,amount)
+end)
+
+RegisterServerEvent('UpdateBank')
+AddEventHandler('UpdateBank', function(amount)
+    Super_Update_Bank(source, amount)
+end)
+
+RegisterServerEvent('UpdateBan')
+AddEventHandler('UpdateBan', function(value)
+    Super_Update_Ban(source, value)
+end)
+
+RegisterServerEvent('UpdateJob')
+AddEventHandler('UpdateJob', function(job)
+    Super_Update_Job(source, job)
+end)
+
+RegisterServerEvent('UpdateModel')
+AddEventHandler('UpdateModel', function(model)
+    Super_Update_Model(source, model)
+end)
+
+RegisterServerEvent('GetUserMoney')
+AddEventHandler('GetUserMoney', function()
+    TriggerClientEvent('ReceiveUserMoney', source, GetUserMoney(source, resultCallBack))
+end)
+
+RegisterServerEvent('GetUserBank')
+AddEventHandler('GetUserBank', function()
+    TriggerClientEvent('ReceiveUserBank', source, GetUserBank(source, resultCallBack))
+end)
+
+RegisterServerEvent('GetUserJob')
+AddEventHandler('GetUser', function()
+    TriggerClientEvent('ReceiveUserJob', source, GetUserJob(source, resultCallBack))
+end)
+
+RegisterServerEvent('GetUserModel')
+AddEventHandler('GetUserModel', function()
+    TriggerClientEvent('ReceiveUserModel', source, GetUserModel(source, resultCallBack))
+end)

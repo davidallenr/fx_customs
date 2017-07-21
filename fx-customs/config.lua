@@ -1,15 +1,8 @@
-  -- @Date:   2017-07-18
+  -- @Date:   2017-07-20
   -- @Project: FX Customs
   -- @Owner: Jink Left
-  -- @Last modified time: 2017-07-18
+  -- @Last modified time: 2017-07-20
 
----------------[   BlIPS   ]---------------
-locations = {
-    [1] = { outside = { x = -362.7962, y = -132.4005, z = 38.25239, heading = 71.187133}, inside = {x = -337.3863,y = -136.9247,z = 38.5737, heading = 269.455}},
-    [2] = { outside = { x = -1140.191, y = -1985.478, z = 12.72923, heading = 315.290466}, inside = {x = -1155.536,y = -2007.183,z = 12.744, heading = 155.413}},
-    [3] = { outside = { x = 716.4645, y = -1088.869, z = 21.92979, heading = 88.768}, inside = {x = 731.8163,y = -1088.822,z = 21.733, heading = 269.318}},
-    [4] = { outside = { x = 1174.811, y = 2649.954, z = 37.37151, heading = 0.450}, inside = {x = 1175.04,y = 2640.216,z = 37.32177, heading = 182.402}},
-  }
 -------------------------------------------
 ---------------[REPAIR MENU]---------------
 menu = {
@@ -24,7 +17,7 @@ menu = {
       buttons = {
         { text = "Purchase Upgrades", menu = "fx_main" },
         { text = "Purchase Vehicle Repairs", menu = "fx_repair" },
-        { text = "Close menu", close = true },
+        { text = "Close menu", close = true, eventClient = "fx_customs:LeaveGarage", data = { closed = true }},
       },
 
     },
