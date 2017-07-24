@@ -1,8 +1,7 @@
-  -- @Date:   2017-07-20
+  -- @Date:   2017-07-24
   -- @Project: FX Customs
   -- @Owner: Jink Left
-  -- @Last modified time: 2017-07-20
-
+  -- @Last modified time: 2017-07-24
 -------------------------------------------
 ---------------[REPAIR MENU]---------------
 menu = {
@@ -53,7 +52,7 @@ menu = {
       },
 
       buttons = {
-        { text = "Confirm", subText = "5,000" },
+        { text = "Confirm", subText = "100", eventServer = "fx_customs:ConfirmRepair", data = { repair = true , cost = 100} },
         { text = "Previous Menu", back = true },
       },
 

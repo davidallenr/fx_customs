@@ -1,7 +1,7 @@
-  -- @Date:   2017-07-20
+  -- @Date:   2017-07-24
   -- @Project: FX Customs
   -- @Owner: Jink Left
-  -- @Last modified time: 2017-07-20
+  -- @Last modified time: 2017-07-24
 ----------------------------------------------------
 --------------------[   DATA   ]--------------------
 local FirstJoinProper = false
@@ -17,6 +17,31 @@ local locations = {
     [3] = { outside = { x = 716.4645, y = -1088.869, z = 21.92979, heading = 88.768}, inside = {x = 731.8163,y = -1088.822,z = 21.733, heading = 269.318}},
     [4] = { outside = { x = 1174.811, y = 2649.954, z = 37.37151, heading = 0.450}, inside = {x = 1175.04,y = 2640.216,z = 37.32177, heading = 182.402}},
   }
+
+local mods = {
+	[1] = { name = "Spoilers", mod = 0, toggle = false, default = nil},
+	[2] = { name = "Front Bumper", mod = 1, toggle = false, default = nil},
+	[3] = { name = "Rear Bumper", mod = 2, toggle = false, default = nil},
+	[4] = { name = "Side Skirt", mod = 3, toggle = false, default = nil},
+	[5] = { name = "Exhaust", mod = 4, toggle = false, default = nil},
+	[6] = { name = "Frame", mod = 5, toggle = false, default = nil},
+	[7] = { name = "Grille", mod = 6, toggle = false, default = nil},
+	[8] = { name = "Hood", mod = 7, toggle = false, default = nil},
+	[9] = { name = "Fender", mod = 8, toggle = false, default = nil},
+	[10] = { name = "Right Fender", mod = 9, toggle = false, default = nil},
+	[11] = { name = "Roof", mod = 10, toggle = false, default = nil},
+	[12] = { name = "Engine", mod = 11, toggle = false, default = nil},
+	[13] = { name = "Brakes", mod = 12, toggle = false, default = nil},
+	[14] = { name = "Transmission", mod = 13, toggle = false, default = nil},
+	[15] = { name = "Horns", mod = 14, toggle = false, default = nil},
+	[16] = { name = "Suspension", mod = 15, toggle = false, default = nil},
+	[17] = { name = "Armor", mod = 16, toggle = false, default = nil},
+	[18] = { name = "Turbo", mod = 18, toggle = true, default = "off"},
+	[19] = { name = "Tire Smoke", mod = 20, toggle = false, default = "off"},
+	[20] = { name = "Xeon Head Lights", mod = 22, toggle = true, default = "off"},
+	[21] = { name = "Front Wheels", mod = 23, toggle = false, default = nil},
+	[22] = { name = "Back Wheels", mod = 24, toggle = true, default = nil},
+}
 
 ----------------------------------------------------
 ---------------[	FUNCTIONS 		]---------------
@@ -35,7 +60,7 @@ function dump(o)
 end
 
 function AddBlips()
-  for i,pos in ipairs(locations) do
+  for i, pos in ipairs(locations) do
     local blip = AddBlipForCoord(pos.inside.x,pos.inside.y,pos.inside.z)
     SetBlipSprite(blip, 72)
     SetBlipScale(blip, 0.9)
@@ -76,8 +101,7 @@ function SetVehicleOutsideGarage()
 	SetEntityCollision(veh,true,true)
 	FreezeEntityPosition(veh, false)
 	SetVehicleDoorsLocked(veh,0)
-	currentGarage = 0  	  
-   
+	currentGarage = 0  
 end
 
 
@@ -85,13 +109,36 @@ function SetVehicleInGarage()
 	local pos = insidePosition
 	local player = GetPlayerPed(-1)
 	local veh = GetVehiclePedIsUsing(player)
-
-	 
+	local stolen = IsVehicleStolen(veh)
+	local vehiclecol = table.pack(GetVehicleColours(veh))
+	local extracol = table.pack(GetVehicleExtraColours(veh))
+	local neoncolor = table.pack(GetVehicleNeonLightsColour(veh))
+	local plate_index = GetVehicleNumberPlateTextIndex(veh)
+	local model = GetVehicleClass(veh)
+	local veh_state = GetVehicleBodyHealth(veh)
+	local plate = GetVehicleNumberPlateText(veh)
+	local windowtint = GetVehicleWindowTint(veh)
+	local wheeltype = GetVehicleWheelType(veh)
+	local vehicle_name = GetHashKey(veh)
+	local mods = mods 
 
 	if DoesEntityExist(veh) then
 	 	 -- Send {menu} to Menu Generator export
 	    if not exports.ft_menuBuilder:IsOpened() and GetLastInputMethod(2) then
-	    	exports.ft_menuBuilder:Open("fx_customs")	 
+	    	exports.ft_menuBuilder:Open("fx_customs")
+	    	--	if debug then
+	    	Citizen.Trace( "Vehicle Col : " .. dump(vehiclecol) .. " | Extra Col : " .. dump(extracol) .. " | Neon : " .. dump(neoncolor) .. " | Plate : " .. tostring(vehicle_plate) .. " | Window Tint : " .. tostring(windowtint) .. " | Wheel Typ : " .. tostring(vehicle_wheeltype))
+	    	--Citizen.Trace( "Mods : " .. dump(mods))
+	  		--for k,v in pairs(mods) do
+			-- 	Citizen.Trace(k .. dump(v))
+			-- end
+
+			-- for k,v in pairs(vehiclecol) do
+			-- 	Citizen.Trace("k is : " .. k .. "v is : " .. v)
+			-- end
+	    	--end
+
+	    	TriggerServerEvent("fx_customs:UpdateVeh", veh, stolen, vehiclecol, extracol, neoncolor, plate_index, model, veh_state, plate, windowtint, wheeltype, vehicle_name, mods)	 
 	    	Citizen.Trace("Position : " .. tostring(pos.x) .."Position : " .. tostring(pos.y) .."Position : " .. tostring(pos.z) .."Position Heading: " .. tostring(pos.heading) .. " Ped is : " .. tostring(player) .. " Veh is : " .. tostring(veh))
 	  		SetEntityCoordsNoOffset(veh,pos.x,pos.y,pos.z)
 			SetEntityHeading(veh,pos.heading)
@@ -130,7 +177,7 @@ Citizen.CreateThread(function()
 			   				currentGarage = i
 				        	insidePosition = pos.inside
 				        	outsidePosition = pos.outside
-				        	SetVehicleInGarage() -- TODO JINK IMPLEMENT FUNCTION FOR BEING INTO GARAGE THAT BRINGS UP MENU
+				        	SetVehicleInGarage()
 	      				end
 			    	end
 	      		end
@@ -156,5 +203,16 @@ AddEventHandler('fx_customs:LeaveGarage', function(data)
 		Citizen.Trace(tostring(k) .. " | " .. tostring(v))
 		exports.ft_menuBuilder:Close()
 		SetVehicleOutsideGarage()
+	end
+end)
+RegisterNetEvent('fx_customs:RepairVehicle')
+AddEventHandler('fx_customs:RepairVehicle', function(paid)
+	local player = GetPlayerPed(-1)
+	local veh = GetVehiclePedIsUsing(player)
+	local damaged = IsVehicleDamaged(veh)
+	Citizen.Trace("I'm Repairing Vehicle." .. veh)
+	if damaged and paid then
+		SetVehicleFixed(veh)
+		--TODO JINK SET NOTIFICATION
 	end
 end)
