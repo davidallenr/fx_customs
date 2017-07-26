@@ -5,13 +5,14 @@ This is a remake of the popular script LS-Customs by Artur. Hopefully it does a 
 ### FX- Customs ###
 
 * Quick summary
-* Version Alpha 1.0
+* Version Alpha 2.0
 
 ### Dependencies ###
-* ft_menuBuilder
-* ft_ui
 * mysql-async
 * supertables
+
+### Optional ###
+* pNotify
 
 ### Features ###
 * mysql async support
@@ -28,10 +29,11 @@ This is a remake of the popular script LS-Customs by Artur. Hopefully it does a 
 
 
 ### Contribution ###
-
 * If you would like to contribute please let me know.
 * Please do not fork until talking with me first.
 
+### Credits ###
+COMING SOON
 
 ### Who do I talk to? ###
 * Owner: JinkLeft
