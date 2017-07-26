@@ -1,7 +1,7 @@
-  -- @Date:   2017-07-24
+  -- @Date:   2017-07-26
   -- @Project: FX Customs
   -- @Owner: Jink Left
-  -- @Last modified time: 2017-07-24
+  -- @Last modified time: 2017-07-26
 ----------------------------------------------------
 --------------------[   DATA   ]--------------------
 local FirstJoinProper = false
@@ -46,6 +46,8 @@ local mods = {
 ----------------------------------------------------
 ---------------[	FUNCTIONS 		]---------------
 ----------------------------------------------------
+
+
 function dump(o)
    if type(o) == 'table' then
       local s = '{ '
@@ -88,6 +90,7 @@ function SetVehicleOutsideGarage()
 	local pos = outsidePosition
 	local ped = GetPlayerPed(-1)
 	local veh = GetVehiclePedIsUsing(ped)
+	vehicleInGarage = false
 
 	SetEntityCoordsNoOffset(veh,pos.x,pos.y,pos.z)
 	SetEntityHeading(veh,pos.heading)
@@ -114,30 +117,32 @@ function SetVehicleInGarage()
 	local extracol = table.pack(GetVehicleExtraColours(veh))
 	local neoncolor = table.pack(GetVehicleNeonLightsColour(veh))
 	local plate_index = GetVehicleNumberPlateTextIndex(veh)
-	local model = GetVehicleClass(veh)
+	local model = GetEntityModel(veh)
 	local veh_state = GetVehicleBodyHealth(veh)
 	local plate = GetVehicleNumberPlateText(veh)
 	local windowtint = GetVehicleWindowTint(veh)
 	local wheeltype = GetVehicleWheelType(veh)
 	local vehicle_name = GetHashKey(veh)
-	local mods = mods 
+	local mods = mods
+	local tempMods = {}
+
+	for i = 0,24 do
+		tempMods[i] = GetVehicleMod(veh,i)
+	end 
+	Citizen.Trace("Vehicle : " .. tostring(veh) .."Plate Index : " .. tostring(plate_index) .."Model : " .. tostring(model) .."Vehicle Name: " .. tostring(vehicle_name))
+	Citizen.Trace(dump(tempMods))
 
 	if DoesEntityExist(veh) then
 	 	 -- Send {menu} to Menu Generator export
-	    if not exports.ft_menuBuilder:IsOpened() and GetLastInputMethod(2) then
-	    	exports.ft_menuBuilder:Open("fx_customs")
+	    if not IsOpened() and GetLastInputMethod(2) then
+	    	Open("fx_customs")
 	    	--	if debug then
-	    	Citizen.Trace( "Vehicle Col : " .. dump(vehiclecol) .. " | Extra Col : " .. dump(extracol) .. " | Neon : " .. dump(neoncolor) .. " | Plate : " .. tostring(vehicle_plate) .. " | Window Tint : " .. tostring(windowtint) .. " | Wheel Typ : " .. tostring(vehicle_wheeltype))
+	    	--Citizen.Trace( "Vehicle Col : " .. dump(vehiclecol) .. " | Extra Col : " .. dump(extracol) .. " | Neon : " .. dump(neoncolor) .. " | Plate : " .. tostring(vehicle_plate) .. " | Window Tint : " .. tostring(windowtint) .. " | Wheel Typ : " .. tostring(vehicle_wheeltype))
 	    	--Citizen.Trace( "Mods : " .. dump(mods))
 	  		--for k,v in pairs(mods) do
 			-- 	Citizen.Trace(k .. dump(v))
 			-- end
-
-			-- for k,v in pairs(vehiclecol) do
-			-- 	Citizen.Trace("k is : " .. k .. "v is : " .. v)
-			-- end
-	    	--end
-
+			vehicleInGarage = true
 	    	TriggerServerEvent("fx_customs:UpdateVeh", veh, stolen, vehiclecol, extracol, neoncolor, plate_index, model, veh_state, plate, windowtint, wheeltype, vehicle_name, mods)	 
 	    	Citizen.Trace("Position : " .. tostring(pos.x) .."Position : " .. tostring(pos.y) .."Position : " .. tostring(pos.z) .."Position Heading: " .. tostring(pos.heading) .. " Ped is : " .. tostring(player) .. " Veh is : " .. tostring(veh))
 	  		SetEntityCoordsNoOffset(veh,pos.x,pos.y,pos.z)
@@ -185,13 +190,30 @@ Citizen.CreateThread(function()
 	    end
   	end
 end)
+
+Citizen.CreateThread(function()
+
+  if NetworkIsSessionStarted() then
+
+	  while true do
+	    Citizen.Wait(5)
+
+	    -- Open game menu
+	    if not IsPauseMenuActive() then
+	      Show()
+	    end
+	  end
+
+  end
+
+end)
 ----------------------------------------------------
 ---------------[	EVENTS 		]-------------------
 ----------------------------------------------------
 local firstspawn = 0
 AddEventHandler('playerSpawned', function(spawn)
   if firstspawn == 0 then
-  	exports.ft_menuBuilder:Generator(menu)
+  	Generator(menu)
     AddBlips()
     firstspawn = 1
   end
@@ -201,10 +223,27 @@ RegisterNetEvent('fx_customs:LeaveGarage')
 AddEventHandler('fx_customs:LeaveGarage', function(data)
 	for k,v in pairs(data) do
 		Citizen.Trace(tostring(k) .. " | " .. tostring(v))
-		exports.ft_menuBuilder:Close()
 		SetVehicleOutsideGarage()
 	end
 end)
+
+RegisterNetEvent('fx_customs:SetVehicleMod')
+AddEventHandler('fx_customs:SetVehicleMod', function(modtype,mod)
+	local player = GetPlayerPed(-1)
+	local veh = GetVehiclePedIsUsing(player)
+	local damaged = IsVehicleDamaged(veh)
+	Citizen.Trace("I'm Modifying a vehicle..#.." .. veh)
+	if damaged then
+		SetVehicleModKit(veh,0)
+		SetVehicleMod(veh, modType, mod)
+		TriggerServerEvent("fx_customs:Notify","Los Santos Customs", "We've applied your vehicle update maybe you might want a repair!")
+	else
+		SetVehicleModKit(veh,0)
+		SetVehicleMod(veh, modType, mod)
+		TriggerServerEvent("fx_customs:Notify","Los Santos Customs", "We've applied your vehicle update.")
+	end
+end)
+
 RegisterNetEvent('fx_customs:RepairVehicle')
 AddEventHandler('fx_customs:RepairVehicle', function(paid)
 	local player = GetPlayerPed(-1)
@@ -213,6 +252,6 @@ AddEventHandler('fx_customs:RepairVehicle', function(paid)
 	Citizen.Trace("I'm Repairing Vehicle." .. veh)
 	if damaged and paid then
 		SetVehicleFixed(veh)
-		--TODO JINK SET NOTIFICATION
+		TriggerServerEvent("fx_customs:Notify","Los Santos Customs", "We've repaired your vehicle for a fee")
 	end
 end)

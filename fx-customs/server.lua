@@ -1,11 +1,11 @@
-  -- @Date:   2017-07-24
+  -- @Date:   2017-07-26
   -- @Project: FX Customs
   -- @Owner: Jink Left
-  -- @Last modified time: 2017-07-24
+  -- @Last modified time: 2017-07-26
 ----------------------------------------------------
 ---------------[MYSQL ASYNC FUNCTION]---------------
 AddEventHandler('onMySQLReady', function ()
-  FxFirstRun()
+	FxFirstRun()
 end)
 
 function FxFirstRun() 
@@ -17,6 +17,41 @@ function FxFirstRun()
     MySQL.Async.execute(sql, param)
     
     print ("Finished first Run creation")
+end
+
+function addVehicle(steamid,steamname,plate,plateindex,stolen)
+	
+	MySQL.Async.fetchAll("SELECT * FROM fx_customs WHERE vehicle_plate = @vehicle_plate", { ['@vehicle_plate'] = plate}, function (result)
+		if (not result[1]) then
+			if not stolen then	
+	  			MySQL.Async.execute("INSERT INTO fx_customs (steamid, steamname, vehicle_plate, vehicle_plateindex) VALUES (@steamid,@steamname,@plate,@plateindex)",{ ['@steamid'] = steamid, ['@steamname'] = steamname, ['@plate'] = plate, ['@plateindex'] = plateindex})
+	  		else
+	  			print("Vehicle is coming back STOLEN so it is not added")
+	  			Notify("Los Santos Customs", "Welcome to the shop!")
+	  		end
+		else
+			print("Vehicle Has Already Been Added")	
+		end
+	end)
+end
+----------------------------------------------------
+---------------[	FUNCTIONS 		]---------------
+function Notify(text1,text2)
+
+local notification = {
+  type = "pnotify"            -- Choices are (pnotify, normal)
+}  
+	if(notification.type == "pnotify") then
+      	TriggerClientEvent("pNotify:SendNotification", -1, {
+  					text = "<strong> <h2>" .. text1 .."</h2> </strong> <br />" .. "<h3>" .. text2 .. "<h3> <br />",
+                	type = "success",
+                	timeout = (2000),
+                	layout = "bottomCenter",
+                	queue = "top",
+	  				})
+    elseif (notification.type == "normal") then 
+      TriggerEvent("chatMessage", "Server", { 0, 0, 0 }, text1 .. text2)
+    end  
 end
 
 function dump(o)
@@ -32,23 +67,6 @@ function dump(o)
    end
 end
 
-----------------------------------------------------
----------------[  FUNCTIONS     ]---------------
-function addVehicle(steamid,steamname,plate,plateindex,stolen)
-  
-  MySQL.Async.fetchAll("SELECT * FROM fx_customs WHERE vehicle_plate = @vehicle_plate", { ['@vehicle_plate'] = plate}, function (result)
-    if (not result[1]) then
-      if not stolen then  
-          MySQL.Async.execute("INSERT INTO fx_customs (steamid, steamname, vehicle_plate, vehicle_plateindex) VALUES (@steamid,@steamname,@plate,@plateindex)",{ ['@steamid'] = steamid, ['@steamname'] = steamname, ['@plate'] = plate, ['@plateindex'] = plateindex})
-        else
-          print("Vehicle is coming back STOLEN so it is not added")
-        end
-    else
-      print("Vehicle Has Already Been Added") 
-    end
-  end)
-end
-
 function getPlayerID(source)
   return getIdentifier(GetPlayerIdentifiers(source))
 end
@@ -59,44 +77,65 @@ function getIdentifier(id)
   end
 end
 ----------------------------------------------------
----------------[  EVENTS    ]-------------------
+---------------[	EVENTS 		]-------------------
 RegisterServerEvent('fx_customs:UpdateVeh')
 AddEventHandler('fx_customs:UpdateVeh', function(veh, stolen, vehiclecol, extracol, neoncolor, plate_index, model, veh_state, plate, windowtint, wheeltype, vehicle_name, mods) 
     local player = source
     print("player = " .. tostring(player))
     local steamid = GetUserSteamID(player)
-  local steamname = GetPlayerName(player) 
+	local steamname = GetPlayerName(player) 
     local vehicle = veh
     local plateindex = plate_index
     local state = veh_state
+	addVehicle(steamid,steamname,plate,plateindex, stolen)
+	print("steam ID : " .. tostring(steamid) .. " | Source Name : " .. tostring(steamname).. " | Plate Number : " .. tostring(plate))
+end)
 
-  addVehicle(steamid,steamname,plate,plateindex, stolen)
-  print("steam ID : " .. tostring(steamid) .. " | Source Name : " .. tostring(steamname).. " | Plate Number : " .. tostring(plate))
+RegisterServerEvent('fx_customs:ConfirmMod')
+AddEventHandler('fx_customs:ConfirmMod', function(data)
+	local player = source
+    local steamid = GetUserSteamID(player)
+	local steamname = GetPlayerName(player)
+	local paid = false
+
+	print("Price : " .. tostring(price) .. " Confirmed : " .. tostring(confirmed) .. " Repair : " .. tostring(repair))	
+    print(tostring(value))
+
+	if data.confirmed ~= nil then
+			local price = data.cost
+			local modtype = data.modtype
+			local mod = data.mod
+			local value = GetUserMoney(player, function(res) 
+				print(tostring(player) .. " | " .. tostring(price) .. " | modtype : " .. tostring(modtype) .. " | mod : " .. tostring(mod))
+			 	local playerMoney = res
+			 	local newMoney = playerMoney - price
+			 	if newMoney ~= nil and newMoney >= 0 then
+			 		print("NewMoney is GREATER than 0")
+			 		print("NewMoney : " .. newMoney)
+				 	MySQL.Async.execute("UPDATE supertable SET money = @newMoney WHERE steamid = @id", {newMoney = newMoney, id = steamid}, function ()
+				 		end)
+			 	 	TriggerClientEvent('fx_customs:SetVehicleMod',-1,modtype,mod) -- TODO JINK MAKE A CLIENT EVEN TO SET THE MODS IF PAYMENT TRUE
+			 	end
+			end)
+	elseif data.repair ~= nil then
+		local value = GetUserMoney(player, function(res) 
+			print(tostring(steamid) .. " | " .. tostring(result) .. " | Data : " .. dump(data))
+		 	local playerMoney = res
+		 	local newMoney = playerMoney - price
+		 	if newMoney ~= nil and newMoney >= 0 then
+		 		local paid = true
+		 		print("NewMoney is GREATER than 0")
+		 		print("NewMoney : " .. newMoney)
+			 	MySQL.Async.execute("UPDATE supertable SET money = @newMoney WHERE steamid = @id", {newMoney = newMoney, id = steamid}, function ()
+			 		end)
+		 	 	TriggerClientEvent('fx_customs:RepairVehicle',-1, paid)
+		 	end
+		end)
+	end
 
 end)
 
-RegisterServerEvent('fx_customs:ConfirmRepair')
-AddEventHandler('fx_customs:ConfirmRepair', function(data)
-  local player = source
-    local steamid = GetUserSteamID(player)
-  local steamname = GetPlayerName(player)
-  local price = data.cost
-  local repair = data.repair
-  local paid = false
-  print("Price : " .. tostring(price) .. " repair : " .. tostring(repair) )
-   if repair then 
-    MySQL.Async.fetchScalar("SELECT money FROM supertable WHERE steamid LIKE @id LIMIT 1", {id = steamid}, function (result)
-      print(tostring(steamid) .. " | " .. tostring(result) .. " | Data : " .. dump(data))
-      local playerMoney = result
-      local newMoney = playerMoney - price
-      if newMoney ~= nil and newMoney >= 0 then
-        local paid = true
-        print("NewMoney is GREATER than 0")
-        print("NewMoney : " .. newMoney)
-        MySQL.Async.execute("UPDATE supertable SET money = @newMoney WHERE steamid = @id", {newMoney = newMoney, id = steamid}, function ()
-          end)
-        TriggerClientEvent('fx_customs:RepairVehicle',-1, paid)
-      end
-    end)
-  end
+RegisterServerEvent('fx_customs:Notify')
+AddEventHandler('fx_customs:Notify', function(text1,text2)
+	Notify(text1,text2)
 end)
