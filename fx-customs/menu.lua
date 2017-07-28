@@ -1,3 +1,9 @@
+  -- @Date:   2017-07-27
+  -- @Project: FX Customs
+  -- @Owner: Jink Left
+  -- @Last modified time: 2017-07-27
+  --------------------------------------------
+  
 menus = {
   opened = false,
   backMenu = {},
@@ -57,6 +63,18 @@ function Notification(message)
   end)
 end
 
+function IsModOwned(modtype, mod, text, font, centre, x, y, scale, r, g, b, a) 
+    -- TODO JINK ADD LOGIC FOR OWNED MODS BEING DRAWN AS OWNED IN THE MENU   
+  -- for k, v in pairs(vehMods) do
+    -- if k == modtype and v == mod then
+    --   Citizen.Trace("inModType".. tostring(modtype) .. "mod : " .. tostring(mod))
+       --Text2( font, centre, x, y, scale, r, g, b, a)
+    -- else
+      Text(text, font, centre, x, y, scale, r, g, b, a)
+    -- end
+  -- end
+end
+
 function Text(text, font, centre, x, y, scale, r, g, b, a)
   Citizen.CreateThread(function()
 
@@ -68,6 +86,21 @@ function Text(text, font, centre, x, y, scale, r, g, b, a)
     SetTextEntry("STRING")
     AddTextComponentString(text)
     DrawText(x, y)
+
+  end)
+end
+
+function Text2(font, centre, x, y, scale, r, g, b, a) -- TODO JINK MENU FOR OWNED MODS
+  Citizen.CreateThread(function()
+
+    SetTextFont(font)
+    SetTextProportional(0)
+    SetTextScale(scale, scale * .9)
+    SetTextColour(r, g, b, a)
+    SetTextCentre(centre)
+    SetTextEntry("STRING")
+    AddTextComponentString("OWNED")
+    DrawText(x - .009, y)
 
   end)
 end
@@ -86,10 +119,10 @@ function DrawMenuButton(data, x, y, width, height, selected)
 
     Text(data.text, 0, 0, x - width / 2 + 0.005, y - height / 2 + 0.0035, 0.4, color.text.red, color.text.blue, color.text.green, 255)
     DrawRect(x, y, width, height, color.rect.red, color.rect.blue, color.rect.green, color.rect.alpha)
-
     if data.subText ~= nil then
-      Text(data.subText, 0, 0, x + width / 2 - 0.0385, y - height / 2 + 0.0035, 0.4, color.text.red, color.text.blue, color.text.green, 255)
+      IsModOwned(data.modtype, data.mod, data.subText, 0, 0, x + width / 2 - 0.0385, y - height / 2 + 0.0035, 0.4, color.text.red, color.text.blue, color.text.green, 255)
     end
+
 
   end)
 end
@@ -490,7 +523,6 @@ function Show()
         -- Up
         if IsControlJustPressed(2, 188) and GetLastInputMethod(2) and not menus.gameMenu then
           if menus.selectedButton > 1 then
-
             menus.selectedButton = menus.selectedButton - 1
             if menus.selectedButton < menus.conf.from then
               menus.conf.from = menus.conf.from - 1

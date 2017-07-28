@@ -1,7 +1,7 @@
-  -- @Date:   2017-07-26
+  -- @Date:   2017-07-27
   -- @Project: FX Customs
   -- @Owner: Jink Left
-  -- @Last modified time: 2017-07-26
+  -- @Last modified time: 2017-07-27
 ----------------------------------------------------
 --------------------[   DATA   ]--------------------
 local FirstJoinProper = false
@@ -129,6 +129,8 @@ function SetVehicleInGarage()
 	for i = 0,24 do
 		tempMods[i] = GetVehicleMod(veh,i)
 	end 
+	vehMods = tempMods
+
 	Citizen.Trace("Vehicle : " .. tostring(veh) .."Plate Index : " .. tostring(plate_index) .."Model : " .. tostring(model) .."Vehicle Name: " .. tostring(vehicle_name))
 	Citizen.Trace(dump(tempMods))
 
@@ -192,7 +194,6 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
-
   if NetworkIsSessionStarted() then
 
 	  while true do
@@ -205,7 +206,6 @@ Citizen.CreateThread(function()
 	  end
 
   end
-
 end)
 ----------------------------------------------------
 ---------------[	EVENTS 		]-------------------
@@ -228,20 +228,21 @@ AddEventHandler('fx_customs:LeaveGarage', function(data)
 end)
 
 RegisterNetEvent('fx_customs:SetVehicleMod')
-AddEventHandler('fx_customs:SetVehicleMod', function(modtype,mod)
+AddEventHandler('fx_customs:SetVehicleMod', function(modtype,mod,wheeltype)
 	local player = GetPlayerPed(-1)
 	local veh = GetVehiclePedIsUsing(player)
 	local damaged = IsVehicleDamaged(veh)
-	Citizen.Trace("I'm Modifying a vehicle..#.." .. veh)
+	
 	if damaged then
-		SetVehicleModKit(veh,0)
-		SetVehicleMod(veh, modType, mod)
 		TriggerServerEvent("fx_customs:Notify","Los Santos Customs", "We've applied your vehicle update maybe you might want a repair!")
 	else
-		SetVehicleModKit(veh,0)
-		SetVehicleMod(veh, modType, mod)
 		TriggerServerEvent("fx_customs:Notify","Los Santos Customs", "We've applied your vehicle update.")
 	end
+	if wheeltype ~= nil then
+		SetVehicleWheelType(veh, wheeltype)
+	end
+	SetVehicleModKit(veh, 0)
+	SetVehicleMod(veh, modtype, mod)
 end)
 
 RegisterNetEvent('fx_customs:RepairVehicle')
