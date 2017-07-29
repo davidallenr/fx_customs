@@ -1,7 +1,7 @@
-  -- @Date:   2017-07-27
+  -- @Date:   2017-07-28
   -- @Project: FX Customs
   -- @Owner: Jink Left
-  -- @Last modified time: 2017-07-27
+  -- @Last modified time: 2017-07-28
 ----------------------------------------------------
 ---------------[MYSQL ASYNC FUNCTION]---------------
 AddEventHandler('onMySQLReady', function ()
@@ -102,20 +102,17 @@ AddEventHandler('fx_customs:ConfirmMod', function(data)
   print("Price : " .. tostring(price) .. " Confirmed : " .. tostring(confirmed) .. " Repair : " .. tostring(repair))  
     print(tostring(value))
 
-  if data.confirmed ~= nil then   
-      local modtype = data.modtype
-      local mod = data.mod
-      local wheeltype = data.wtype
+  if data.confirmed ~= nil then
       local value = GetUserMoney(player, function(res) 
         print(tostring(player) .. " | " .. tostring(price) .. " | modtype : " .. tostring(modtype) .. " | mod : " .. tostring(mod))
         local playerMoney = res
         local newMoney = playerMoney - price
         if playerMoney >= price then 
-            print("NewMoney is GREATER than 0")
+            print("NewMoney is GREATER than 0" .. " windowtint " .. tostring(windowtint))
             print("NewMoney : " .. newMoney)
             MySQL.Async.execute("UPDATE supertable SET money = @newMoney WHERE steamid = @id", {newMoney = newMoney, id = steamid}, function ()
               end)
-            TriggerClientEvent('fx_customs:SetVehicleMod',-1,modtype,mod,wheeltype)
+            TriggerClientEvent('fx_customs:SetVehicleMod',-1,data)
         else
           Notify("Los Santos Customs", "You did not have enough cash for the purchase!")
         end

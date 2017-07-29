@@ -1,7 +1,7 @@
-  -- @Date:   2017-07-27
+  -- @Date:   2017-07-28
   -- @Project: FX Customs
   -- @Owner: Jink Left
-  -- @Last modified time: 2017-07-27
+  -- @Last modified time: 2017-07-28
 ----------------------------------------------------
 --------------------[   DATA   ]--------------------
 local FirstJoinProper = false
@@ -227,22 +227,140 @@ AddEventHandler('fx_customs:LeaveGarage', function(data)
 	end
 end)
 
+RegisterNetEvent('fx_customs:NeonSide')
+AddEventHandler('fx_customs:NeonSide', function(data)
+	local side = data.side
+	if side == "front" then 
+		neonSide = 2
+		elseif side == "left" then
+			neonSide = 0
+			elseif side == "back" then
+				neonSide = 3 
+				elseif side == "all" then
+					neonSide = 1
+	end
+end)
+
+RegisterNetEvent('fx_customs:Paint')
+AddEventHandler('fx_customs:Paint', function(data)
+	local paint = data.paints
+	Citizen.Trace(" dumping paint data: " .. dump(data))
+	if paint == "primary" then 
+		Citizen.Trace(" In paint is 1: " .. tostring(paint))
+		paintCar = 1
+		elseif paint == "secondary" then
+			Citizen.Trace(" In paint is 2: " .. tostring(paint))
+			paintCar = 2
+			elseif paint == "pearl" then
+				Citizen.Trace(" In paint is 3: " .. tostring(paint))
+				paintCar = 3 
+				elseif paint == "wheel" then
+					Citizen.Trace(" In paint is 4: " .. tostring(paint))
+					paintCar = 4
+	end
+end)
+
 RegisterNetEvent('fx_customs:SetVehicleMod')
-AddEventHandler('fx_customs:SetVehicleMod', function(modtype,mod,wheeltype)
+AddEventHandler('fx_customs:SetVehicleMod', function(data)
 	local player = GetPlayerPed(-1)
 	local veh = GetVehiclePedIsUsing(player)
 	local damaged = IsVehicleDamaged(veh)
+	local modtype = data.modtype
+	local mod = data.mod
+	local wheeltype = data.wtype
+	local windowtint = data.tint
+	local colorIndex = data.colorindex
+	local neonSide = neonSide
+	local paintCar = paintCar
+	local r,g,b = data.r,data.g,data.b
 	
 	if damaged then
 		TriggerServerEvent("fx_customs:Notify","Los Santos Customs", "We've applied your vehicle update maybe you might want a repair!")
 	else
 		TriggerServerEvent("fx_customs:Notify","Los Santos Customs", "We've applied your vehicle update.")
 	end
+	
+	SetVehicleModKit(veh, 0)
 	if wheeltype ~= nil then
 		SetVehicleWheelType(veh, wheeltype)
+	elseif windowtint ~= nil then
+		SetVehicleWindowTint(veh,  windowtint)
+	elseif r ~= nil and g ~= nil and b ~= nil and neonSide ~= nil then
+		if neonSide == 2 then
+			Citizen.Trace(" | Side " .. tostring(neonSide))
+			for i=0,3, 1 do 
+				if i == 2 then
+					SetVehicleNeonLightEnabled(veh, i, true)
+					SetVehicleNeonLightsColour(veh, r, g, b)
+				else
+					SetVehicleNeonLightEnabled(veh, i, false)
+				end
+			end
+			elseif neonSide == 3 then
+				Citizen.Trace(" | Side " .. tostring(neonSide))
+				for i=0,3, 1 do 
+					if i == 3 then
+						SetVehicleNeonLightEnabled(veh, i, true)
+						SetVehicleNeonLightsColour(veh, r, g, b)
+					else
+						SetVehicleNeonLightEnabled(veh, i, false)
+					end
+				end
+				elseif neonSide == 0 then
+					Citizen.Trace(" | Side " .. tostring(neonSide))
+					for i=0,3, 1 do
+						if i <= 1 then
+							SetVehicleNeonLightEnabled(veh, i, true)
+							SetVehicleNeonLightsColour(veh, r, g, b)
+						else
+							SetVehicleNeonLightEnabled(veh, i, false)
+						end
+					end
+					elseif neonSide == 1 then
+					Citizen.Trace(" | Side " .. tostring(neonSide))	 		
+						for i=0,3, 1 do 
+							SetVehicleNeonLightEnabled(veh, i, true)
+							SetVehicleNeonLightsColour(veh, r, g, b)
+						end
+
+		end
+	elseif paintCar ~= nil then
+		if paintCar == 1 then
+			local vehiclecol = table.pack(GetVehicleColours(veh))
+			for k, v in pairs(vehiclecol) do
+				Citizen.Trace(" Colors: " .. dump(vehiclecol))
+				if k == 2 then
+					SetVehicleColours(veh, colorIndex, v)
+				end
+			end
+			elseif paintCar == 2 then
+				local vehiclecol = table.pack(GetVehicleColours(veh))
+				Citizen.Trace(" Colors: " .. dump(vehiclecol))
+				for k, v in pairs(vehiclecol) do
+					if k == 1 then
+						SetVehicleColours(veh, v, colorIndex)
+					end
+				end
+				elseif paintCar == 3 then
+					local extracol = table.pack(GetVehicleExtraColours(veh))
+					Citizen.Trace(" Colors: " .. dump(extracol))
+					for k, v in pairs(extracol) do
+						if k == 2 then
+							SetVehicleExtraColours(veh, colorIndex, v)
+						end
+					end
+					elseif paintCar == 4 then
+						local extracol = table.pack(GetVehicleExtraColours(veh))
+						Citizen.Trace(" Colors: " .. dump(extracol))
+						for k, v in pairs(extracol) do
+							if k == 1 then
+								SetVehicleExtraColours(veh, v, colorIndex)
+							end
+						end
+		end
 	end
-	SetVehicleModKit(veh, 0)
 	SetVehicleMod(veh, modtype, mod)
+	
 end)
 
 RegisterNetEvent('fx_customs:RepairVehicle')
