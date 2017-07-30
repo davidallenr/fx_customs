@@ -1,7 +1,7 @@
-  -- @Date:   2017-07-28
+  -- @Date:   2017-07-29
   -- @Project: FX Customs
   -- @Owner: Jink Left
-  -- @Last modified time: 2017-07-28
+  -- @Last modified time: 2017-07-29
 ----------------------------------------------------
 --------------------[   DATA   ]--------------------
 local FirstJoinProper = false
@@ -17,31 +17,6 @@ local locations = {
     [3] = { outside = { x = 716.4645, y = -1088.869, z = 21.92979, heading = 88.768}, inside = {x = 731.8163,y = -1088.822,z = 21.733, heading = 269.318}},
     [4] = { outside = { x = 1174.811, y = 2649.954, z = 37.37151, heading = 0.450}, inside = {x = 1175.04,y = 2640.216,z = 37.32177, heading = 182.402}},
   }
-
-local mods = {
-	[1] = { name = "Spoilers", mod = 0, toggle = false, default = nil},
-	[2] = { name = "Front Bumper", mod = 1, toggle = false, default = nil},
-	[3] = { name = "Rear Bumper", mod = 2, toggle = false, default = nil},
-	[4] = { name = "Side Skirt", mod = 3, toggle = false, default = nil},
-	[5] = { name = "Exhaust", mod = 4, toggle = false, default = nil},
-	[6] = { name = "Frame", mod = 5, toggle = false, default = nil},
-	[7] = { name = "Grille", mod = 6, toggle = false, default = nil},
-	[8] = { name = "Hood", mod = 7, toggle = false, default = nil},
-	[9] = { name = "Fender", mod = 8, toggle = false, default = nil},
-	[10] = { name = "Right Fender", mod = 9, toggle = false, default = nil},
-	[11] = { name = "Roof", mod = 10, toggle = false, default = nil},
-	[12] = { name = "Engine", mod = 11, toggle = false, default = nil},
-	[13] = { name = "Brakes", mod = 12, toggle = false, default = nil},
-	[14] = { name = "Transmission", mod = 13, toggle = false, default = nil},
-	[15] = { name = "Horns", mod = 14, toggle = false, default = nil},
-	[16] = { name = "Suspension", mod = 15, toggle = false, default = nil},
-	[17] = { name = "Armor", mod = 16, toggle = false, default = nil},
-	[18] = { name = "Turbo", mod = 18, toggle = true, default = "off"},
-	[19] = { name = "Tire Smoke", mod = 20, toggle = false, default = "off"},
-	[20] = { name = "Xeon Head Lights", mod = 22, toggle = true, default = "off"},
-	[21] = { name = "Front Wheels", mod = 23, toggle = false, default = nil},
-	[22] = { name = "Back Wheels", mod = 24, toggle = true, default = nil},
-}
 
 ----------------------------------------------------
 ---------------[	FUNCTIONS 		]---------------
@@ -125,14 +100,50 @@ function SetVehicleInGarage()
 	local vehicle_name = GetHashKey(veh)
 	local mods = mods
 	local tempMods = {}
+	local vehMods = {}
 
-	for i = 0,24 do
-		tempMods[i] = GetVehicleMod(veh,i)
+	local mods = {
+		[1] = { name = "Spoilers", mod = 0, toggle = false, default = nil},
+		[2] = { name = "Front Bumper", mod = 1, toggle = false, default = nil},
+		[3] = { name = "Rear Bumper", mod = 2, toggle = false, default = nil},
+		[4] = { name = "Side Skirt", mod = 3, toggle = false, default = nil},
+		[5] = { name = "Exhaust", mod = 4, toggle = false, default = nil},
+		[6] = { name = "Frame", mod = 5, toggle = false, default = nil},
+		[7] = { name = "Grille", mod = 6, toggle = false, default = nil},
+		[8] = { name = "Hood", mod = 7, toggle = false, default = nil},
+		[9] = { name = "Fender", mod = 8, toggle = false, default = nil},
+		[10] = { name = "Right Fender", mod = 9, toggle = false, default = nil},
+		[11] = { name = "Roof", mod = 10, toggle = false, default = nil},
+		[12] = { name = "Engine", mod = 11, toggle = false, default = nil},
+		[13] = { name = "Brakes", mod = 12, toggle = false, default = nil},
+		[14] = { name = "Transmission", mod = 13, toggle = false, default = nil},
+		[15] = { name = "Horns", mod = 14, toggle = false, default = nil},
+		[16] = { name = "Suspension", mod = 15, toggle = false, default = nil},
+		[17] = { name = "Armor", mod = 16, toggle = false, default = nil},
+		[18] = { name = "Turbo", mod = 18, toggle = true, default = "off"},
+		[19] = { name = "Tire Smoke", mod = 20, toggle = false, default = "off"},
+		[20] = { name = "Xeon Head Lights", mod = 22, toggle = true, default = "off"},
+		[21] = { name = "Front Wheels", mod = 23, toggle = false, default = nil},
+		[22] = { name = "Back Wheels", mod = 24, toggle = true, default = nil},
+	}
+
+
+	local modKit = GetVehicleModKit(veh)
+	local modKitType = GetVehicleModKitType(veh)
+	for i = 1,24 do
+		tempMods[i] = GetVehicleMod(veh, i)
 	end 
-	vehMods = tempMods
+	
 
 	Citizen.Trace("Vehicle : " .. tostring(veh) .."Plate Index : " .. tostring(plate_index) .."Model : " .. tostring(model) .."Vehicle Name: " .. tostring(vehicle_name))
-	Citizen.Trace(dump(tempMods))
+	Citizen.Trace("Mod Kit : " .. dump(modKit))
+	Citizen.Trace("Temp : " .. dump(modKitType))
+	
+	for i = 1,#mods do
+		vehMods[i] = GetNumVehicleMods(veh, mods[i].mod)
+		Citizen.Trace("In th eloop Mods : " .. mods[i].mod)
+	end
+	Citizen.Trace("Veh Mods : " .. dump(vehMods))
 
 	if DoesEntityExist(veh) then
 	 	 -- Send {menu} to Menu Generator export
@@ -273,6 +284,10 @@ AddEventHandler('fx_customs:SetVehicleMod', function(data)
 	local neonSide = neonSide
 	local paintCar = paintCar
 	local r,g,b = data.r,data.g,data.b
+	local plateIndex = data.plateindex
+	local smoke = data.smoke
+	local bulletProof = data.burst
+	local xeon = data.xeon
 	
 	if damaged then
 		TriggerServerEvent("fx_customs:Notify","Los Santos Customs", "We've applied your vehicle update maybe you might want a repair!")
@@ -317,7 +332,7 @@ AddEventHandler('fx_customs:SetVehicleMod', function(data)
 						end
 					end
 					elseif neonSide == 1 then
-					Citizen.Trace(" | Side " .. tostring(neonSide))	 		
+						Citizen.Trace(" | Side " .. tostring(neonSide))	 		
 						for i=0,3, 1 do 
 							SetVehicleNeonLightEnabled(veh, i, true)
 							SetVehicleNeonLightsColour(veh, r, g, b)
@@ -335,32 +350,51 @@ AddEventHandler('fx_customs:SetVehicleMod', function(data)
 			end
 			elseif paintCar == 2 then
 				local vehiclecol = table.pack(GetVehicleColours(veh))
-				Citizen.Trace(" Colors: " .. dump(vehiclecol))
 				for k, v in pairs(vehiclecol) do
 					if k == 1 then
 						SetVehicleColours(veh, v, colorIndex)
+						Citizen.Trace(" Colors: " .. dump(vehiclecol))
 					end
 				end
 				elseif paintCar == 3 then
 					local extracol = table.pack(GetVehicleExtraColours(veh))
-					Citizen.Trace(" Colors: " .. dump(extracol))
 					for k, v in pairs(extracol) do
 						if k == 2 then
 							SetVehicleExtraColours(veh, colorIndex, v)
+							Citizen.Trace(" Colors: " .. dump(extracol))
 						end
 					end
 					elseif paintCar == 4 then
 						local extracol = table.pack(GetVehicleExtraColours(veh))
-						Citizen.Trace(" Colors: " .. dump(extracol))
 						for k, v in pairs(extracol) do
 							if k == 1 then
 								SetVehicleExtraColours(veh, v, colorIndex)
+								Citizen.Trace(" Colors: " .. dump(extracol))
 							end
 						end
 		end
+	elseif plateIndex ~= nil then
+		SetVehicleNumberPlateTextIndex(veh, plateIndex)
+	elseif r ~= nil and g ~= nil and b ~= nil and smoke ~= nil then
+		 Citizen.Trace("i'm setting tire smoke" .. tostring(smoke) .." | R :" .. tostring(r) .." | G : " .. tostring(g) .." | B : " .. tostring(b))
+		 if smoke then
+		 	ToggleVehicleMod(veh, 20, true)
+			SetVehicleTyreSmokeColor(veh, r, g, b)
+		end
+	elseif bulletProof ~= nil then
+		if bulletProof then
+			SetVehicleTyresCanBurst(veh, false)
+		else
+			SetVehicleTyresCanBurst(veh, true)
+		end
+	elseif xeon ~= nil then
+		if xeon then
+			ToggleVehicleMod(veh, 22, true)
+		else
+			ToggleVehicleMod(veh, 22, false)
+		end
 	end
 	SetVehicleMod(veh, modtype, mod)
-	
 end)
 
 RegisterNetEvent('fx_customs:RepairVehicle')
