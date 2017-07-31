@@ -1,7 +1,7 @@
-  -- @Date:   2017-07-29
+  -- @Date:   2017-07-30
   -- @Project: FX Customs
   -- @Owner: Jink Left
-  -- @Last modified time: 2017-07-29
+  -- @Last modified time: 2017-07-30
 -------------------------------------------
 ---------------[COST MENU]----------------
 local cost = {
@@ -27,8 +27,8 @@ local cost = {
   ['turbo'] = { total = 500, display = "$500"},
   ['smoke'] = { total = 50, display = "$50"},
   ['headlights'] = { total = 80, display = "$80"},
-  ['frontWheel'] = { total = 500, display = "$500"},
-  ['backWheel'] = { total = 500, display = "$500"},
+  ['frontWheel'] = { total = 150, display = "$150"},
+  ['backWheel'] = { total = 150, display = "$150"},
   ['windowtint'] = { total = 200, display = "$200"},
   ['neon'] = { total = 10, display = "$10"},
   ['paint'] = { total = 20, display = "$20"},
@@ -65,13 +65,7 @@ menu = {
       },
 
       buttons = {
-        { text = "Wheels", menu = "wheels"  },
-        { text = "Accessories", menu = "accessories"  },
-        { text = "Paint", menu = "paint" },
-        { text = "Tuning", menu = "tuning"  }, 
-        { text = "Lights", menu = "lights"  },
-        { text = "Window Tint", menu = "windows"  },
-        { text = "Previous Menu", back = true },
+
       },
     },
 ---------------[REPAIR MENU]---------------
@@ -101,7 +95,7 @@ menu = {
 
       buttons = { 
         { text = "Wheel Type", menu = "wheeltype" },
-        { text = "Wheel Color", menu = "classic" , eventClient = "fx_customs:Paint", data = { paints = "wheel" }},
+        { text = "Rim Color", menu = "classic" , eventClient = "fx_customs:Paint", data = { paints = "wheel" }},
         { text = "Wheel Accessories", menu = "wheelaccessories" },
       },
     },
@@ -137,7 +131,7 @@ menu = {
       },
 
           buttons = { 
-          
+
               { text = "Stock", subText = cost['rims'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = false, modtype = 23, mod = -1, confirmed = true , cost = cost['rims'].total} },
               { text = "Chrono", subText = cost['rims'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = false, modtype = 23, mod = 4, confirmed = true , cost = cost['rims'].total} },
               { text = "Cosmo", subText = cost['rims'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = false, modtype = 23, mod = 16, confirmed = true , cost = cost['rims'].total} },
@@ -374,7 +368,7 @@ menu = {
 
             { text = "Bulletproof Tires", menu = "bulletproof_tires" },
             { text = "Tire Smoke", menu = "tiresmoke" },
-            -- { text = "Front Wheel Mods", menu = "frontwheel" }, --TODO JINK CHECK IF THIS WORKS WITH ALL VEHICLES AND OR JUST MOTORCYCLES
+            -- { text = "Front Wheel Mods", menu = "frontWheel" }, --TODO JINK CHECK IF THIS WORKS WITH ALL VEHICLES AND OR JUST MOTORCYCLES
             -- { text = "Back Wheel Mods", menu = "backwheel" },
           },
         },
@@ -430,61 +424,78 @@ menu = {
           },
         },
 
-    -- frontwheel = { 
+wheels2 = { 
 
-    --   settings = {
-    --     title = "Los Santos Customs",
-    --     menuTitle = "Welcome",
-    --     back = CallbackBack,
-    --     closable = true,
-    --   },
+      settings = {
+        title = "Los Santos Customs",
+        menuTitle = "Categories",
+        back = CallbackBack,
+        closable = true,
+      },
 
-    --     buttons = { 
+      buttons = { 
+        { text = "Front Wheel", menu = "frontWheel" , eventClient = "fx_customs:BackWheel", data = { wheels = "front" }},
+        { text = "Rear Wheel", menu = "backwheel" , eventClient = "fx_customs:BackWheel", data = { wheels = "back" }},
+        { text = "Rim Color", menu = "classic" , eventClient = "fx_customs:Paint", data = { paints = "wheel" }},
+        { text = "Wheel Accessories", menu = "wheelaccessories" },
+      },
+    },
 
-    --         { text = "Stock", wtype = 6, modtype = 23, mod = -1, costs = 0, subText = "" },
-    --         { text = "Speedway", wtype = 6, modtype = 23, mod = false, costs = 0, subText = "" },
-    --         { text = "Streetspecial", wtype = 6, modtype = 23, mod = 1, costs = 0, subText = "" },
-    --         { text = "Racer", wtype = 6, modtype = 23, mod = 2, costs = 0, subText = "" },
-    --         { text = "Trackstar", wtype = 6, modtype = 23, mod = 3, costs = 0, subText = "" },
-    --         { text = "Overlord", wtype = 6, modtype = 23, mod = 4, costs = 0, subText = "" },
-    --         { text = "Trident", wtype = 6, modtype = 23, mod = 5, costs = 0, subText = "" },
-    --         { text = "Triplethreat", wtype = 6, modtype = 23, mod = 6, costs = 0, subText = "" },
-    --         { text = "Stilleto", wtype = 6, modtype = 23, mod = 7, costs = 0, subText = "" },
-    --         { text = "Wires", wtype = 6, modtype = 23, mod = 8, costs = 0, subText = "" },
-    --         { text = "Bobber", wtype = 6, modtype = 23, mod = 9, costs = 0, subText = "" },
-    --         { text = "Solidus", wtype = 6, modtype = 23, mod = 10, costs = 0, subText = "" },
-    --         { text = "Iceshield", wtype = 6, modtype = 23, mod = 11, costs = 0, subText = "" },
-    --         { text = "Loops", wtype = 6, modtype = 23, mod = 12, costs = 0, subText = "" },
-    --       },
-    --     },
+    frontWheel = { 
 
-    -- backwheel = { 
+      settings = {
+        title = "Los Santos Customs",
+        menuTitle = "Welcome",
+        back = CallbackBack,
+        closable = true,
+      },
 
-    --   settings = {
-    --     title = "Los Santos Customs",
-    --     menuTitle = "Welcome",
-    --     back = CallbackBack,
-    --     closable = true,
-    --   },
+        buttons = { 
 
-    --     buttons = { 
+            { text = "Stock", subText = cost['frontWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 23, mod = -1, confirmed = true , cost = cost['frontWheel'].total} },
+            { text = "Speedway", subText = cost['frontWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 23, mod = false, confirmed = true , cost = cost['frontWheel'].total} },
+            { text = "Streetspecial", subText = cost['frontWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 23, mod = 1, confirmed = true , cost = cost['frontWheel'].total} },
+            { text = "Racer", subText = cost['frontWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 23, mod = 2, confirmed = true , cost = cost['frontWheel'].total} },
+            { text = "Trackstar", subText = cost['frontWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 23, mod = 3, confirmed = true , cost = cost['frontWheel'].total} },
+            { text = "Overlord", subText = cost['frontWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 23, mod = 4, confirmed = true , cost = cost['frontWheel'].total} },
+            { text = "Trident", subText = cost['frontWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 23, mod = 5, confirmed = true , cost = cost['frontWheel'].total} },
+            { text = "Triplethreat", subText = cost['frontWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 23, mod = 6, confirmed = true , cost = cost['frontWheel'].total} },
+            { text = "Stilleto", subText = cost['frontWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 23, mod = 7, confirmed = true , cost = cost['frontWheel'].total} },
+            { text = "Wires", subText = cost['frontWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 23, mod = 8, confirmed = true , cost = cost['frontWheel'].total} },
+            { text = "Bobber", subText = cost['frontWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 23, mod = 9, confirmed = true , cost = cost['frontWheel'].total} },
+            { text = "Solidus", subText = cost['frontWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 23, mod = 10, confirmed = true , cost = cost['frontWheel'].total} },
+            { text = "Iceshield", subText = cost['frontWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 23, mod = 11, confirmed = true , cost = cost['frontWheel'].total} },
+            { text = "Loops", subText = cost['frontWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 23, mod = 12, confirmed = true , cost = cost['frontWheel'].total} },
+          },
+        },
 
-    --         { text = "Stock", wtype = 6, modtype = 24, mod = -1, costs = 0, subText = "" },
-    --         { text = "Speedway", wtype = 6, modtype = 24, mod = false, costs = 0, subText = "" },
-    --         { text = "Streetspecial", wtype = 6, modtype = 24, mod = 1, costs = 0, subText = "" },
-    --         { text = "Racer", wtype = 6, modtype = 24, mod = 2, costs = 0, subText = "" },
-    --         { text = "Trackstar", wtype = 6, modtype = 24, mod = 3, costs = 0, subText = "" },
-    --         { text = "Overlord", wtype = 6, modtype = 24, mod = 4, costs = 0, subText = "" },
-    --         { text = "Trident", wtype = 6, modtype = 24, mod = 5, costs = 0, subText = "" },
-    --         { text = "Triplethreat", wtype = 6, modtype = 24, mod = 6, costs = 0, subText = "" },
-    --         { text = "Stilleto", wtype = 6, modtype = 24, mod = 7, costs = 0, subText = "" },
-    --         { text = "Wires", wtype = 6, modtype = 24, mod = 8, costs = 0, subText = "" },
-    --         { text = "Bobber", wtype = 6, modtype = 24, mod = 9, costs = 0, subText = "" },
-    --         { text = "Solidus", wtype = 6, modtype = 24, mod = 10, costs = 0, subText = "" },
-    --         { text = "Iceshield", wtype = 6, modtype = 24, mod = 11, costs = 0, subText = "" },
-    --         { text = "Loops", wtype = 6, modtype = 24, mod = 12, costs = 0, subText = "" },
-    --       },
-    --     },
+    backwheel = {  --TODO JINK WORK ON THIS MORE ASSUMING THERE MIGHT BE MORE MODS
+
+      settings = {
+        title = "Los Santos Customs",
+        menuTitle = "Welcome",
+        back = CallbackBack,
+        closable = true,
+      },
+
+        buttons = { 
+
+            { text = "Stock", subText = cost['backWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 24, mod = -1, confirmed = true , cost = cost['backWheel'].total} },
+            { text = "Speedway", subText = cost['backWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 24, mod = false, confirmed = true , cost = cost['backWheel'].total} },
+            { text = "Streetspecial", subText = cost['backWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 24, mod = 1, confirmed = true , cost = cost['backWheel'].total} },
+            { text = "Racer", subText = cost['backWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 24, mod = 2, confirmed = true , cost = cost['backWheel'].total} },
+            { text = "Trackstar", subText = cost['backWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 24, mod = 3, confirmed = true , cost = cost['backWheel'].total} },
+            { text = "Overlord", subText = cost['backWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 24, mod = 4, confirmed = true , cost = cost['backWheel'].total} },
+            { text = "Trident", subText = cost['backWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 24, mod = 5, confirmed = true , cost = cost['backWheel'].total} },
+            { text = "Triplethreat", subText = cost['backWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 24, mod = 6, confirmed = true , cost = cost['backWheel'].total} },
+            { text = "Stilleto", subText = cost['backWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 24, mod = 7, confirmed = true , cost = cost['backWheel'].total} },
+            { text = "Wires", subText = cost['backWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 24, mod = 8, confirmed = true , cost = cost['backWheel'].total} },
+            { text = "Bobber", subText = cost['backWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 24, mod = 9, confirmed = true , cost = cost['backWheel'].total} },
+            { text = "Solidus", subText = cost['backWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 24, mod = 10, confirmed = true , cost = cost['backWheel'].total} },
+            { text = "Iceshield", subText = cost['backWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 24, mod = 11, confirmed = true , cost = cost['backWheel'].total} },
+            { text = "Loops", subText = cost['backWheel'].display, eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 24, mod = 12, confirmed = true , cost = cost['backWheel'].total} },
+          },
+        },
 ---------------[ACCESSORIES CATEGORY]---------------
 
 accessories = {
@@ -940,7 +951,7 @@ paint = {
             {text = "Race Transmission", subText = cost['transmission'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 13, mod = 2, confirmed = true , cost = cost['transmission'].total} },
           },
         },
-        
+       
     turbo = { 
           
           settings = {
@@ -952,8 +963,8 @@ paint = {
           
         buttons = {
 
-            {text = "None", subText = cost['turbo'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 18, mod = false, confirmed = true , cost = cost['turbo'].total} },
-            {text = "Turbo Tuning", subText = cost['turbo'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 18, mod = true, confirmed = true , cost = cost['turbo'].total} },
+            {text = "None", subText = "Free", eventServer = "fx_customs:ConfirmMod", data = { turbo = false, confirmed = true , cost = 0} },
+            {text = "Turbo Tuning", subText = cost['turbo'].display, eventServer = "fx_customs:ConfirmMod", data = { turbo = true,  confirmed = true , cost = cost['turbo'].total} },
           },
         },
 
@@ -1039,8 +1050,8 @@ paint = {
           },
           
           buttons = { 
-            { text = "Stock Lights", subText = cost['headlights'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 22, xeon = false, confirmed = true , cost = cost['headlights'].total} },
-            { text = "Xenon Lights", subText = cost['headlights'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 22, xeon = true, confirmed = true , cost = cost['headlights'].total} },
+            { text = "Stock Lights", subText = cost['headlights'].display, eventServer = "fx_customs:ConfirmMod", data = { xeon = false, confirmed = true , cost = cost['headlights'].total} },
+            { text = "Xenon Lights", subText = cost['headlights'].display, eventServer = "fx_customs:ConfirmMod", data = { xeon = true, confirmed = true , cost = cost['headlights'].total} },
           }
         },
 

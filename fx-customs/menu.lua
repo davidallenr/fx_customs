@@ -1,9 +1,10 @@
-  -- @Date:   2017-07-29
+  -- @Date:   2017-07-30
   -- @Project: FX Customs
   -- @Owner: Jink Left
-  -- @Last modified time: 2017-07-29
-  --------------------------------------------
-
+  -- @Last modified time: 2017-07-30
+---------------------------------------------------------------------------------------------------
+-------------[THIS MENU IS POSSIBLE BECAUSE OF THE SCRIPT Ft_menuBuilder and Ft_ui by (name)] -----
+---------------------------------------------------------------------------------------------------
 menus = {
   opened = false,
   backMenu = {},
@@ -227,6 +228,20 @@ function AddButton(name, button)
 
     if menus.list[name] ~= nil then
       table.insert(menus.list[name].buttons, button)
+    end
+
+  end)
+end
+
+function AddButtonTable(name, button)
+  Citizen.CreateThread(function()
+
+    if menus.list[name] ~= nil then
+      menus.list[name].buttons = {}
+      for k, v in pairs (button) do
+        table.insert(menus.list[name].buttons, v)
+        --Citizen.Trace("K : " .. tostring(k) .. " V : " .. dump(v))
+      end
     end
 
   end)
