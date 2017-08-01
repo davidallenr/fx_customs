@@ -131,11 +131,11 @@ function SetVehicleInGarage()
 	local vehMods = {}
 
 	if DoesEntityExist(veh) then
-	    if not IsOpened() and GetLastInputMethod(2) then
+	    if not exports.ft_menuBuilder:IsOpened() and GetLastInputMethod(2) then
 		    if bike then
 				local buttons = {{ text = "Wheels", menu = "wheels2"  }, { text = "Accessories", menu = "accessories"  }, { text = "Paint", menu = "paint" }, { text = "Tuning", menu = "tuning"  }, { text = "Lights", menu = "lights"  },{ text = "Custom Mods", menu = "mods"  }, { text = "Previous Menu", back = true }, }
 		    	local modButtons = {}
-		    	AddButtonTable("fx_main", buttons)
+		    	exports.ft_menuBuilder:AddButtonTable("fx_main", buttons)
 		    	for i = 1,#mods do
 						 SetVehicleModKit(veh, 0)
 					 	if GetNumVehicleMods(veh,mods[i].mod) ~= nil and GetNumVehicleMods(veh,mods[i].mod) ~= false then
@@ -156,13 +156,13 @@ function SetVehicleInGarage()
 						end
 					end
 				if modButtons ~= nil then
-					AddButtonTable("mods", modButtons)
+					exports.ft_menuBuilder:AddButtonTable("mods", modButtons)
 				end
-		    	Open("fx_customs") -- OPENS Fx_customs menu if on motorcyle
+		    	exports.ft_menuBuilder:Open("fx_customs") -- OPENS Fx_customs menu if on motorcyle
 			else
 				local buttons = {{ text = "Wheels", menu = "wheels"  }, { text = "Accessories", menu = "accessories"  }, { text = "Paint", menu = "paint" }, { text = "Tuning", menu = "tuning"  }, { text = "Lights", menu = "lights"  }, { text = "Window Tint", menu = "windows"  },{ text = "Custom Mods", menu = "mods"  }, { text = "Previous Menu", back = true }, }
 				local modButtons = {}
-				AddButtonTable("fx_main", buttons)
+				exports.ft_menuBuilder:AddButtonTable("fx_main", buttons)
 				 	for i = 1,#mods do
 						 SetVehicleModKit(veh, 0)
 						 if GetNumVehicleMods(veh,mods[i].mod) ~= nil and GetNumVehicleMods(veh,mods[i].mod) ~= false then
@@ -183,9 +183,9 @@ function SetVehicleInGarage()
 						end
 					end
 				if modButtons ~= nil then
-					AddButtonTable("mods", modButtons)
+					exports.ft_menuBuilder:AddButtonTable("mods", modButtons)
 				end
-				Open("fx_customs") -- OPENS Fx_customs menu if not on motorcyle
+				exports.ft_menuBuilder:Open("fx_customs") -- OPENS Fx_customs menu if not on motorcyle
 			end
 			vehicleInGarage = true
 	    	--TriggerServerEvent("fx_customs:UpdateVeh", veh, stolen, vehiclecol, extracol, neoncolor, plate_index, model, veh_state, plate, windowtint, wheeltype, vehicle_name, mods)	 
@@ -247,25 +247,13 @@ Citizen.CreateThread(function()
 	    end
   	end
 end)
-
-Citizen.CreateThread(function()
-  if NetworkIsSessionStarted() then
-	  while true do
-	    Citizen.Wait(5)
-	    if not IsPauseMenuActive() then
-	      Show() -- Shows Game menu when pause menu is not active
-	    end
-	  end
-
-  end
-end)
 ----------------------------------------------------
 ---------------[	EVENTS 		]-------------------
 ----------------------------------------------------
 local firstspawn = 0
 AddEventHandler('playerSpawned', function(spawn)
   if firstspawn == 0 then
-	Generator(menu)  -- Generates game menu on player spawn // (menu) is the name of the table storing the menu
+	exports.ft_menuBuilder:Generator(menu)  -- Generates game menu on player spawn // (menu) is the name of the table storing the menu
     AddBlips()
     firstspawn = 1
   end
@@ -340,9 +328,9 @@ AddEventHandler('fx_customs:SetVehicleMod', function(data)
 	local turbo = data.turbo
 	
 	if damaged then
-		TriggerServerEvent("fx_customs:Notify","Los Santos Customs", "We've applied your vehicle update maybe you might want a repair!")
+		TriggerServerEvent("fx_customs:Notify", "We've applied your vehicle update maybe you might want a repair!")
 	else
-		TriggerServerEvent("fx_customs:Notify","Los Santos Customs", "We've applied your vehicle update.")
+		TriggerServerEvent("fx_customs:Notify", "We've applied your vehicle update.")
 	end
 	
 	SetVehicleModKit(veh, 0) -- Sets Modkit to be able to apply vehicle mods.
@@ -476,8 +464,8 @@ AddEventHandler('fx_customs:RepairVehicle', function(paid)
 	Citizen.Trace("I'm Repairing Vehicle." .. veh)
 	if damaged and paid then
 		SetVehicleFixed(veh)
-		TriggerServerEvent("fx_customs:Notify","Los Santos Customs", "We've repaired your vehicle for a fee")
+		TriggerServerEvent("fx_customs:Notify", "We've repaired your vehicle for a fee")
 	else
-		TriggerServerEvent("fx_customs:Notify","Los Santos Customs", "You have nothing to repair.")
+		TriggerServerEvent("fx_customs:Notify", "You have nothing to repair.")
 	end		
 end)

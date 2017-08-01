@@ -28,7 +28,7 @@ function addVehicle(steamid,steamname,plate,plateindex,stolen)
           MySQL.Async.execute("INSERT INTO fx_customs (steamid, steamname, vehicle_plate, vehicle_plateindex) VALUES (@steamid,@steamname,@plate,@plateindex)",{ ['@steamid'] = steamid, ['@steamname'] = steamname, ['@plate'] = plate, ['@plateindex'] = plateindex})
         else
           print("Vehicle is coming back STOLEN so it is not added")
-          Notify("Los Santos Customs", "Welcome to the shop!")
+          Notify("Welcome to the shop!")
         end
     else
       print("Vehicle Has Already Been Added") 
@@ -37,21 +37,21 @@ function addVehicle(steamid,steamname,plate,plateindex,stolen)
 end
 ----------------------------------------------------
 ---------------[  FUNCTIONS     ]---------------
-function Notify(text1,text2)
+function Notify(input)
 
 local notification = {
   type = "pnotify"            -- Choices are (pnotify, normal)
 }  
   if(notification.type == "pnotify") then
         TriggerClientEvent("pNotify:SendNotification", -1, {
-            text = "<strong> <h2>" .. text1 .."</h2> </strong> <br />" .. "<h3>" .. text2 .. "<h3> <br />",
+            text = "<strong> <h2>" .. input .."</h2> </strong>",
                   type = "success",
                   timeout = (2000),
                   layout = "bottomCenter",
                   queue = "top",
             })
     elseif (notification.type == "normal") then 
-      TriggerEvent("chatMessage", "Server", { 0, 0, 0 }, text1 .. text2)
+      TriggerEvent("chatMessage", "Server", { 0, 0, 0 }, input)
     end  
 end
 
@@ -109,7 +109,7 @@ AddEventHandler('fx_customs:ConfirmMod', function(data)
               end)
             TriggerClientEvent('fx_customs:SetVehicleMod',-1,data)
         else
-          Notify("Los Santos Customs", "You did not have enough cash for the purchase!")
+          Notify("You did not have enough cash for the purchase!")
         end
       end)
   elseif data.repair ~= nil then
