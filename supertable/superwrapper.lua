@@ -3,29 +3,29 @@ function CreateUser(player)
     exports['supertable']:Super_Create_User(player)
 end
 
-function UpdateMoney(player, amount)
+function UpdateUserMoney(player, amount)
     exports['supertable']:Super_Update_Money(player,amount)
 end
 
-function UpdateBank(player, amount)
+function UpdateUserBank(player, amount)
     exports['supertable']:Super_Update_Bank(player, amount)
 end
 
-function UpdateName(player)
+function UpdateUserName(player)
     exports['supertable']:Super_Update_Name(player)
 end
 
 -- 0 = unbanned ... 1 = banned...
 
-function UpdateBan(player, value) 
+function UpdateUserBan(player, value) 
     exports['supertable']:Super_Update_Ban(player, intbanned)
 end
 
-function UpdateJob(player, job)
+function UpdateUserJob(player, job)
     exports['supertable']:Super_Update_Job(player, job)
 end
 
-function UpdateModel(player, model)
+function UpdateUserModel(player, model)
     exports['supertable']:Super_Update_Model(player, model)
 end
 
@@ -40,6 +40,7 @@ function IsUserBanned(player, resultCallBack)
 end
 
 function GetUserMoney(player, resultCallBack)
+    print(player)
     return exports['supertable']:Super_Get_Money(player, resultCallBack)
 end
 

@@ -1,12 +1,13 @@
   -- @Date:   2017-07-331
-  -- @Project: FX Customs
-  -- @Owner: Jink Left
+  -- @Project: Ft_menuBuilder/ft_ui
+  -- @Owner: samuelds
   -- @LICENSE: GNU General Public License v3.0 https://github.com/FivemTools/ft_menuBuilder/blob/master/LICENSE
   -- @Last modified time: 2017-07-31
   -- @Source Project: Ft_menuBuilder: https://github.com/FivemTools/ft_menuBuilder
 ---------------------------------------------------------------------------------------------------
 -------------[THIS MENU IS POSSIBLE BECAUSE OF THE SCRIPT Ft_menuBuilder and Ft_ui by (samuelds) ] -----
 ---------------------------------------------------------------------------------------------------
+
 menus = {
   opened = false,
   backMenu = {},
@@ -26,14 +27,6 @@ menus = {
     backlock = false
   },
 }
-
-function IsOpened()
-  return menus.opened
-end
-
-function Current()
-  return menus.curent
-end
 
 function Help(text, state)
   Citizen.CreateThread(function()
@@ -107,6 +100,9 @@ function Text2(font, centre, x, y, scale, r, g, b, a) -- TODO JINK MENU FOR OWNE
 
   end)
 end
+
+
+
 
 function DrawMenuButton(data, x, y, width, height, selected)
   Citizen.CreateThread(function()
@@ -213,23 +209,23 @@ function Remove(name)
   end)
 end
 
--- Clean buttons
-function CleanButtons(name)
-  Citizen.CreateThread(function()
-
-    if menus.list[name] ~= nil then
-      menus.list[name].buttons = {}
-    end
-
-  end)
-end
-
 -- remove button
 function RemoveButton(name, button)
   Citizen.CreateThread(function()
 
     if menus.list[name] ~= nil then
       table.remove(menus.list[name].buttons, button)
+    end
+
+  end)
+end
+
+-- Clean buttons
+function CleanButtons(name)
+  Citizen.CreateThread(function()
+
+    if menus.list[name] ~= nil then
+      menus.list[name].buttons = {}
     end
 
   end)
@@ -342,7 +338,7 @@ function Close()
       local data = menus.list[name]
       local settings = data.settings
 
-      Citizen.Trace(dump(data))  
+      --Citizen.Trace(dump(data))  
         local buttons = data.buttons[3]
         if settings.closable ~= nil and settings.closable == false then
           if buttons.close then
@@ -551,6 +547,7 @@ function Show()
         -- Up
         if IsControlJustPressed(2, 188) and GetLastInputMethod(2) and not menus.gameMenu then
           if menus.selectedButton > 1 then
+
             menus.selectedButton = menus.selectedButton - 1
             if menus.selectedButton < menus.conf.from then
               menus.conf.from = menus.conf.from - 1
