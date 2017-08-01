@@ -1,7 +1,8 @@
-  -- @Date:   2017-07-30
+  -- @Date:   2017-07-331
   -- @Project: FX Customs
   -- @Owner: Jink Left
-  -- @Last modified time: 2017-07-26
+  -- @LICENSE: NO LICENSE/LICENSE
+  -- @Last modified time: 2017-07-31
   
 resource_manifest_version '77731fab-63ca-442c-a67b-abc70f28dfa5'
 

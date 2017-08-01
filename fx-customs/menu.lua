@@ -1,9 +1,11 @@
-  -- @Date:   2017-07-30
+  -- @Date:   2017-07-331
   -- @Project: FX Customs
   -- @Owner: Jink Left
-  -- @Last modified time: 2017-07-30
+  -- @LICENSE: GNU General Public License v3.0 https://github.com/FivemTools/ft_menuBuilder/blob/master/LICENSE
+  -- @Last modified time: 2017-07-31
+  -- @Source Project: Ft_menuBuilder: https://github.com/FivemTools/ft_menuBuilder
 ---------------------------------------------------------------------------------------------------
--------------[THIS MENU IS POSSIBLE BECAUSE OF THE SCRIPT Ft_menuBuilder and Ft_ui by (name)] -----
+-------------[THIS MENU IS POSSIBLE BECAUSE OF THE SCRIPT Ft_menuBuilder and Ft_ui by (samuelds) ] -----
 ---------------------------------------------------------------------------------------------------
 menus = {
   opened = false,
@@ -118,10 +120,10 @@ function DrawMenuButton(data, x, y, width, height, selected)
       color.rect = { red = 0, blue = 0, green = 0, alpha = 150 }
     end
 
-    Text(data.text, 0, 0, x - width / 2 + 0.005, y - height / 2 + 0.0035, 0.4, color.text.red, color.text.blue, color.text.green, 255)
+    Text(data.text, 0, 0, x - width / 2 + 0.004, y - height / 2 + 0.0035, 0.4*.9, color.text.red, color.text.blue, color.text.green, 255)
     DrawRect(x, y, width, height, color.rect.red, color.rect.blue, color.rect.green, color.rect.alpha)
     if data.subText ~= nil then
-      IsModOwned(data.modtype, data.mod, data.subText, 0, 0, x + width / 2 - 0.0385, y - height / 2 + 0.0035, 0.4, color.text.red, color.text.blue, color.text.green, 255)
+      IsModOwned(data.modtype, data.mod, data.subText, 0, 0, x + width / 2 - 0.0385, y - height / 2 + 0.0035, 0.4*.9, color.text.red, color.text.blue, color.text.green, 255)
     end
 
 
@@ -217,6 +219,17 @@ function CleanButtons(name)
 
     if menus.list[name] ~= nil then
       menus.list[name].buttons = {}
+    end
+
+  end)
+end
+
+-- remove button
+function RemoveButton(name, button)
+  Citizen.CreateThread(function()
+
+    if menus.list[name] ~= nil then
+      table.remove(menus.list[name].buttons, button)
     end
 
   end)

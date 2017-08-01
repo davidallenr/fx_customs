@@ -1,10 +1,11 @@
-  -- @Date:   2017-07-30
+  -- @Date:   2017-07-331
   -- @Project: FX Customs
   -- @Owner: Jink Left
-  -- @Last modified time: 2017-07-30
+  -- @LICENSE: NO LICENSE/LICENSE
+  -- @Last modified time: 2017-07-31
 -------------------------------------------
 ---------------[COST MENU]----------------
-local cost = {
+cost = {
   ['repair'] = { total = 100, display = "$100"},
   ['rims'] = { total = 1000, display = "$1,000"},
   ['spoilers'] = { total = 100, display = "$100"},
@@ -34,6 +35,7 @@ local cost = {
   ['paint'] = { total = 20, display = "$20"},
   ['plate'] = { total = 20, display = "$20"},
   ['bulletproof_tires'] = { total = 20, display = "$20"},
+  ['custom_mods'] = { total = 2000, display = "$2,000"},
 }
 
 ------------------------------------------
@@ -63,13 +65,13 @@ menu = {
         back = CallbackBack,
         closable = true,
       },
-
+      --- BUTTONS ARE GENERATED IN THE CLIENT
       buttons = {
 
       },
     },
 ---------------[REPAIR MENU]---------------
-    fx_repair = {
+fx_repair = {
 
       settings = {
         title = "Los Santos Customs",
@@ -81,6 +83,20 @@ menu = {
       buttons = {
         { text = "Confirm", subText = cost['repair'].display, eventServer = "fx_customs:ConfirmMod", data = { repair = true , cost = cost['repair'].total} },
         { text = "Previous Menu", back = true },
+      },
+    },
+---------------[CUSTOM MODS CATEGORY]---------------
+mods = { 
+
+      settings = {
+        title = "Los Santos Customs",
+        menuTitle = "Mods",
+        back = CallbackBack,
+        closable = true,
+      },
+
+      buttons = { 
+
       },
     },
 ---------------[WHEEL CATEGORY]---------------

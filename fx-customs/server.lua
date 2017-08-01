@@ -1,7 +1,8 @@
-  -- @Date:   2017-07-30
+  -- @Date:   2017-07-331
   -- @Project: FX Customs
   -- @Owner: Jink Left
-  -- @Last modified time: 2017-07-28
+  -- @LICENSE: NO LICENSE/LICENSE
+  -- @Last modified time: 2017-07-31
 ----------------------------------------------------
 ---------------[MYSQL ASYNC FUNCTION]---------------
 AddEventHandler('onMySQLReady', function ()
@@ -99,17 +100,11 @@ AddEventHandler('fx_customs:ConfirmMod', function(data)
   local price = data.cost
   local paid = false
 
-  print("Price : " .. tostring(price) .. " Confirmed : " .. tostring(confirmed) .. " Repair : " .. tostring(repair))  
-    print(tostring(value))
-
   if data.confirmed ~= nil then
       local value = GetUserMoney(player, function(res) 
-        print(tostring(player) .. " | " .. tostring(price) .. " | modtype : " .. tostring(modtype) .. " | mod : " .. tostring(mod))
         local playerMoney = res
         local newMoney = playerMoney - price
         if playerMoney >= price then 
-            print("NewMoney is GREATER than 0" .. " windowtint " .. tostring(windowtint))
-            print("NewMoney : " .. newMoney)
             MySQL.Async.execute("UPDATE supertable SET money = @newMoney WHERE steamid = @id", {newMoney = newMoney, id = steamid}, function ()
               end)
             TriggerClientEvent('fx_customs:SetVehicleMod',-1,data)
@@ -124,8 +119,6 @@ AddEventHandler('fx_customs:ConfirmMod', function(data)
       local newMoney = playerMoney - price
       if newMoney ~= nil and newMoney >= 0 then
         local paid = true
-        print("NewMoney is GREATER than 0")
-        print("NewMoney : " .. newMoney)
         MySQL.Async.execute("UPDATE supertable SET money = @newMoney WHERE steamid = @id", {newMoney = newMoney, id = steamid}, function ()
           end)
         TriggerClientEvent('fx_customs:RepairVehicle',-1, paid)
