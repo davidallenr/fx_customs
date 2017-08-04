@@ -12,6 +12,7 @@ menus = {
   opened = false,
   backMenu = {},
   curent = nil,
+  owned = nil,
   list = {},
   selectedButton = 0,
   gameMenu = false,
@@ -27,6 +28,7 @@ menus = {
     backlock = false
   },
 }
+
 
 function Help(text, state)
   Citizen.CreateThread(function()
@@ -59,21 +61,31 @@ function Notification(message)
   end)
 end
 
-function IsModOwned(modtype, mod, text, font, centre, x, y, scale, r, g, b, a) 
-    -- TODO JINK ADD LOGIC FOR OWNED MODS BEING DRAWN AS OWNED IN THE MENU   
-  -- for k, v in pairs(vehMods) do
-    -- if k == modtype and v == mod then
-    --   Citizen.Trace("inModType".. tostring(modtype) .. "mod : " .. tostring(mod))
-       --Text2( font, centre, x, y, scale, r, g, b, a)
+function dump(o)
+   if type(o) == 'table' then
+      local s = '{ '
+      for k,v in pairs(o) do
+         if type(k) ~= 'number' then k = '"'..k..'"' end
+         s = s .. '['..k..'] = ' .. dump(v) .. ','
+      end
+      return s .. '} '
+   else
+      return tostring(o)
+   end
+end
+
+function IsModOwned(selected, text, font, centre, x, y, scale, r, g, b, a)
+    -- if selected and owned ~= nil then
+    --   if owned == text then
+    --     Text2(font, centre, x, y, scale, r, g, b, a)
+    --   end
     -- else
       Text(text, font, centre, x, y, scale, r, g, b, a)
     -- end
-  -- end
+   
 end
 
 function Text(text, font, centre, x, y, scale, r, g, b, a)
-  Citizen.CreateThread(function()
-
     SetTextFont(font)
     SetTextProportional(0)
     SetTextScale(scale, scale)
@@ -82,23 +94,17 @@ function Text(text, font, centre, x, y, scale, r, g, b, a)
     SetTextEntry("STRING")
     AddTextComponentString(text)
     DrawText(x, y)
-
-  end)
 end
 
 function Text2(font, centre, x, y, scale, r, g, b, a) -- TODO JINK MENU FOR OWNED MODS
-  Citizen.CreateThread(function()
-
     SetTextFont(font)
     SetTextProportional(0)
-    SetTextScale(scale, scale * .9)
+    SetTextScale(scale, scale * .8)
     SetTextColour(r, g, b, a)
     SetTextCentre(centre)
     SetTextEntry("STRING")
     AddTextComponentString("OWNED")
-    DrawText(x - .009, y)
-
-  end)
+    DrawText(x , y)
 end
 
 
@@ -106,6 +112,10 @@ end
 
 function DrawMenuButton(data, x, y, width, height, selected)
   Citizen.CreateThread(function()
+    local modtype = data.modtype
+    local mod = data.modtype
+    local menu = data
+    local owned = owned
 
     local color = {}
     if selected then
@@ -119,7 +129,7 @@ function DrawMenuButton(data, x, y, width, height, selected)
     Text(data.text, 0, 0, x - width / 2 + 0.004, y - height / 2 + 0.0035, 0.4*.9, color.text.red, color.text.blue, color.text.green, 255)
     DrawRect(x, y, width, height, color.rect.red, color.rect.blue, color.rect.green, color.rect.alpha)
     if data.subText ~= nil then
-      IsModOwned(data.modtype, data.mod, data.subText, 0, 0, x + width / 2 - 0.0385, y - height / 2 + 0.0035, 0.4*.9, color.text.red, color.text.blue, color.text.green, 255)
+      IsModOwned(selected, data.subText, 0, 0, x + width / 2 - 0.0385, y - height / 2 + 0.0035, 0.4*.9, color.text.red, color.text.blue, color.text.green, 255)
     end
 
 
@@ -128,7 +138,7 @@ end
 
 function Generator(data)
   Citizen.CreateThread(function()
-
+    Citizen.Trace("I'm in generator.")
     if type(data) == "table" then
       for name, menu in pairs(data) do
         Add(name, menu.buttons, menu.settings)
@@ -448,6 +458,11 @@ function Exec()
       -- Go to next menu
       if infos.menu ~= nil and menus.list[infos.menu] ~= nil then
         Next(infos.menu)
+      else
+        --Citizen.Trace(tostring(owned) .. "THIS IS OWNED")
+        if infos.text ~= nil then
+         -- owned = infos.subText
+        end
       end
 
       --
