@@ -13,42 +13,30 @@ local currentGarage = 0
 local insidePosition = {}
 local outsidePosition = {}
 local locations = {
-    [1] = { outside = { x = -362.7962, y = -132.4005, z = 38.25239, heading = 71.187133}, inside = {x = -337.3863,y = -136.9247,z = 38.5737, heading = 269.455}},
-    [2] = { outside = { x = -1140.191, y = -1985.478, z = 12.72923, heading = 315.290466}, inside = {x = -1155.536,y = -2007.183,z = 12.744, heading = 155.413}},
-    [3] = { outside = { x = 716.4645, y = -1088.869, z = 21.92979, heading = 88.768}, inside = {x = 731.8163,y = -1088.822,z = 21.733, heading = 269.318}},
-    [4] = { outside = { x = 1174.811, y = 2649.954, z = 37.37151, heading = 0.450}, inside = {x = 1175.04,y = 2640.216,z = 37.32177, heading = 182.402}},
+    [1] = { outside = { x = -362.796, y = -132.400, z = 38.252, heading = 71.187}, inside = {x = -337.386,y = -136.924,z = 38.573, heading = 269.455}},
+    [2] = { outside = { x = -1140.191, y = -1985.478, z = 12.729, heading = 315.290}, inside = {x = -1155.536,y = -2007.183,z = 12.744, heading = 155.413}},
+    [3] = { outside = { x = 716.464, y = -1088.869, z = 21.929, heading = 88.768}, inside = {x = 731.816,y = -1088.822,z = 21.733, heading = 269.318}},
+    [4] = { outside = { x = 1174.811, y = 2649.954, z = 37.371, heading = 0.450}, inside = {x = 1175.04,y = 2640.216,z = 37.321, heading = 182.402}},
   }
 
-local mods = {
-	[1] = { name = "Spoilers", mod = 0, toggle = false, default = nil },
-	[2] = { name = "Front Bumper", mod = 1, toggle = false, default = nil },
-	[3] = { name = "Rear Bumper", mod = 2, toggle = false, default = nil},
-	[4] = { name = "Side Skirt", mod = 3, toggle = false, default = nil },
-	[5] = { name = "Exhaust", mod = 4, toggle = false, default = nil},
-	[6] = { name = "Roll Cage", mod = 5, toggle = false, default = nil },
-	[7] = { name = "Grille", mod = 6, toggle = false, default = nil },
-	[8] = { name = "Hood", mod = 7, toggle = false, default = nil },
-	[9] = { name = "Fender", mod = 8, toggle = false, default = nil},
-	[10] = { name = "Right Fender", mod = 9, toggle = false, default = nil},
-	[11] = { name = "Roof", mod = 10, toggle = false, default = nil},
-}
+local mods = {[1] = { name = "Spoilers", mod = 0 }, [2] = { name = "Front Bumper", mod = 1 }, [3] = { name = "Rear Bumper", mod = 2 }, [4] = { name = "Side Skirt", mod = 3 }, [5] = { name = "Exhaust", mod = 4 }, [6] = { name = "Roll Cage", mod = 5 }, [7] = { name = "Grille", mod = 6 }, [8] = { name = "Hood", mod = 7 }, [9] = { name = "Fender", mod = 8 }, [10] = { name = "Right Fender", mod = 9 }, [11] = { name = "Roof", mod = 10 }, }
 
 ---TODO JINK ONLY FOR TESTING DELETE AFTER
 local vehicle_generator = {
-[1] = { name = "banshee2", x = 1165.95, y = 2666.74, z = 37.9, heading = 360.402 },
-[2] = { name =  "cavalcade", x = 1170.95, y = 2666.74, z = 37.9, heading = 360.402 },
-[3] = { name =  "minivan", x = 1175.95, y = 2666.74, z = 37.9, heading = 360.402 },
---- Motorcycles
-[4] = { name =  "daemon2", x = 1187.95, y = 2666.74, z = 37.9, heading = 182.402 },
-[5] = { name =  "bf400", x = 1190.95, y = 2666.74, z = 37.9, heading = 360.402 },
-[6] = { name =  "shotaro", x = 1195.95, y = 2666.74, z = 37.9, heading = 360.402 },
-[2] = { name =  "sandking", x = 1180.95, y = 2666.74, z = 37.9, heading = 360.402 },
+	[1] = { name = "police4", x = 1165.95, y = 2666.74, z = 37.9, heading = 360.402 },
+	[2] = { name =  "cavalcade", x = 1170.95, y = 2666.74, z = 37.9, heading = 360.402 },
+	[3] = { name =  "police", x = 1175.95, y = 2666.74, z = 37.9, heading = 360.402 },
+	--- Motorcycles
+	[4] = { name =  "daemon2", x = 1187.95, y = 2666.74, z = 37.9, heading = 182.402 },
+	[5] = { name =  "bf400", x = 1190.95, y = 2666.74, z = 37.9, heading = 360.402 },
+	[6] = { name =  "shotaro", x = 1195.95, y = 2666.74, z = 37.9, heading = 360.402 },
+	[7] = { name =  "sandking", x = 1180.95, y = 2666.74, z = 37.9, heading = 360.402 },
 }
+
 
 ----------------------------------------------------
 ---------------[	FUNCTIONS 		]---------------
 ----------------------------------------------------
-
 
 function dump(o)
    if type(o) == 'table' then
