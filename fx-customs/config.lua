@@ -99,6 +99,36 @@ mods = {
 
       },
     },
+---------------[EXTRAS CATEGORY]---------------
+extras = { 
+
+      settings = {
+        title = "Los Santos Customs",
+        menuTitle = "Vehicle Extras",
+        back = CallbackBack,
+        closable = true,
+      },
+
+      buttons = { 
+
+        {text = "Enable", eventClient = "fx_customs:VehicleExtra", menu = "extras2", data = { extra = "true" } },
+        {text = "Disable", eventClient = "fx_customs:VehicleExtra",menu = "extras2", data = { extra = "false" } },
+      },
+    },
+
+extras2 = { 
+
+      settings = {
+        title = "Los Santos Customs",
+        menuTitle = "Vehicle Extras",
+        back = CallbackBack,
+        closable = true,
+      },
+
+      buttons = { 
+
+      },
+    },
 ---------------[WHEEL CATEGORY]---------------
     wheels = { 
 
@@ -400,7 +430,7 @@ mods = {
 
         buttons = { 
 
-            { text = "Never Flats", subText = cost['bulletproof_tires'].display, eventServer = "fx_customs:ConfirmMod", data = { burst = true, confirmed = true , cost = cost['bulletproof_tires'].total} },
+            { text = "Never Flats", subText = cost['bulletproof_tires'].display, eventServer = "fx_customs:ConfirmMod", data = { burst = true, confirmed = true , cost = cost['bulletproof_tires'].total } },
             { text = "Original Tires", subText = cost['bulletproof_tires'].display, eventServer = "fx_customs:ConfirmMod", data = { burst = false, confirmed = true , cost = cost['bulletproof_tires'].total} },
             { text = "Previous Menu", back = true },
           },
@@ -1053,7 +1083,7 @@ paint = {
 
             { text = "Headlights", menu = "headlights" },
             { text = "Neon Kits", menu = "neonkits"  },
-          }
+          },
         },
 
         headlights = { 
@@ -1068,7 +1098,7 @@ paint = {
           buttons = { 
             { text = "Stock Lights", subText = cost['headlights'].display, eventServer = "fx_customs:ConfirmMod", data = { xeon = false, confirmed = true , cost = cost['headlights'].total} },
             { text = "Xenon Lights", subText = cost['headlights'].display, eventServer = "fx_customs:ConfirmMod", data = { xeon = true, confirmed = true , cost = cost['headlights'].total} },
-          }
+          },
         },
 
     neonkits = { 
