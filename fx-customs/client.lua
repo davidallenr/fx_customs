@@ -54,8 +54,9 @@ end
 function GetVehicleData()
   local player = GetPlayerPed(-1)
   local veh = GetVehiclePedIsIn(player,false)
-  local model = GetEntityModel(veh)
-  local bike = IsThisModelABike(model) 
+  local hash = GetEntityModel(veh)
+  local bike = IsThisModelABike(hash)
+  local model = GetDisplayNameFromVehicleModel(hash) 
   local stolen = IsVehicleStolen(veh)
   local vehiclecol = table.pack(GetVehicleColours(veh))
   local extracol = table.pack(GetVehicleExtraColours(veh))
@@ -66,33 +67,65 @@ function GetVehicleData()
   local plate = GetVehicleNumberPlateText(veh)
   local windowtint = GetVehicleWindowTint(veh)
   local wheeltype = GetVehicleWheelType(veh)
-  local vehicle_name = GetHashKey(veh)
-  local mods = mods
+  local vehicle_class = GetVehicleClass(veh)
+  local vehicle_smoke = table.pack(GetVehicleTyreSmokeColor(veh))
+  local burst = GetVehicleTyresCanBurst(veh)
   local tempMods = {}
+  local neonsides = {}
   local vehicleData = {}
   
-  for i = 0, 24 do
-    SetVehicleModKit(veh, 0)
-    local vehMods = GetVehicleMod(veh, i)
-    if vehMods ~= nil then
-      tempMods[#tempMods+1] = vehMods
-    end
-  end
+	for i = 0, 24 do
+		SetVehicleModKit(veh, 0)
+		local vehMods = GetVehicleMod(veh, i)
+		if vehMods ~= nil then
+		  tempMods[#tempMods+1] = vehMods
+		end
+	end
+	for i = 0, 3 do
+		SetVehicleModKit(veh, 0)
+		local neon = IsVehicleNeonLightEnabled(veh, i)
+		if neon ~= nil then
+			neonsides[#neonsides+1] = neon
+		end
+	end
+	for i = 1,#mods do -- FOR 1 TO THE LENGTH OF THE LOCAL MODS AT THE BEGINNING DO THIS
+		 SetVehicleModKit(veh, 0)
+	 	if GetNumVehicleMods(veh,mods[i].mod) ~= nil and GetNumVehicleMods(veh,mods[i].mod) ~= false then
+		 	 modType = mods[i].mod
+			if modType ~= nil then 
+				for i = 0, GetNumVehicleMods(veh, modType) - 1 do
+				 	local lbl = GetModTextLabel(veh,modType,i)
+					if lbl ~= nil then
+						local name = tostring(GetLabelText(lbl))
+						if name ~= "NULL" then
+							local custom_mods = { modtype = modType, mod = i}
+			 				vehicleData[#vehicleData+1] = { custom_mods = custom_mods }
+		 					--Citizen.Trace(" Name: " .. name.." | Mod "..modType.." | Number: "..i)
+				 		end
+			 		end
+			 	end
+		 	end
+		end
+	end
 
   vehicleData[#vehicleData+1] = { player = player }
   vehicleData[#vehicleData+1] = { veh = veh}
+  vehicleData[#vehicleData+1] = { hash = hash}
   vehicleData[#vehicleData+1] = { model = model }
   vehicleData[#vehicleData+1] = { bike = bike }
   vehicleData[#vehicleData+1] = { stolen = stolen }
   vehicleData[#vehicleData+1] = { vehiclecol = vehiclecol }
   vehicleData[#vehicleData+1] = { extracol = extracol }
   vehicleData[#vehicleData+1] = { neoncolor = neoncolor }
+  vehicleData[#vehicleData+1] = { neonsides = neonsides }
   vehicleData[#vehicleData+1] = { veh_state = veh_state }
   vehicleData[#vehicleData+1] = { plate = plate }
+  vehicleData[#vehicleData+1] = { burst = burst }
   vehicleData[#vehicleData+1] = { plate_index = plate_index }
   vehicleData[#vehicleData+1] = { windowtint = windowtint }
   vehicleData[#vehicleData+1] = { wheeltype = wheeltype }
-  vehicleData[#vehicleData+1] = { vehicle_name = vehicle_name }
+  vehicleData[#vehicleData+1] = { vehicle_class = vehicle_class }
+  vehicleData[#vehicleData+1] = { vehicle_smoke = vehicle_smoke }
   vehicleData[#vehicleData+1] = { tempMods = tempMods }
 
   callback = vehicleData
@@ -238,7 +271,7 @@ function SetVehicleInGarage()
 				exports.ft_menuBuilder:Open("fx_customs") -- OPENS Fx_customs menu if not on motorcyle
 			end
 			vehicleInGarage = true
-	    	TriggerServerEvent("fx_customs:UpdateVeh", veh_data )	 
+	    	TriggerServerEvent("fx_customs:SetVehicle", veh_data )	 
 	  		SetEntityCoordsNoOffset(veh,pos.x,pos.y,pos.z)
 			SetEntityHeading(veh,pos.heading)
 			SetVehicleOnGroundProperly(veh)
@@ -372,6 +405,7 @@ RegisterNetEvent('fx_customs:SetVehicleMod')
 AddEventHandler('fx_customs:SetVehicleMod', function(data)
 	local player = GetPlayerPed(-1)
 	local veh = GetVehiclePedIsUsing(player)
+	local updateveh = GetVehicleData()
 	local damaged = IsVehicleDamaged(veh)
 	local modtype = data.modtype
 	local mod = data.mod
@@ -523,6 +557,9 @@ AddEventHandler('fx_customs:SetVehicleMod', function(data)
 				--Citizen.Trace("SetExtra Else If : " .. tostring(setExtra))
 		end
 	end
+	TriggerServerEvent("fx_customs:UpdateVeh",updateveh)
+	Citizen.Trace("Updating Veh ")
+	Citizen.Trace(dump(updateveh))
 end)
 
 RegisterNetEvent('fx_customs:RepairVehicle')
