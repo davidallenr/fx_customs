@@ -1,22 +1,3 @@
-TriggerServerEvent('GetUserMoney')
-
-AddEventHandler('ReceiveUserMoney', function(func)
-    Money = func
-end)
-
-
-
-
-
-
-
-
-
-
-
-
-
---[[
 AddEventHandler('rconCommand', function(commandName, args)
     if commandName == 'test' then
         local player = GetPlayers()[1]  
@@ -36,4 +17,4 @@ AddEventHandler('rconCommand', function(commandName, args)
         print (money) -- This will print 500 in console as well but not rcon as the event has expired (i think)
     end
     CancelEvent()
-end) ]]--
+end)

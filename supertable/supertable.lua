@@ -30,7 +30,7 @@ function Super_First_Run()
     Update_Table_Job()
     Update_Table_PlayerModel()
     Wait(1000)
-    print ("Ignore these 'errors'. They are expected and SuperTable is functioning properly!")
+    print ("SuperTable is functioning properly!")
 end
 
 function Super_Create_User(player)
@@ -178,14 +178,14 @@ function Super_Get_Steam_ID(player)
 end
 
 function Update_Table_Job()
-    local sql = "ALTER TABLE supertable ADD job varchar(255)"
+    local sql = "ALTER TABLE supertable ADD COLUMN IF NOT EXISTS job varchar(255)"
     local param = {}
     
     MySQL.Async.execute(sql, param)
 end
 
 function Update_Table_PlayerModel()
-    local sql = "ALTER TABLE supertable ADD playermodel varchar(255)"
+    local sql = "ALTER TABLE supertable ADD COLUMN IF NOT EXISTS playermodel varchar(255)"
     local param = {}
     
     MySQL.Async.execute(sql, param)
@@ -193,44 +193,55 @@ end
 
 -- Register Events
 
-RegisterServerEvent('UpdateMoney')
-AddEventHandler('UpdateMoney', function(amount)
+RegisterServerEvent('UpdateUserMoney')
+AddEventHandler('UpdateUserMoney', function(amount)
     Super_Update_Money(source,amount)
 end)
 
-RegisterServerEvent('UpdateBank')
-AddEventHandler('UpdateBank', function(amount)
+RegisterServerEvent('UpdateUserBank')
+AddEventHandler('UpdateUserBank', function(amount)
     Super_Update_Bank(source, amount)
 end)
 
-RegisterServerEvent('UpdateBan')
-AddEventHandler('UpdateBan', function(value)
+RegisterServerEvent('UpdateUserBan')
+AddEventHandler('UpdateUserBan', function(value)
     Super_Update_Ban(source, value)
 end)
 
-RegisterServerEvent('UpdateJob')
-AddEventHandler('UpdateJob', function(job)
+RegisterServerEvent('UpdateUserJob')
+AddEventHandler('UpdateUserJob', function(job)
     Super_Update_Job(source, job)
 end)
 
-RegisterServerEvent('UpdateModel')
-AddEventHandler('UpdateModel', function(model)
+RegisterServerEvent('UpdateUserModel')
+AddEventHandler('UpdateUserModel', function(model)
     Super_Update_Model(source, model)
 end)
 
+-- get
+
 RegisterServerEvent('GetUserMoney')
 AddEventHandler('GetUserMoney', function()
-    TriggerClientEvent('ReceiveUserMoney', source, GetUserMoney(source, resultCallBack))
+    player = source
+    Super_Get_Money(player, function(res)
+        TriggerClientEvent('ReceiveUserMoney', player, res)
+    end)
 end)
 
 RegisterServerEvent('GetUserBank')
 AddEventHandler('GetUserBank', function()
-    TriggerClientEvent('ReceiveUserBank', source, GetUserBank(source, resultCallBack))
+    player = source
+    Super_Get_Bank(player, function(res)
+        TriggerClientEvent('ReceiveUserBank', player, res)
+    end)
 end)
 
 RegisterServerEvent('GetUserJob')
-AddEventHandler('GetUser', function()
-    TriggerClientEvent('ReceiveUserJob', source, GetUserJob(source, resultCallBack))
+AddEventHandler('GetUserJob', function()
+    player = source
+    Super_Get_Job(player, function(res)
+        TriggerClientEvent('ReceiveUserJob', player, res)
+    end)
 end)
 
 RegisterServerEvent('GetUserModel')

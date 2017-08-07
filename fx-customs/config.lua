@@ -99,6 +99,36 @@ mods = {
 
       },
     },
+---------------[EXTRAS CATEGORY]---------------
+extras = { 
+
+      settings = {
+        title = "Los Santos Customs",
+        menuTitle = "Vehicle Extras",
+        back = CallbackBack,
+        closable = true,
+      },
+
+      buttons = { 
+
+        {text = "Enable", eventClient = "fx_customs:VehicleExtra", menu = "extras2", data = { extra = "enable" } },
+        {text = "Disable", eventClient = "fx_customs:VehicleExtra",menu = "extras2", data = { extra = "disable" } },
+      },
+    },
+
+extras2 = { 
+
+      settings = {
+        title = "Los Santos Customs",
+        menuTitle = "Vehicle Extras",
+        back = CallbackBack,
+        closable = true,
+      },
+
+      buttons = { 
+
+      },
+    },
 ---------------[WHEEL CATEGORY]---------------
     wheels = { 
 
@@ -400,7 +430,7 @@ mods = {
 
         buttons = { 
 
-            { text = "Never Flats", subText = cost['bulletproof_tires'].display, eventServer = "fx_customs:ConfirmMod", data = { burst = true, confirmed = true , cost = cost['bulletproof_tires'].total} },
+            { text = "Never Flats", subText = cost['bulletproof_tires'].display, eventServer = "fx_customs:ConfirmMod", data = { burst = true, confirmed = true , cost = cost['bulletproof_tires'].total } },
             { text = "Original Tires", subText = cost['bulletproof_tires'].display, eventServer = "fx_customs:ConfirmMod", data = { burst = false, confirmed = true , cost = cost['bulletproof_tires'].total} },
             { text = "Previous Menu", back = true },
           },
@@ -417,25 +447,25 @@ mods = {
 
         buttons = { 
 
-            { text = "Normal", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = true, r = 255, g = 255, b = 255, confirmed = true , cost = cost['smoke'].total} }, 
-            { text = "Slate Gray", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = true, r = 112, g = 128, b = 144,confirmed = true , cost = cost['smoke'].total} },
-            { text = "Blue", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = true, r = 0, g = 0, b = 255, confirmed = true , cost = cost['smoke'].total} },
-            { text = "Light Blue", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = true, r = 0, g = 150, b = 255, confirmed = true , cost = cost['smoke'].total} },
-            { text = "Navy Blue", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = true, r = 0, g = 0, b = 128, confirmed = true , cost = cost['smoke'].total} },
-            { text = "Sky Blue", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = true, r = 135, g = 206, b = 235, confirmed = true , cost = cost['smoke'].total} },
-            { text = "Turquoise", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = true, r = 0, g = 245, b = 255, confirmed = true , cost = cost['smoke'].total} },
-            { text = "Mint Green", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = true, r = 50, g = 255, b = 155, confirmed = true , cost = cost['smoke'].total} },
-            { text = "Lime Green", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = true, r = 0, g = 255, b = 0, confirmed = true , cost = cost['smoke'].total} },
-            { text = "Yellow", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = true, r = 255, g = 255, b = 0, confirmed = true , cost = cost['smoke'].total} },
-            { text = "Olive", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = true, r = 128, g = 128, b = 0, confirmed = true , cost = cost['smoke'].total} },
-            { text = "Gold", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = true, r = 255, g = 215, b = 0, confirmed = true , cost = cost['smoke'].total} },
-            { text = "Orange", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = true, r = 255, g = 165, b = 0, confirmed = true , cost = cost['smoke'].total} },
-            { text = "Wheat", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = true, r = 245, g = 222, b = 179, confirmed = true , cost = cost['smoke'].total} },
-            { text = "Red", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = true, r = 255, g = 0, b = 0, confirmed = true , cost = cost['smoke'].total} },
-            { text = "Pink", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = true, r = 255, g = 161, b = 211, confirmed = true , cost = cost['smoke'].total} },
-            { text = "Bright Pink", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = true, r = 255, g = 0, b = 255, confirmed = true , cost = cost['smoke'].total} },
-            { text = "Purple", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = true, r = 153, g = 0, b = 153, confirmed = true , cost = cost['smoke'].total} },
-            { text = "Ivory", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = true, r = 41, g = 36, b = 33, confirmed = true , cost = cost['smoke'].total} },
+            { text = "Normal", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = 1, enabled = 0, tr = 255, tg = 255, tb = 255, confirmed = true , cost = cost['smoke'].total} }, 
+            { text = "Slate Gray", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = 1, enabled = 1, tr = 112, tg = 128, tb = 144,confirmed = true , cost = cost['smoke'].total} },
+            { text = "Blue", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = 1, enabled = 1, tr = 0, g = 0, tb = 255, confirmed = true , cost = cost['smoke'].total} },
+            { text = "Light Blue", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = 1, enabled = 1, tr = 0, tg = 150, tb = 255, confirmed = true , cost = cost['smoke'].total} },
+            { text = "Navy Blue", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = 1, enabled = 1, tr = 0, tg = 0, tb = 128, confirmed = true , cost = cost['smoke'].total} },
+            { text = "Sky Blue", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = 1, enabled = 1, tr = 135, tg = 206, tb = 235, confirmed = true , cost = cost['smoke'].total} },
+            { text = "Turquoise", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = 1, enabled = 1, tr = 0, tg = 245, tb = 255, confirmed = true , cost = cost['smoke'].total} },
+            { text = "Mint Green", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = 1, enabled = 1, tr = 50, tg = 255, tb = 155, confirmed = true , cost = cost['smoke'].total} },
+            { text = "Lime Green", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = 1, enabled = 1, tr = 0, tg = 255, tb = 0, confirmed = true , cost = cost['smoke'].total} },
+            { text = "Yellow", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = 1, enabled = 1, tr = 255, tg = 255, tb = 0, confirmed = true , cost = cost['smoke'].total} },
+            { text = "Olive", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = 1, enabled = 1, tr = 128, tg = 128, tb = 0, confirmed = true , cost = cost['smoke'].total} },
+            { text = "Gold", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = 1, enabled = 1, tr = 255, tg = 215, tb = 0, confirmed = true , cost = cost['smoke'].total} },
+            { text = "Orange", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = 1, enabled = 1, tr = 255, tg = 165, tb = 0, confirmed = true , cost = cost['smoke'].total} },
+            { text = "Wheat", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = 1, enabled = 1, tr = 245, tg = 222, tb = 179, confirmed = true , cost = cost['smoke'].total} },
+            { text = "Red", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = 1, enabled = 1, tr = 255, tg = 0, tb = 0, confirmed = true , cost = cost['smoke'].total} },
+            { text = "Pink", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = 1, enabled = 1, tr = 255, tg = 161, tb = 211, confirmed = true , cost = cost['smoke'].total} },
+            { text = "Bright Pink", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = 1, enabled = 1, tr = 255, tg = 0, tb = 255, confirmed = true , cost = cost['smoke'].total} },
+            { text = "Purple", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = 1, enabled = 1, tr = 153, tg = 0, tb = 153, confirmed = true , cost = cost['smoke'].total} },
+            { text = "Ivory", subText = cost['smoke'].display, eventServer = "fx_customs:ConfirmMod", data = { smoke = 1, enabled = 1, tr = 41, tg = 36, tb = 33, confirmed = true , cost = cost['smoke'].total} },
             { text = "Previous Menu", back = true },
           },
         },
@@ -979,8 +1009,8 @@ paint = {
           
         buttons = {
 
-            {text = "None", subText = "Free", eventServer = "fx_customs:ConfirmMod", data = { turbo = false, confirmed = true , cost = 0} },
-            {text = "Turbo Tuning", subText = cost['turbo'].display, eventServer = "fx_customs:ConfirmMod", data = { turbo = true,  confirmed = true , cost = cost['turbo'].total} },
+            {text = "None", subText = "Free", eventServer = "fx_customs:ConfirmMod", data = { turbo = false, toggle = 0, confirmed = true , cost = 0} },
+            {text = "Turbo Tuning", subText = cost['turbo'].display, eventServer = "fx_customs:ConfirmMod", data = { turbo = true, toggle = 1,  confirmed = true , cost = cost['turbo'].total} },
           },
         },
 
@@ -1053,7 +1083,7 @@ paint = {
 
             { text = "Headlights", menu = "headlights" },
             { text = "Neon Kits", menu = "neonkits"  },
-          }
+          },
         },
 
         headlights = { 
@@ -1066,9 +1096,9 @@ paint = {
           },
           
           buttons = { 
-            { text = "Stock Lights", subText = cost['headlights'].display, eventServer = "fx_customs:ConfirmMod", data = { xeon = false, confirmed = true , cost = cost['headlights'].total} },
-            { text = "Xenon Lights", subText = cost['headlights'].display, eventServer = "fx_customs:ConfirmMod", data = { xeon = true, confirmed = true , cost = cost['headlights'].total} },
-          }
+            { text = "Stock Lights", subText = cost['headlights'].display, eventServer = "fx_customs:ConfirmMod", data = { xeon = false, toggle = 0, confirmed = true , cost = cost['headlights'].total} },
+            { text = "Xenon Lights", subText = cost['headlights'].display, eventServer = "fx_customs:ConfirmMod", data = { xeon = true, toggle = 1, confirmed = true , cost = cost['headlights'].total} },
+          },
         },
 
     neonkits = { 
@@ -1098,26 +1128,26 @@ paint = {
           },
           
                 buttons = {
-                  { text = "None", subText = "Free", eventServer = "fx_customs:ConfirmMod", data = { enabled = false, confirmed = true , cost = 0} }, 
-                  { text = "White", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { r = 255, g = 255, b = 255, confirmed = true , cost = cost['neon'].total} }, 
-                  { text = "Slate Gray", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { r = 112, g = 128, b = 144,confirmed = true , cost = cost['neon'].total} },
-                  { text = "Blue", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { r = 0, g = 0, b = 255, confirmed = true , cost = cost['neon'].total} },
-                  { text = "Light Blue", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { r = 0, g = 150, b = 255, confirmed = true , cost = cost['neon'].total} },
-                  { text = "Navy Blue", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { r = 0, g = 0, b = 128, confirmed = true , cost = cost['neon'].total} },
-                  { text = "Sky Blue", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { r = 135, g = 206, b = 235, confirmed = true , cost = cost['neon'].total} },
-                  { text = "Turquoise", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { r = 0, g = 245, b = 255, confirmed = true , cost = cost['neon'].total} },
-                  { text = "Mint Green", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { r = 50, g = 255, b = 155, confirmed = true , cost = cost['neon'].total} },
-                  { text = "Lime Green", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { r = 0, g = 255, b = 0, confirmed = true , cost = cost['neon'].total} },
-                  { text = "Yellow", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { r = 255, g = 255, b = 0, confirmed = true , cost = cost['neon'].total} },
-                  { text = "Olive", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { r = 128, g = 128, b = 0, confirmed = true , cost = cost['neon'].total} },
-                  { text = "Gold", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { r = 255, g = 215, b = 0, confirmed = true , cost = cost['neon'].total} },
-                  { text = "Orange", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { r = 255, g = 165, b = 0, confirmed = true , cost = cost['neon'].total} },
-                  { text = "Wheat", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { r = 245, g = 222, b = 179, confirmed = true , cost = cost['neon'].total} },
-                  { text = "Red", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { r = 255, g = 0, b = 0, confirmed = true , cost = cost['neon'].total} },
-                  { text = "Pink", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { r = 255, g = 161, b = 211, confirmed = true , cost = cost['neon'].total} },
-                  { text = "Bright Pink", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { r = 255, g = 0, b = 255, confirmed = true , cost = cost['neon'].total} },
-                  { text = "Purple", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { r = 153, g = 0, b = 153, confirmed = true , cost = cost['neon'].total} },
-                  { text = "Ivory", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { r = 41, g = 36, b = 33, confirmed = true , cost = cost['neon'].total} },
+                  { text = "None", subText = "Free", eventServer = "fx_customs:ConfirmMod", data = { enabled = 0, r = 0, g = 0, b = 0, confirmed = true , cost = 0} }, 
+                  { text = "White", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { enabled = 1, r = 255, g = 255, b = 255, confirmed = true , cost = cost['neon'].total} }, 
+                  { text = "Slate Gray", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { enabled = 1, r = 112, g = 128, b = 144,confirmed = true , cost = cost['neon'].total} },
+                  { text = "Blue", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { enabled = 1, r = 0, g = 0, b = 255, confirmed = true , cost = cost['neon'].total} },
+                  { text = "Light Blue", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { enabled = 1, r = 0, g = 150, b = 255, confirmed = true , cost = cost['neon'].total} },
+                  { text = "Navy Blue", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { enabled = 1, r = 0, g = 0, b = 128, confirmed = true , cost = cost['neon'].total} },
+                  { text = "Sky Blue", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { enabled = 1, r = 135, g = 206, b = 235, confirmed = true , cost = cost['neon'].total} },
+                  { text = "Turquoise", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { enabled = 1, r = 0, g = 245, b = 255, confirmed = true , cost = cost['neon'].total} },
+                  { text = "Mint Green", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { enabled = 1, r = 50, g = 255, b = 155, confirmed = true , cost = cost['neon'].total} },
+                  { text = "Lime Green", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { enabled = 1, r = 0, g = 255, b = 0, confirmed = true , cost = cost['neon'].total} },
+                  { text = "Yellow", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { enabled = 1, r = 255, g = 255, b = 0, confirmed = true , cost = cost['neon'].total} },
+                  { text = "Olive", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { enabled = 1, r = 128, g = 128, b = 0, confirmed = true , cost = cost['neon'].total} },
+                  { text = "Gold", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { enabled = 1, r = 255, g = 215, b = 0, confirmed = true , cost = cost['neon'].total} },
+                  { text = "Orange", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { enabled = 1, r = 255, g = 165, b = 0, confirmed = true , cost = cost['neon'].total} },
+                  { text = "Wheat", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { enabled = 1, r = 245, g = 222, b = 179, confirmed = true , cost = cost['neon'].total} },
+                  { text = "Red", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { enabled = 1, r = 255, g = 0, b = 0, confirmed = true , cost = cost['neon'].total} },
+                  { text = "Pink", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { enabled = 1, r = 255, g = 161, b = 211, confirmed = true , cost = cost['neon'].total} },
+                  { text = "Bright Pink", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { enabled = 1, r = 255, g = 0, b = 255, confirmed = true , cost = cost['neon'].total} },
+                  { text = "Purple", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { enabled = 1, r = 153, g = 0, b = 153, confirmed = true , cost = cost['neon'].total} },
+                  { text = "Ivory", subText = cost['neon'].display, eventServer = "fx_customs:ConfirmMod", data = { enabled = 1, r = 41, g = 36, b = 33, confirmed = true , cost = cost['neon'].total} },
                 },
               },
 
