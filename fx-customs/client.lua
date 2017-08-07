@@ -1,8 +1,8 @@
-  -- @Date:   2017-08-05
+  -- @Date:   2017-07-331
   -- @Project: FX Customs
   -- @Owner: Jink Left
   -- @LICENSE: NO LICENSE/LICENSE
-  -- @Last modified time: 2017-08-05
+  -- @Last modified time: 2017-07-31
 ----------------------------------------------------
 --------------------[   DATA   ]--------------------
 local FirstJoinProper = false
@@ -67,6 +67,9 @@ function GetVehicleData()
   local plate = GetVehicleNumberPlateText(veh)
   local windowtint = GetVehicleWindowTint(veh)
   local wheeltype = GetVehicleWheelType(veh)
+  local turbo_tog = IsToggleModOn(veh, 18)
+  local smoke_tog = IsToggleModOn(veh, 20)
+  local xeon_tog = IsToggleModOn(veh, 22)
   local vehicle_class = GetVehicleClass(veh)
   local vehicle_smoke = table.pack(GetVehicleTyreSmokeColor(veh))
   local burst = GetVehicleTyresCanBurst(veh)
@@ -100,7 +103,6 @@ function GetVehicleData()
 						if name ~= "NULL" then
 							local custom_mods = { modtype = modType, mod = i}
 			 				vehicleData[#vehicleData+1] = { custom_mods = custom_mods }
-
 				 		end
 			 		end
 			 	end
@@ -111,6 +113,9 @@ function GetVehicleData()
   vehicleData[#vehicleData+1] = { player = player }
   vehicleData[#vehicleData+1] = { veh = veh}
   vehicleData[#vehicleData+1] = { hash = hash}
+  vehicleData[#vehicleData+1] = { turbo_tog = turbo_tog }
+  vehicleData[#vehicleData+1] = { smoke_tog = smoke_tog }
+  vehicleData[#vehicleData+1] = { xeon_tog = xeon_tog }
   vehicleData[#vehicleData+1] = { model = model }
   vehicleData[#vehicleData+1] = { bike = bike }
   vehicleData[#vehicleData+1] = { stolen = stolen }
@@ -204,7 +209,7 @@ function SetVehicleInGarage()
 									if lbl ~= nil then
 										local name = tostring(GetLabelText(lbl))
 										if name ~= "NULL" then
-							 				local button = { text = name, subText = cost['custom_mods'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = modType, mod = i, confirmed = true , cost = cost['custom_mods'].total}} -- ADDS A BUTTON WITH THE CUSTOM MODS LABEL TEXT
+							 				local button = { text = name, subText = cost['custom_mods'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = modType, mod = i, toggle = 0, confirmed = true , cost = cost['custom_mods'].total}} -- ADDS A BUTTON WITH THE CUSTOM MODS LABEL TEXT
 							 				modButtons[#modButtons+1] = button
 
 								 		end
@@ -222,7 +227,7 @@ function SetVehicleInGarage()
 						local extra = DoesExtraExist(veh, i)
 
 						if extra ~= nil and extra then
-							local button = { text = "Vehicle Extra : " .. tostring(i), subText = "Free", eventServer = "fx_customs:ConfirmMod", data = { value = true, id = i, confirmed = true , cost = 0}} -- ADDS A BUTTON FOR VEHICLE EXTRA MODS.
+							local button = { text = "Vehicle Extra : " .. tostring(i), subText = "Free", eventServer = "fx_customs:ConfirmMod", data = { value = true, id = i, toggle = 0, confirmed = true , cost = 0}} -- ADDS A BUTTON FOR VEHICLE EXTRA MODS.
 							modButtons[#modButtons+1] = button
 						end
 					end
@@ -244,7 +249,7 @@ function SetVehicleInGarage()
 									if lbl ~= nil then
 										local name = tostring(GetLabelText(lbl))
 										if name ~= "NULL" then
-							 				local button = { text = name, subText = cost['custom_mods'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = modType, mod = i, confirmed = true , cost = cost['custom_mods'].total}}
+							 				local button = { text = name, subText = cost['custom_mods'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = modType, mod = i, toggle = 0, confirmed = true , cost = cost['custom_mods'].total}}
 							 				modButtons[#modButtons+1] = button	
 
 								 		end
@@ -261,7 +266,7 @@ function SetVehicleInGarage()
 						SetVehicleModKit(veh, 0)
 						local extra = DoesExtraExist(veh, i)
 						if extra ~= nil and extra then
-							local button = { text = "Vehicle Extra : " .. tostring(i), subText = "Free", eventServer = "fx_customs:ConfirmMod", data = { value = true, id = i, confirmed = true , cost = 0}}
+							local button = { text = "Vehicle Extra : " .. tostring(i), subText = "Free", eventServer = "fx_customs:ConfirmMod", data = { value = true, id = i, toggle = 0, confirmed = true , cost = 0}}
 							modButtons[#modButtons+1] = button
 						end
 					end
@@ -415,11 +420,26 @@ AddEventHandler('fx_customs:VehicleExtra', function(data)
 	local extra = data.extra
 	local specific = {}
 
-	if extra == "true" then 
-		setExtra = true
-	elseif extra == "false" then
-		setExtra = false
+	if extra == "enable" then 
+		setExtra = 1
+	elseif extra == "disable" then
+		setExtra = 0
 	end
+
+	if setExtra ~= nil then
+		Citizen.Trace("Set Extra not nill")
+		specific[#specific+1] = { setExtra = setExtra }
+	end
+
+	local updateveh = GetVehicleData()
+
+	if updateveh ~= nil then
+		Citizen.Trace("Update veh not nill") 
+		updateveh[#updateveh+1] = { specific = specific }
+	end
+
+	TriggerServerEvent("fx_customs:UpdateVeh",updateveh)
+
 end)
 
 RegisterNetEvent('fx_customs:SetVehicleMod')
@@ -435,8 +455,8 @@ AddEventHandler('fx_customs:SetVehicleMod', function(data)
 	local neonSide = neonSide
 	local paintCar = paintCar
 	local r,g,b = data.r,data.g,data.b
+	local tr,tg,tb = data.tr,data.tg,data.tb
 	local plateIndex = data.plateindex
-	local smoke = data.smoke
 	local bulletProof = data.burst
 	local xeon = data.xeon
 	local turbo = data.turbo
@@ -446,7 +466,15 @@ AddEventHandler('fx_customs:SetVehicleMod', function(data)
 	
 	SetVehicleModKit(veh, 0) -- Sets Modkit to be able to apply vehicle mods.
 	if modtype ~= nil then
-		SetVehicleMod(veh, modtype, mod)
+		if mod ~= nil then
+			--SetVehicleModKit(veh, 0)
+			local vehMods = GetVehicleMod(veh, modtype)
+			if vehMods == mod then
+				SetVehicleMod(veh, modtype, -1)
+			else
+				SetVehicleMod(veh, modtype, mod)
+			end
+		end
 	end
 	if wheeltype ~= nil then
 		SetVehicleWheelType(veh, wheeltype)
@@ -454,43 +482,68 @@ AddEventHandler('fx_customs:SetVehicleMod', function(data)
 	if windowtint ~= nil then
 		SetVehicleWindowTint(veh,  windowtint)
 	end
-	if r ~= nil and g ~= nil and b ~= nil and smoke ~= nil then -- Tire Smoke is nested with neon R/G/B in an Elseif to prevent double setting the RGB of
-		 if smoke then
+	if tr ~= nil and tg ~= nil and tb ~= nil and data.smoke ~= nil then -- Tire Smoke is nested with neon R/G/B in an Elseif to prevent double setting the RGB of
+	 	if data.enabled == 1 then
 		 	ToggleVehicleMod(veh, 20, true)
-			SetVehicleTyreSmokeColor(veh, r, g, b)
+		 	local updateveh = GetVehicleData()
+			SetVehicleTyreSmokeColor(veh, tr, tg, tb)
+		else
+			ToggleVehicleMod(veh, 20, false)
 		end
 	elseif r ~= nil and g ~= nil and b ~= nil and neonSide ~= nil then
 		if neonSide == 2 then
-			for i=0,3, 1 do 
-				if i == 2 then
-					SetVehicleNeonLightEnabled(veh, i, true)
-					SetVehicleNeonLightsColour(veh, r, g, b)
-				else
-					SetVehicleNeonLightEnabled(veh, i, false)
+			for i=0,3, 1 do
+				if data.enabled == 1 then
+					if i == 2 then
+						SetVehicleNeonLightEnabled(veh, i, true)
+						SetVehicleNeonLightsColour(veh, r, g, b)
+					else
+						SetVehicleNeonLightEnabled(veh, i, false)
+					end
+				else 
+					for i=0,3 do
+						SetVehicleNeonLightEnabled(veh, i, false)
+					end
 				end
 			end
 		elseif neonSide == 3 then
 			for i=0,3, 1 do 
-				if i == 3 then
-					SetVehicleNeonLightEnabled(veh, i, true)
-					SetVehicleNeonLightsColour(veh, r, g, b)
-				else
-					SetVehicleNeonLightEnabled(veh, i, false)
+				if data.enabled == 1 then
+					if i == 3 then
+						SetVehicleNeonLightEnabled(veh, i, true)
+						SetVehicleNeonLightsColour(veh, r, g, b)
+					else
+						SetVehicleNeonLightEnabled(veh, i, false)
+					end
+				else 
+					
 				end
 			end
 		elseif neonSide == 0 then
 			for i=0,3, 1 do
-				if i <= 1 then
-					SetVehicleNeonLightEnabled(veh, i, true)
-					SetVehicleNeonLightsColour(veh, r, g, b)
+				if data.enabled == 1 then
+					if i <= 1 then
+						SetVehicleNeonLightEnabled(veh, i, true)
+						SetVehicleNeonLightsColour(veh, r, g, b)
+					else
+						SetVehicleNeonLightEnabled(veh, i, false)
+					end
 				else
-					SetVehicleNeonLightEnabled(veh, i, false)
+					for i=0,3 do
+						SetVehicleNeonLightEnabled(veh, i, false)
+					end
 				end
 			end
 		elseif neonSide == 1 then 		
-			for i=0,3, 1 do 
-				SetVehicleNeonLightEnabled(veh, i, true)
-				SetVehicleNeonLightsColour(veh, r, g, b)
+			for i=0,3, 1 do
+				if data.enabled == 1 then
+					SetVehicleNeonLightEnabled(veh, i, true)
+					SetVehicleNeonLightsColour(veh, r, g, b)
+				else 
+					for i=0,3 do
+						SetVehicleNeonLightEnabled(veh, i, false)
+					end
+				end
 			end
 		end
 	end
@@ -500,7 +553,6 @@ AddEventHandler('fx_customs:SetVehicleMod', function(data)
 			for k, v in pairs(vehiclecol) do
 				if k == 2 then
 					SetVehicleColours(veh, colorIndex, v)
-					--Citizen.Trace("Setting colorIndex to : " .. tostring(colorIndex) .. "Setting v to : " .. tostring(v) )
 				end
 			end
 		elseif paintCar == 2 then
@@ -508,7 +560,6 @@ AddEventHandler('fx_customs:SetVehicleMod', function(data)
 			for k, v in pairs(vehiclecol) do
 				if k == 1 then
 					SetVehicleColours(veh, v, colorIndex)
-					--Citizen.Trace("Setting colorIndex to : " .. tostring(colorIndex) .. "Setting v to : " .. tostring(v) )
 				end
 			end
 		elseif paintCar == 3 then
@@ -516,7 +567,6 @@ AddEventHandler('fx_customs:SetVehicleMod', function(data)
 			for k, v in pairs(extracol) do
 				if k == 2 then
 					SetVehicleExtraColours(veh, colorIndex, v)
-					--Citizen.Trace("Setting colorIndex to : " .. tostring(colorIndex) .. "Setting v to : " .. tostring(v) )
 				end
 			end
 		elseif paintCar == 4 then
@@ -524,7 +574,6 @@ AddEventHandler('fx_customs:SetVehicleMod', function(data)
 			for k, v in pairs(extracol) do
 				if k == 1 then
 					SetVehicleExtraColours(veh, v, colorIndex)
-					--Citizen.Trace("Setting colorIndex to : " .. tostring(colorIndex) .. "Setting v to : " .. tostring(v) )
 				end
 			end
 		end
@@ -555,20 +604,11 @@ AddEventHandler('fx_customs:SetVehicleMod', function(data)
 		end	
 	end
 	if id ~= nil then -- Set Vehicle extra for some reason false enabled the extra and true disabled?
-		if setExtra then
+		if setExtra == 1 then
 			SetVehicleExtra(veh, id, false)
-			elseif not setExtra then
-				SetVehicleExtra(veh, id, true)
+		elseif setExtra  == 0 then
+			SetVehicleExtra(veh, id, true)
 		end
-	end
-	if smoke ~= nil then
-		specific[#specific+1] = { smoke = smoke }
-	end
-	if xeon ~= nil then
-		specific[#specific+1] = { xeon = xeon }
-	end
-	if turbo ~= nil then
-		specific[#specific+1] = { turbo = turbo }
 	end
 	if damaged then
 		TriggerServerEvent("fx_customs:Notify", "We've applied your vehicle update maybe you might want a repair!")
@@ -578,12 +618,8 @@ AddEventHandler('fx_customs:SetVehicleMod', function(data)
 
 	local updateveh = GetVehicleData()
 
-	if updateveh ~= nil then 
-		updateveh[#updateveh+1] = { specific = specific }
-	end
 	TriggerServerEvent("fx_customs:UpdateVeh",updateveh)
-	Citizen.Trace("Updating Veh ")
-	Citizen.Trace(dump(updateveh))	
+	Citizen.Trace("Updating Veh ")	
 end)
 
 RegisterNetEvent('fx_customs:RepairVehicle')
