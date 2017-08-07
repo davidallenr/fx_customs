@@ -1,8 +1,8 @@
-  -- @Date:   2017-07-331
+  -- @Date:   2017-08-07
   -- @Project: FX Customs
   -- @Owner: Jink Left
   -- @LICENSE: NO LICENSE/LICENSE
-  -- @Last modified time: 2017-07-31
+  -- @Last modified time: 2017-08-07
 -------------------------------------------
 ---------------[COST MENU]----------------
 cost = {
@@ -961,6 +961,26 @@ paint = {
           },
         },
 
+   tuning2 = {
+
+          settings = {
+            title = "Los Santos Customs",
+            menuTitle = "Categories",
+            back = CallbackBack,
+            closable = true,
+          },
+
+        buttons = {
+
+            { text = "Transmission", menu = "transmission" },
+            { text = "Turbo", menu = "turbo" },
+            { text = "Brakes", menu = "brakes" },
+            { text = "Engine", menu = "engine" },
+            { text = "Armor", menu = "armor" },
+            { text = "Previous Menu", back = true },
+          },
+        },
+
     suspension = { 
 
           settings = {
@@ -1083,6 +1103,21 @@ paint = {
 
             { text = "Headlights", menu = "headlights" },
             { text = "Neon Kits", menu = "neonkits"  },
+          },
+        },
+
+    lights2 = { 
+    
+        settings = {
+          title = "Los Santos Customs",
+          menuTitle = "Categories",
+          back = CallbackBack,
+          closable = true,
+        },
+
+        buttons = {
+
+            { text = "Headlights", menu = "headlights" },
           },
         },
 

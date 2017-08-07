@@ -1,8 +1,8 @@
-  -- @Date:   2017-07-331
+  -- @Date:   2017-08-07
   -- @Project: FX Customs
   -- @Owner: Jink Left
   -- @LICENSE: NO LICENSE/LICENSE
-  -- @Last modified time: 2017-07-31
+  -- @Last modified time: 2017-08-07
 ----------------------------------------------------
 --------------------[   DATA   ]--------------------
 local FirstJoinProper = false
@@ -20,19 +20,6 @@ local locations = {
   }
 
 local mods = {[1] = { name = "Spoilers", mod = 0 }, [2] = { name = "Front Bumper", mod = 1 }, [3] = { name = "Rear Bumper", mod = 2 }, [4] = { name = "Side Skirt", mod = 3 }, [5] = { name = "Exhaust", mod = 4 }, [6] = { name = "Roll Cage", mod = 5 }, [7] = { name = "Grille", mod = 6 }, [8] = { name = "Hood", mod = 7 }, [9] = { name = "Fender", mod = 8 }, [10] = { name = "Right Fender", mod = 9 }, [11] = { name = "Roof", mod = 10 }, }
-
----TODO JINK ONLY FOR TESTING DELETE AFTER
-local vehicle_generator = {
-	[1] = { name = "police4", x = 1165.95, y = 2666.74, z = 37.9, heading = 360.402 },
-	[2] = { name =  "cavalcade", x = 1170.95, y = 2666.74, z = 37.9, heading = 360.402 },
-	[3] = { name =  "police", x = 1175.95, y = 2666.74, z = 37.9, heading = 360.402 },
-	--- Motorcycles
-	[4] = { name =  "daemon2", x = 1187.95, y = 2666.74, z = 37.9, heading = 182.402 },
-	[5] = { name =  "bf400", x = 1190.95, y = 2666.74, z = 37.9, heading = 360.402 },
-	[6] = { name =  "shotaro", x = 1195.95, y = 2666.74, z = 37.9, heading = 360.402 },
-	[7] = { name =  "sandking", x = 1180.95, y = 2666.74, z = 37.9, heading = 360.402 },
-}
-
 
 ----------------------------------------------------
 ---------------[	FUNCTIONS 		]---------------
@@ -62,7 +49,7 @@ function GetVehicleData()
   local extracol = table.pack(GetVehicleExtraColours(veh))
   local neoncolor = table.pack(GetVehicleNeonLightsColour(veh))
   local plate_index = GetVehicleNumberPlateTextIndex(veh) 
-  local veh_state = GetVehicleBodyHealth(veh)
+  local veh_state = math.floor(GetVehicleBodyHealth(veh))
   local plate_index = GetVehicleNumberPlateTextIndex(veh)
   local plate = GetVehicleNumberPlateText(veh)
   local windowtint = GetVehicleWindowTint(veh)
@@ -196,7 +183,7 @@ function SetVehicleInGarage()
 	if DoesEntityExist(veh) then
 	    if not exports.ft_menuBuilder:IsOpened() and GetLastInputMethod(2) then
 		    if bike then -- IF THE PLAYER IS RIDING A MOTORCYLE THEN USE THIS MENU
-				local buttons = {{ text = "Wheels", menu = "wheels2"  }, { text = "Accessories", menu = "accessories"  }, { text = "Paint", menu = "paint" }, { text = "Tuning", menu = "tuning"  }, { text = "Lights", menu = "lights"  },{ text = "Custom Mods", menu = "mods"  },{ text = "Vehicle Extras", menu = "extras"  }, { text = "Previous Menu", back = true }}
+				local buttons = {{ text = "Wheels", menu = "wheels2"  }, { text = "Accessories", menu = "accessories"  }, { text = "Paint", menu = "paint" }, { text = "Tuning", menu = "tuning2"  }, { text = "Lights", menu = "lights2"  },{ text = "Custom Mods", menu = "mods"  },{ text = "Vehicle Extras", menu = "extras"  }, { text = "Previous Menu", back = true }}
 		    	local modButtons = {}
 		    	exports.ft_menuBuilder:AddButtonTable("fx_main", buttons)
 		    	for i = 1,#mods do -- FOR 1 TO THE LENGTH OF THE LOCAL MODS AT THE BEGINNING DO THIS
@@ -291,20 +278,6 @@ end
 ----------------------------------------------------
 ---------------[	THREADS 		]---------------
 ---------------------------------------------------- 
-----JINK DELETE OR COMMENT OUT AFTER THIS SPAWNS THE VEHICLES BY #4 LS CUSTOMS. THIS IS FOR DEBUGGING PURPOSES.
-Citizen.CreateThread(function()
-	for i=1,#vehicle_generator do
-	 	local vehicle = GetHashKey(vehicle_generator[i].name)
-	 	local x,y,z,h = vehicle_generator[i].x,vehicle_generator[i].y,vehicle_generator[i].z,vehicle_generator[i].h
-	 	RequestModel(vehicle)
- 		while not HasModelLoaded(vehicle) do
-	 		Citizen.Wait(0)
-		end
-		CreateVehicle(vehicle, x, y, z, h, true, true)
-	end
-end)
-
-
 Citizen.CreateThread(function()
   	while true do	
     Citizen.Wait(0)
@@ -467,17 +440,19 @@ AddEventHandler('fx_customs:SetVehicleMod', function(data)
 	SetVehicleModKit(veh, 0) -- Sets Modkit to be able to apply vehicle mods.
 	if modtype ~= nil then
 		if mod ~= nil then
-			--SetVehicleModKit(veh, 0)
-			local vehMods = GetVehicleMod(veh, modtype)
-			if vehMods == mod then
+			local vehMods = GetVehicleMod(veh, modtype)		
+			if wheeltype ~= nil then
+				-- Citizen.Trace("Setting WheelType")
+				-- Citizen.Trace(tostring(wheeltype))
+				SetVehicleWheelType(veh, wheeltype)
+				SetVehicleMod(veh, modtype, mod)
+			elseif vehMods == mod then
+				-- Citizen.Trace("vehMod = mod")
 				SetVehicleMod(veh, modtype, -1)
 			else
 				SetVehicleMod(veh, modtype, mod)
 			end
 		end
-	end
-	if wheeltype ~= nil then
-		SetVehicleWheelType(veh, wheeltype)
 	end
 	if windowtint ~= nil then
 		SetVehicleWindowTint(veh,  windowtint)
@@ -579,7 +554,7 @@ AddEventHandler('fx_customs:SetVehicleMod', function(data)
 		end
 	end
 	if plateIndex ~= nil then
-		Citizen.Trace(dump(vehData))
+		--Citizen.Trace(dump(vehData))
 		SetVehicleNumberPlateTextIndex(veh, plateIndex)	
 	end
 	if bulletProof ~= nil then -- BulletProof tires are a toggle Triggered by the menu.
@@ -617,9 +592,7 @@ AddEventHandler('fx_customs:SetVehicleMod', function(data)
 	end
 
 	local updateveh = GetVehicleData()
-
-	TriggerServerEvent("fx_customs:UpdateVeh",updateveh)
-	Citizen.Trace("Updating Veh ")	
+	TriggerServerEvent("fx_customs:UpdateVeh",updateveh)	
 end)
 
 RegisterNetEvent('fx_customs:RepairVehicle')
