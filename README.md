@@ -8,19 +8,21 @@ This is a remake of the popular script LS-Customs by Artur. Hopefully it does a 
 
 ### Dependencies ###
 * mysql-async
-* Essential Mode 4.4.2+
+* Essential Mode 4.4.3+
+
+
+### Optional Dependencies ###
 * pNotify
 
 ### Features ###
 * mysql async support
-* vehicle state auto saved to db 
+* vehicle state auto saved to db
+* Mod previews in the customs 
 * money integration for customizations
 * identification system (persistant user id for database storage)
-* gui
-* blip, markers areas (enter/leave callbacks) API WIP
+* Blips/Gui for customs garages
 
 ### CURRENT KNOWN BUGS ###
-* Truck horn can be bought over and over other horns cannot.
 * Double buying rapidly can cause errors.
 * Spam buying will cause console errors.
 * The garage isn't locked currently so possibly multiple people can enter the customs at the same time. Should be fixed next update.
