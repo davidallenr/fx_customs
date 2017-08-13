@@ -24,6 +24,14 @@ local mods = {[1] = { name = "Spoilers", mod = 0 }, [2] = { name = "Front Bumper
 ----------------------------------------------------
 ---------------[	FUNCTIONS 		]---------------
 ----------------------------------------------------
+function AddBlips()
+  for i, pos in ipairs(locations) do
+    local blip = AddBlipForCoord(pos.inside.x,pos.inside.y,pos.inside.z)
+    SetBlipSprite(blip, 72)
+    SetBlipScale(blip, 0.9)
+    SetBlipAsShortRange(blip,true)
+  end
+end
 
 function dump(o)
    if type(o) == 'table' then
@@ -36,57 +44,6 @@ function dump(o)
    else
       return tostring(o)
    end
-end
-
-function ResetVehicleInfo(result)
-  for k,v in pairs(result) do
-    print("THIS RESULT RESETTING")
-    print(dump(v))
-    if v.primary_color ~= nil then
-      primary_color = v.primary_color
-    end
-    if v.secondary_color ~= nil then
-      secondary_color = v.secondary_color
-    end
-    if v.pearl_color ~= nil then
-      pearl_color = v.pearl_color
-    end
-    if v.wheel_color ~= nil then
-      wheel_color = v.wheel_color
-    end
-    if v.wheeltype ~= nil then
-      wheeltype = v.wheeltype
-    end
-    if v.neon_r ~= nil then
-      neon_r = v.neon_r
-      neon_g = v.neon_g
-      neon_b= v.neon_b
-    end
-    if v.neon_left ~= nil then
-      neon_left = v.neon_left
-    end
-    if v.neon_right ~= nil then
-      neon_right = v.neon_right
-    end
-    if v.neon_front ~= nil then
-      neon_front = v.neon_front
-    end
-    if v.neon_back ~= nil then
-      neon_back = v.neon_back
-    end
-    if v.xeon ~= nil then
-      xeon = v.xeon
-    end
-    if v.front_wheel ~= nil then
-      front_wheel = v.front_wheel
-    end
-    if v.back_wheel ~= nil then
-      back_wheel = v.back_wheel
-    end
-    if v.windowtint ~= nil then
-      windowtint = v.windowtint
-    end
-  end
 end
 
 function GetVehicleData()
@@ -171,18 +128,9 @@ function GetVehicleData()
   vehicleData[#vehicleData+1] = { vehicle_smoke = vehicle_smoke }
   vehicleData[#vehicleData+1] = { tempMods = tempMods }
 
-  callback = vehicleData
+  local callback = vehicleData
   return callback
 
-end
-
-function AddBlips()
-  for i, pos in ipairs(locations) do
-    local blip = AddBlipForCoord(pos.inside.x,pos.inside.y,pos.inside.z)
-    SetBlipSprite(blip, 72)
-    SetBlipScale(blip, 0.9)
-    SetBlipAsShortRange(blip,true)
-  end
 end
 
 function drawTxt(text,font,centre,x,y,scale,r,g,b,a)
@@ -206,7 +154,7 @@ function SetVehicleInGarage()
 	local veh = GetVehiclePedIsIn(player,false)
 	local model = GetEntityModel(veh)
 	local bike = IsThisModelABike(model) 
-	local veh_data = GetVehicleData()	
+	veh_data = GetVehicleData()	
 
 	if DoesEntityExist(veh) then
 	    if not exports.ft_menuBuilder:IsOpened() and GetLastInputMethod(2) then
@@ -326,15 +274,368 @@ function SetVehicleOutsideGarage()
 	SetVehicleDoorsLocked(veh,0)
 	currentGarage = 0  
 end
+
+function SetModSpecifics(data)
+	local wheels = data.wheels
+	local extra = data.extra
+	local side = data.side
+	local paint = data.paints	
+	local specific = {}
+
+	if extra == "enable" then 
+		setExtra = 1
+	elseif extra == "disable" then
+		setExtra = 0
+	end
+	if wheels == "back" then 
+		setWheel = 1
+	elseif wheels == "front" then
+		setWheel = 2
+	end
+	if side == "front" then 
+		neonSide = 2
+	elseif side == "left" then
+		neonSide = 0
+	elseif side == "back" then
+		neonSide = 3 
+	elseif side == "all" then
+		neonSide = 1
+	end
+	if paint == "primary" then -- Sets the Primary Paint via a menu choice. 
+		paintCar = 1
+		TriggerServerEvent("print","Setting paintcar 1")
+	elseif paint == "secondary" then -- Sets the Secondary Paint via a menu choice.
+		paintCar = 2
+		TriggerServerEvent("print","Setting paintcar 2")
+	elseif paint == "pearl" then -- Sets the Pearlsecent Paint via a menu choice.
+		paintCar = 3 
+		TriggerServerEvent("print","Setting paintcar 3")
+	elseif paint == "wheel" then -- Sets the Rim Paint via a menu choice.
+		paintCar = 4
+		TriggerServerEvent("print","Setting paintcar 4")
+	end
+	
+	if paintCar ~= nil then
+		specific[#specific+1] = { paintCar = paintCar }
+	end
+	if neonSide ~= nil then
+		specific[#specific+1] = { neonSide = neonSide }
+	end
+	if setExtra ~= nil then
+		specific[#specific+1] = { setExtra = setExtra }
+	end
+
+	local data = GetVehicleData()
+	if data ~= nil then
+		data[#data+1] = { specific = specific }
+		TriggerServerEvent("fx_customs:UpdateVehicleInfo",data)
+	end
+end
+
+function SetDatabasePlate(result)
+local originaldata = result
+	if originaldata ~= nil then
+		for k,v in pairs(originaldata) do
+		    if v ~= nil then
+		    	if v.plate ~= nil then
+		    		o_plate = v.plate 
+		    		TriggerServerEvent("print","setting o plate")
+		    		TriggerServerEvent("print",tostring(o_plate))
+		    	end
+		    end
+		end
+	end
+end
+
+function SetDatabaseMods(result, data)
+	local originaldata = result
+	if originaldata ~= nil then
+		for k,v in pairs(originaldata) do
+		    if v ~= nil then
+		       	if v.vehicle_name ~= nil then  
+		          o_vehicle_name = v.vehicle_name 
+		        end
+		        if v.model ~= nil then
+		          o_model = v.model
+		        end
+		        if v.xeon_tog ~= nil then
+		          o_xeon = v.xeon_tog
+		        end
+		        if v.bike ~= nil then
+		          o_bike = v.bike
+		        end
+		        if v.plate_index ~= nil then 
+		          o_plate_index = v.plate_index
+		        end 
+		        if v.vehiclecol ~= nil then
+		          for k,v in pairs(v.vehiclecol) do
+		            if k == 1 then
+		              o_primary_color = v
+		            elseif k == 2 then
+		              o_secondary_color = v
+		            end
+		          end
+		        end
+		        if v.extracol ~= nil then
+		          for k,v in pairs(v.extracol) do
+		            if k == 1 then
+		              o_pearl_color = v
+		            elseif k == 2 then
+		              o_wheel_color = v
+		            end
+		          end
+		        end
+		        if v.wheeltype ~= nil then
+		          o_wheeltype = v.wheeltype
+		        end
+		        if v.neoncolor ~= nil then 
+		          for k,v in pairs(v.neoncolor) do
+		            if k == 1 then
+		              o_neon_r = v
+		            elseif k == 2 then
+		              o_neon_g = v
+		            elseif k == 3 then
+		              o_neon_b = v
+		            end
+		          end
+		        end
+		        if v.neonsides ~= nil then
+		          for k,v in pairs(v.neonsides) do
+		            if k == 1 then
+		              o_neon_left = v
+		            elseif k == 2 then
+		              o_neon_right = v
+		            elseif k == 3 then
+		              o_neon_front = v
+		            elseif k == 4 then
+		              o_neon_back = v
+		            end
+		          end
+		        end
+		        if v.front_wheel ~= nil then
+		          o_front_wheel = v.front_wheel
+		          TriggerServerEvent("print","setting o front wheel to :")
+		          TriggerServerEvent("print",tostring(o_front_wheel))
+		        end
+		        if v.windowtint ~= nil then 
+		          o_windowtint = v.windowtint
+		        end
+			end
+		end
+	end
+end
+
+function SetVehicleMods(data,preview)
+	local player = GetPlayerPed(-1)
+	local veh = GetVehiclePedIsUsing(player)
+	local plate = GetVehicleNumberPlateText(veh)
+	local damaged = IsVehicleDamaged(veh)
+	local modtype = data.modtype
+	local mod = data.mod
+	local wheeltype = data.wtype
+	local windowtint = data.tint
+	local colorIndex = data.colorindex
+	local neonSide = neonSide
+	local paintCar = paintCar
+	local r,g,b = data.r,data.g,data.b
+	local tr,tg,tb = data.tr,data.tg,data.tb
+	local plateIndex = data.plateindex
+	local bulletProof = data.burst
+	local xeon = data.xeon
+	local turbo = data.turbo
+	local id = data.id
+	local extra = data.extra
+	local vehData = data.veh_data
+
+	if data.reset and plate == o_plate then
+		SetVehicleModKit(veh, 0) -- Sets Modkit to be able to apply vehicle mods.
+		if data.wheels then
+			local hash = GetEntityModel(veh)
+ 			local bike = IsThisModelABike(hash)
+ 			if bike then
+ 				SetVehicleWheelType(veh, tonumber(o_wheeltype))		
+				SetVehicleMod(veh, 23, tonumber(o_front_wheel))
+				SetVehicleMod(veh, 24, tonumber(o_back_wheel))
+			else
+				TriggerServerEvent("print","Data Reset")
+				TriggerServerEvent("print",tostring(o_wheeltype))
+				TriggerServerEvent("print",tostring(o_front_wheel))
+				SetVehicleWheelType(veh, tonumber(o_wheeltype))		
+				SetVehicleMod(veh, 23, tonumber(o_front_wheel))
+			end
+		end
+	else
+		SetVehicleModKit(veh, 0) -- Sets Modkit to be able to apply vehicle mods.
+		if plate == o_plate then
+			if modtype ~= nil then
+				if mod ~= nil then
+					local vehMods = GetVehicleMod(veh, modtype)		
+					if wheeltype ~= nil then
+						TriggerServerEvent("print","in else statement")
+						SetVehicleWheelType(veh, wheeltype)
+						SetVehicleMod(veh, modtype, mod)
+					elseif vehMods == mod  and not preview then
+						TriggerServerEvent("print","Resetting mods")
+						SetVehicleMod(veh, modtype, -1)
+					else
+						SetVehicleMod(veh, modtype, mod)
+					end
+				end
+			end
+			if windowtint ~= nil then
+				SetVehicleWindowTint(veh,  windowtint)
+			end
+			if tr ~= nil and tg ~= nil and tb ~= nil and data.smoke ~= nil then -- Tire Smoke is nested with neon R/G/B in an Elseif to prevent double setting the RGB of
+			 	if data.enabled == 1 then
+				 	ToggleVehicleMod(veh, 20, true)
+				 	local updateveh = GetVehicleData()
+					SetVehicleTyreSmokeColor(veh, tr, tg, tb)
+				else
+					ToggleVehicleMod(veh, 20, false)
+				end
+			elseif r ~= nil and g ~= nil and b ~= nil and neonSide ~= nil then
+				if neonSide == 2 then
+					for i=0,3, 1 do
+						if data.enabled == 1 then
+							if i == 2 then
+								SetVehicleNeonLightEnabled(veh, i, true)
+								SetVehicleNeonLightsColour(veh, r, g, b)
+							else
+								SetVehicleNeonLightEnabled(veh, i, false)
+							end
+						else 
+							for i=0,3 do
+								SetVehicleNeonLightEnabled(veh, i, false)
+							end
+						end
+					end
+				elseif neonSide == 3 then
+					for i=0,3, 1 do 
+						if data.enabled == 1 then
+							if i == 3 then
+								SetVehicleNeonLightEnabled(veh, i, true)
+								SetVehicleNeonLightsColour(veh, r, g, b)
+							else
+								SetVehicleNeonLightEnabled(veh, i, false)
+							end
+						else 
+							
+						end
+					end
+				elseif neonSide == 0 then
+					for i=0,3, 1 do
+						if data.enabled == 1 then
+							if i <= 1 then
+								SetVehicleNeonLightEnabled(veh, i, true)
+								SetVehicleNeonLightsColour(veh, r, g, b)
+							else
+								SetVehicleNeonLightEnabled(veh, i, false)
+							end
+						else
+							for i=0,3 do
+								SetVehicleNeonLightEnabled(veh, i, false)
+							end
+						end
+					end
+				elseif neonSide == 1 then 		
+					for i=0,3, 1 do
+						if data.enabled == 1 then
+							SetVehicleNeonLightEnabled(veh, i, true)
+							SetVehicleNeonLightsColour(veh, r, g, b)
+						else 
+							for i=0,3 do
+								SetVehicleNeonLightEnabled(veh, i, false)
+							end
+						end
+					end
+				end
+			end
+			if paintCar ~= nil and colorIndex ~= nil then
+				if paintCar == 1 then
+					local vehiclecol = table.pack(GetVehicleColours(veh))
+					for k, v in pairs(vehiclecol) do
+						if k == 2 then
+							SetVehicleColours(veh, colorIndex, v)
+						end
+					end
+				elseif paintCar == 2 then
+					local vehiclecol = table.pack(GetVehicleColours(veh))
+					for k, v in pairs(vehiclecol) do
+						if k == 1 then
+							SetVehicleColours(veh, v, colorIndex)
+						end
+					end
+				elseif paintCar == 3 then
+					local extracol = table.pack(GetVehicleExtraColours(veh))
+					for k, v in pairs(extracol) do
+						if k == 2 then
+							SetVehicleExtraColours(veh, colorIndex, v)
+						end
+					end
+				elseif paintCar == 4 then
+					local extracol = table.pack(GetVehicleExtraColours(veh))
+					for k, v in pairs(extracol) do
+						if k == 1 then
+							SetVehicleExtraColours(veh, v, colorIndex)
+							TriggerServerEvent('print',tostring(colorIndex))
+						end
+					end
+				end
+			end
+			if plateIndex ~= nil then
+				SetVehicleNumberPlateTextIndex(veh, plateIndex)	
+			end
+			if bulletProof ~= nil then -- BulletProof tires are a toggle Triggered by the menu.
+				if bulletProof then
+					SetVehicleTyresCanBurst(veh, false)
+				else
+					SetVehicleTyresCanBurst(veh, true)
+				end
+			end
+			if xeon ~= nil then -- Xeon headlights are a toggle triggered by the menu.
+				if xeon then
+					ToggleVehicleMod(veh, 22, true)
+				else
+					ToggleVehicleMod(veh, 22, false)
+				end
+			end
+			if turbo ~= nil then --Turbo is a toggle triggered by the menu.
+				if turbo then
+					ToggleVehicleMod(veh, 18, true)
+				else
+					ToggleVehicleMod(veh, 18, false)
+				end	
+			end
+			if id ~= nil then -- Set Vehicle extra for some reason false enabled the extra and true disabled?
+				if setExtra == 1 then
+					SetVehicleExtra(veh, id, false)
+				elseif setExtra  == 0 then
+					SetVehicleExtra(veh, id, true)
+				end
+			end
+			if not preview and not data.menupaint then
+			    -- exports.ft_menuBuilder:Freeze(true) WORKING ON COOLDOWN FEATURE
+			    -- Citizen.Wait(1000)
+			    -- exports.ft_menuBuilder:Freeze(false) 
+				if damaged then
+					TriggerServerEvent("fx_customs:Notify", "We've applied your vehicle update maybe you might want a repair!")
+				else
+					TriggerServerEvent("fx_customs:Notify", "We've applied your vehicle update.")
+				end
+				local updateveh = GetVehicleData()
+				TriggerServerEvent("fx_customs:UpdateVehicleInfo",updateveh)
+			end
+		end
+	end
+end
 ----------------------------------------------------
----------------[	THREADS 		]---------------
+---------------[	MAIN THREAD 		]---------------
 ---------------------------------------------------- 
 
 Citizen.CreateThread(function()
-  	while true do	
+  	while true do
     Citizen.Wait(0)
 	    if NetworkIsSessionStarted() then
-
 			for i, pos in pairs(locations) do
 		    	 local player = GetPlayerPed(-1)
 		    	 local playerLoc = GetEntityCoords(player)
@@ -377,277 +678,25 @@ end)
 RegisterNetEvent('fx_customs:LeaveGarage')
 AddEventHandler('fx_customs:LeaveGarage', function(data)
 	SetVehicleOutsideGarage()
+	ResetVehicleMods()
 end)
 
-RegisterNetEvent('fx_customs:NeonSide') -- This event triggers how you want neons setup
-AddEventHandler('fx_customs:NeonSide', function(data)
-	local side = data.side
-	local specific = {}
-	if side == "front" then 
-		neonSide = 2
-	elseif side == "left" then
-		neonSide = 0
-	elseif side == "back" then
-		neonSide = 3 
-	elseif side == "all" then
-		neonSide = 1
-	end
-	if neonSide ~= nil then
-		specific[#specific+1] = { neonSide = neonSide }
-	end
-
-	local updateveh = GetVehicleData()
-
-	if updateveh ~= nil then 
-		updateveh[#updateveh+1] = { specific = specific }
-	end
-
-	TriggerServerEvent("fx_customs:UpdateVeh",updateveh)
-end)
-
-RegisterNetEvent('fx_customs:Paint')
-AddEventHandler('fx_customs:Paint', function(data)
-	local paint = data.paints
-	local specific = {}
-
-	if paint == "primary" then -- Sets the Primary Paint via a menu choice. 
-		paintCar = 1
-	elseif paint == "secondary" then -- Sets the Secondary Paint via a menu choice.
-		paintCar = 2
-	elseif paint == "pearl" then -- Sets the Pearlsecent Paint via a menu choice.
-		paintCar = 3 
-	elseif paint == "wheel" then -- Sets the Rim Paint via a menu choice.
-		paintCar = 4
-	end
-
-	if paintCar ~= nil then
-		specific[#specific+1] = { paintCar = paintCar }
-	end
-
-	local updateveh = GetVehicleData()
-
-	if updateveh ~= nil then 
-		updateveh[#updateveh+1] = { specific = specific }
-	end
-
-	TriggerServerEvent("fx_customs:UpdateVeh",updateveh)
-
-end)
-
-RegisterNetEvent('fx_customs:BackWheel') -- Most likely will remove this event as menus are working better than planned.
-AddEventHandler('fx_customs:BackWheel', function(data)
-	local wheels = data.wheels
-
-	if wheels == "back" then 
-		setWheel = 1
-	elseif wheels == "front" then
-		setWheel = 2
+RegisterNetEvent('fx_customs:SetModSpecifics') -- This event triggers how you want neons setup
+AddEventHandler('fx_customs:SetModSpecifics', function(data)
+	if data ~= nil then
+		SetModSpecifics(data)
 	end
 end)
 
-RegisterNetEvent('fx_customs:VehicleExtra') 
-AddEventHandler('fx_customs:VehicleExtra', function(data)
-	local extra = data.extra
-	local specific = {}
-
-	if extra == "enable" then 
-		setExtra = 1
-	elseif extra == "disable" then
-		setExtra = 0
-	end
-
-	if setExtra ~= nil then
-		Citizen.Trace("Set Extra not nill")
-		specific[#specific+1] = { setExtra = setExtra }
-	end
-
-	local updateveh = GetVehicleData()
-
-	if updateveh ~= nil then
-		Citizen.Trace("Update veh not nill") 
-		updateveh[#updateveh+1] = { specific = specific }
-	end
-
-	TriggerServerEvent("fx_customs:UpdateVeh",updateveh)
+RegisterNetEvent('fx_customs:SetOriginalMod')
+AddEventHandler('fx_customs:SetOriginalMod', function(result,data)
+	SetDatabaseMods(result,data)
 end)
 
 RegisterNetEvent('fx_customs:SetVehicleMod')
-AddEventHandler('fx_customs:SetVehicleMod', function(data, preview)
-	local player = GetPlayerPed(-1)
-	local veh = GetVehiclePedIsUsing(player)
-	local damaged = IsVehicleDamaged(veh)
-	local modtype = data.modtype
-	local mod = data.mod
-	local wheeltype = data.wtype
-	local windowtint = data.tint
-	local colorIndex = data.colorindex
-	local neonSide = neonSide
-	local paintCar = paintCar
-	local r,g,b = data.r,data.g,data.b
-	local tr,tg,tb = data.tr,data.tg,data.tb
-	local plateIndex = data.plateindex
-	local bulletProof = data.burst
-	local xeon = data.xeon
-	local turbo = data.turbo
-	local id = data.id
-	local extra = data.extra
-	local vehData = data.veh_data
-	
-	SetVehicleModKit(veh, 0) -- Sets Modkit to be able to apply vehicle mods.
-	if modtype ~= nil then
-		if mod ~= nil then
-			local vehMods = GetVehicleMod(veh, modtype)		
-			if wheeltype ~= nil then
-				SetVehicleWheelType(veh, wheeltype)
-				SetVehicleMod(veh, modtype, mod)
-			elseif vehMods == mod then
-				SetVehicleMod(veh, modtype, -1)
-			else
-				SetVehicleMod(veh, modtype, mod)
-			end
-		end
-	end
-	if windowtint ~= nil then
-		SetVehicleWindowTint(veh,  windowtint)
-	end
-	if tr ~= nil and tg ~= nil and tb ~= nil and data.smoke ~= nil then -- Tire Smoke is nested with neon R/G/B in an Elseif to prevent double setting the RGB of
-	 	if data.enabled == 1 then
-		 	ToggleVehicleMod(veh, 20, true)
-		 	local updateveh = GetVehicleData()
-			SetVehicleTyreSmokeColor(veh, tr, tg, tb)
-		else
-			ToggleVehicleMod(veh, 20, false)
-		end
-	elseif r ~= nil and g ~= nil and b ~= nil and neonSide ~= nil then
-		if neonSide == 2 then
-			for i=0,3, 1 do
-				if data.enabled == 1 then
-					if i == 2 then
-						SetVehicleNeonLightEnabled(veh, i, true)
-						SetVehicleNeonLightsColour(veh, r, g, b)
-					else
-						SetVehicleNeonLightEnabled(veh, i, false)
-					end
-				else 
-					for i=0,3 do
-						SetVehicleNeonLightEnabled(veh, i, false)
-					end
-				end
-			end
-		elseif neonSide == 3 then
-			for i=0,3, 1 do 
-				if data.enabled == 1 then
-					if i == 3 then
-						SetVehicleNeonLightEnabled(veh, i, true)
-						SetVehicleNeonLightsColour(veh, r, g, b)
-					else
-						SetVehicleNeonLightEnabled(veh, i, false)
-					end
-				else 
-					
-				end
-			end
-		elseif neonSide == 0 then
-			for i=0,3, 1 do
-				if data.enabled == 1 then
-					if i <= 1 then
-						SetVehicleNeonLightEnabled(veh, i, true)
-						SetVehicleNeonLightsColour(veh, r, g, b)
-					else
-						SetVehicleNeonLightEnabled(veh, i, false)
-					end
-				else
-					for i=0,3 do
-						SetVehicleNeonLightEnabled(veh, i, false)
-					end
-				end
-			end
-		elseif neonSide == 1 then 		
-			for i=0,3, 1 do
-				if data.enabled == 1 then
-					SetVehicleNeonLightEnabled(veh, i, true)
-					SetVehicleNeonLightsColour(veh, r, g, b)
-				else 
-					for i=0,3 do
-						SetVehicleNeonLightEnabled(veh, i, false)
-					end
-				end
-			end
-		end
-	end
-	if paintCar ~= nil and colorIndex ~= nil then
-		if paintCar == 1 then
-			local vehiclecol = table.pack(GetVehicleColours(veh))
-			for k, v in pairs(vehiclecol) do
-				if k == 2 then
-					SetVehicleColours(veh, colorIndex, v)
-				end
-			end
-		elseif paintCar == 2 then
-			local vehiclecol = table.pack(GetVehicleColours(veh))
-			for k, v in pairs(vehiclecol) do
-				if k == 1 then
-					SetVehicleColours(veh, v, colorIndex)
-				end
-			end
-		elseif paintCar == 3 then
-			local extracol = table.pack(GetVehicleExtraColours(veh))
-			for k, v in pairs(extracol) do
-				if k == 2 then
-					SetVehicleExtraColours(veh, colorIndex, v)
-				end
-			end
-		elseif paintCar == 4 then
-			local extracol = table.pack(GetVehicleExtraColours(veh))
-			for k, v in pairs(extracol) do
-				if k == 1 then
-					SetVehicleExtraColours(veh, v, colorIndex)
-				end
-			end
-		end
-	end
-	if plateIndex ~= nil then
-		Citizen.Trace(dump(vehData))
-		SetVehicleNumberPlateTextIndex(veh, plateIndex)	
-	end
-	if bulletProof ~= nil then -- BulletProof tires are a toggle Triggered by the menu.
-		if bulletProof then
-			SetVehicleTyresCanBurst(veh, false)
-		else
-			SetVehicleTyresCanBurst(veh, true)
-		end
-	end
-	if xeon ~= nil then -- Xeon headlights are a toggle triggered by the menu.
-		if xeon then
-			ToggleVehicleMod(veh, 22, true)
-		else
-			ToggleVehicleMod(veh, 22, false)
-		end
-	end
-	if turbo ~= nil then --Turbo is a toggle triggered by the menu.
-		if turbo then
-			ToggleVehicleMod(veh, 18, true)
-		else
-			ToggleVehicleMod(veh, 18, false)
-		end	
-	end
-	if id ~= nil then -- Set Vehicle extra for some reason false enabled the extra and true disabled?
-		if setExtra == 1 then
-			SetVehicleExtra(veh, id, false)
-		elseif setExtra  == 0 then
-			SetVehicleExtra(veh, id, true)
-		end
-	end
-	if not preview then 
-		if damaged then
-			TriggerServerEvent("fx_customs:Notify", "We've applied your vehicle update maybe you might want a repair!")
-		else
-			TriggerServerEvent("fx_customs:Notify", "We've applied your vehicle update.")
-		end
-	
-		local updateveh = GetVehicleData()
-		TriggerServerEvent("fx_customs:UpdateVeh",updateveh)
-	end		
+AddEventHandler('fx_customs:SetVehicleMod', function(data, preview, result)
+	SetDatabasePlate(result)
+	SetVehicleMods(data,preview)
 end)
 
 RegisterNetEvent('fx_customs:RepairVehicle')

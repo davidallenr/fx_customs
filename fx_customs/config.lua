@@ -111,8 +111,8 @@ extras = {
 
       buttons = { 
 
-        {text = "Enable", eventClient = "fx_customs:VehicleExtra", menu = "extras2", data = { extra = "enable" } },
-        {text = "Disable", eventClient = "fx_customs:VehicleExtra",menu = "extras2", data = { extra = "disable" } },
+        {text = "Enable", eventClient = "fx_customs:SetModSpecifics", menu = "extras2", data = { extra = "enable" } },
+        {text = "Disable", eventClient = "fx_customs:SetModSpecifics",menu = "extras2", data = { extra = "disable" } },
       },
     },
 
@@ -140,8 +140,8 @@ extras2 = {
       },
 
       buttons = { 
-        { text = "Wheel Type", menu = "wheeltype" },
-        { text = "Rim Color", menu = "classic" , eventClient = "fx_customs:Paint", data = { paints = "wheel" }},
+        { text = "Wheel Type", hoverEventServer = "fx_customs:ResetMods", menu = "wheeltype", data = { wheels = true, reset = true } },
+        { text = "Rim Color", menu = "classic" , eventClient = "fx_customs:SetModSpecifics", data = { paints = "wheel" }},
         { text = "Wheel Accessories", menu = "wheelaccessories" },
       },
     },
@@ -157,13 +157,13 @@ extras2 = {
 
       buttons = { 
         
-        { text = "Sport", menu = "sport" },
-        { text = "Muscle", menu = "muscle" },
-        { text = "Lowrider", menu = "lowrider" },
-        { text = "Suv", menu = "suv" },
-        { text = "Offroad", menu = "offroad" },
-        { text = "Tuner", menu = "tuner" },
-        { text = "Highend", menu = "highend" },
+        { text = "Sport", hoverEventServer = "fx_customs:ResetMods", menu = "sport", data = { wheels = true, reset = true } },
+        { text = "Muscle", hoverEventServer = "fx_customs:ResetMods", menu = "muscle", data = { wheels = true, reset = true } },
+        { text = "Lowrider", hoverEventServer = "fx_customs:ResetMods", menu = "lowrider", data = { wheels = true, reset = true } },
+        { text = "Suv", hoverEventServer = "fx_customs:ResetMods", menu = "suv", data = { wheels = true, reset = true } },
+        { text = "Offroad", hoverEventServer = "fx_customs:ResetwMods", menu = "offroad", data = { wheels = true, reset = true } },
+        { text = "Tuner", hoverEventServer = "fx_customs:ResetwMods", menu = "tuner", data = { wheels = true, reset = true } },
+        { text = "Highend", hoverEventServer = "fx_customs:ResetMods", menu = "highend", data = { wheels = true, reset = true } },
       },
     },
 
@@ -480,9 +480,9 @@ wheels2 = {
       },
 
       buttons = { 
-        { text = "Front Wheel", menu = "frontWheel" , eventClient = "fx_customs:BackWheel", data = { wheels = "front" }},
-        { text = "Rear Wheel", menu = "backwheel" , eventClient = "fx_customs:BackWheel", data = { wheels = "back" }},
-        { text = "Rim Color", menu = "classic" , eventClient = "fx_customs:Paint", data = { paints = "wheel" }},
+        { text = "Front Wheel", menu = "frontWheel" , eventClient = "fx_customs:SetModSpecifics", data = { wheels = "front" }},
+        { text = "Rear Wheel", menu = "backwheel" , eventClient = "fx_customs:SetModSpecifics", data = { wheels = "back" }},
+        { text = "Rim Color", menu = "classic" , eventClient = "fx_customs:SetModSpecifics", data = { paints = "wheel" }},
         { text = "Wheel Accessories", menu = "wheelaccessories" },
       },
     },
@@ -643,9 +643,9 @@ paint = {
 
     buttons = {
 
-        { text = "Primary", menu = "primary", eventClient = "fx_customs:Paint", data = { paints = "primary" }},
-        { text = "Secondary", menu = "secondary", eventClient = "fx_customs:Paint", data = { paints = "secondary" }},
-        { text = "Pearlescent", menu = "pearlescent", eventClient = "fx_customs:Paint", data = { paints = "pearl" }},
+        { text = "Primary", hoverEventServer = "fx_customs:ResetMods", menu = "primary", eventClient = "fx_customs:SetModSpecifics", data = {category = 1, menupaint = true, paints = "primary" }},
+        { text = "Secondary", hoverEventServer = "fx_customs:ResetMods", menu = "secondary", eventClient = "fx_customs:SetModSpecifics", data = {category = 2, menupaint = true, paints = "secondary" }},
+        { text = "Pearlescent", hoverEventServer = "fx_customs:ResetMods", menu = "pearlescent", eventClient = "fx_customs:SetModSpecifics", data = {category = 3, menupaint = true, paints = "pearl" }},
         { text = "Previous Menu", back = true },
       },
     },
@@ -713,7 +713,7 @@ paint = {
       settings = {
         title = "Los Santos Customs",
         menuTitle = "Welcome",
-        back = CallbackBack,
+        back = ResetState,
         closable = true,
       },
 
@@ -1094,7 +1094,6 @@ paint = {
         settings = {
           title = "Los Santos Customs",
           menuTitle = "Categories",
-          back = CallbackBack,
           closable = true,
         },
 
@@ -1110,7 +1109,6 @@ paint = {
         settings = {
           title = "Los Santos Customs",
           menuTitle = "Categories",
-          back = CallbackBack,
           closable = true,
         },
 
@@ -1125,7 +1123,6 @@ paint = {
           settings = {
             title = "Los Santos Customs",
             menuTitle = "Welcome",
-            back = CallbackBack,
             closable = true,
           },
           
@@ -1145,10 +1142,10 @@ paint = {
           },
           
               buttons = {
-                  { text = "Only Front", menu = "neoncolor", eventClient = "fx_customs:NeonSide", data = { side = "front" }},
-                  { text = "Left & Right", menu = "neoncolor", eventClient = "fx_customs:NeonSide", data = { side = "left" }},
-                  { text = "Only back", menu = "neoncolor", eventClient = "fx_customs:NeonSide", data = { side = "back" }},
-                  { text = "All", menu = "neoncolor", eventClient = "fx_customs:NeonSide", data = { side = "all" }},
+                  { text = "Only Front", menu = "neoncolor", eventClient = "fx_customs:SetModSpecifics", data = { side = "front" }},
+                  { text = "Left & Right", menu = "neoncolor", eventClient = "fx_customs:SetModSpecifics", data = { side = "left" }},
+                  { text = "Only back", menu = "neoncolor", eventClient = "fx_customs:SetModSpecifics", data = { side = "back" }},
+                  { text = "All", menu = "neoncolor", eventClient = "fx_customs:SetModSpecifics", data = { side = "all" }},
                 },
               },
 

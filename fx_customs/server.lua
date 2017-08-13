@@ -3,8 +3,8 @@
   -- @Owner: Jink Left
   -- @LICENSE: NO LICENSE/LICENSE
   -- @Last modified time: 2017-07-31
-----------------------------------------------------
----------------[MYSQL ASYNC FUNCTION]---------------
+---------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------[MYSQL ASYNC FUNCTION]--------------------------------------------------------------
 AddEventHandler('onMySQLReady', function ()
   FxFirstRun()
 end)
@@ -23,34 +23,19 @@ function AddVehicle(source)
   local steamid = user.getIdentifier(user)
     local user_group = user.getGroup(user)
       MySQL.Async.fetchAll("SELECT * FROM fx_customs_cars WHERE plate = @plate", { ['@plate'] = plate}, function (result)
-      -- print("Running Query")
-        if (not result[1]) then
-            if not stolen then  
-              -- print("Inserting Vehicle For First Time")
-              Notify("Welcome to the shop!")
-              MySQL.Async.execute("INSERT INTO fx_customs_cars ( steamid, user_group, vehicle_class, model, bike, veh_state, plate, plate_index, primary_color, secondary_color, pearl_color, wheel_color, wheeltype, neon_r, neon_g, neon_b, neon_left, neon_right, neon_front, neon_back, smoke_r, smoke_g, smoke_b, spoilers, front_bumper, rear_bumper, side_skirt, exhaust, frame, grille, hood, fender, right_fender, roof, engine, brakes, transmission, horn, suspension, armor, turbo, tire_smoke, xeon, front_wheel, back_wheel, windowtint, bulletproof) VALUES (@steamid, @user_group, @vehicle_class, @model, @bike, @veh_state, @plate, @plate_index, @primary_color, @secondary_color, @pearl_color, @wheel_color, @wheeltype, @neon_r, @neon_g, @neon_b, @neon_left, @neon_right, @neon_front, @neon_back, @smoke_r, @smoke_g, @smoke_b, @spoilers, @front_bumper, @rear_bumper, @side_skirt, @exhaust, @frame, @grille, @hood, @fender, @right_fender, @roof, @engine, @brakes, @transmission, @horn, @suspension, @armor, @turbo, @tire_smoke, @xeon, @front_wheel, @back_wheel, @windowtint, @bulletproof) ",
-                  { ['@steamid'] = steamid, ['@user_group'] = user_group, ['@vehicle_class'] = vehicle_class, ['@model'] = model, ['@bike'] = bike, ['@veh_state'] = veh_state, ['@plate'] = plate, ['@plate_index'] = plate_index, ['@primary_color'] = primary_color, ['@secondary_color'] = secondary_color, ['@pearl_color'] = pearl_color, ['@wheel_color'] = wheel_color, ['@wheeltype'] = wheeltype, ['@neon_r'] = neon_r, ['@neon_g'] = neon_g, ['@neon_b'] = neon_b, ['@neon_left'] = neon_left, ['@neon_right'] = neon_right, ['@neon_front'] = neon_front, ['@neon_back'] = neon_back, ['@smoke_r'] = smoke_r, ['@smoke_g'] = smoke_g, ['@smoke_b'] = smoke_b, ['@spoilers'] = spoilers, ['@front_bumper'] = front_bumper, ['@rear_bumper'] = rear_bumper, ['@side_skirt'] = side_skirt, ['@exhaust'] = exhaust, ['@frame'] = frame, ['@grille'] = grille, ['@hood'] = hood, ['@fender'] = fender, ['@right_fender'] = right_fender, ['@roof'] = roof, ['@engine'] = engine, ['@brakes'] = brakes, ['@transmission'] = transmission, ['@horn'] = horn, ['@suspension'] = suspension, ['@armor'] = armor, ['@turbo'] = turbo, ['@tire_smoke'] = tire_smoke, ['@xeon'] = xeon, ['@front_wheel'] = front_wheel, ['@back_wheel'] = back_wheel, ['@windowtint'] = windowtint, ['@bulletproof'] = bulletproof}) 
-          else
-              -- print("Vehicle is coming back STOLEN so it is not added")
-                Notify("Welcome to the shop!")
-            end
-        else
-          if not preview then  
-            print("Vehicle Has Been Updated") 
-            MySQL.Async.execute( "UPDATE fx_customs_cars SET steamid = @steamid, user_group = @user_group, vehicle_class = @vehicle_class, model = @model, bike = @bike, veh_state = @veh_state, plate = @plate, plate_index = @plate_index, primary_color = @primary_color, secondary_color = @secondary_color, pearl_color = @pearl_color, wheel_color = @wheel_color, wheeltype = @wheeltype, neon_r = @neon_r, neon_g = @neon_g, neon_b = @neon_b, neon_left = @neon_left, neon_right = @neon_right, neon_front = @neon_front, neon_back = @neon_back, smoke_r = @smoke_r, smoke_g = @smoke_g, smoke_b = @smoke_b, spoilers = @spoilers, front_bumper = @front_bumper, rear_bumper = @rear_bumper, side_skirt = @side_skirt, exhaust = @exhaust, frame = @frame, grille = @grille, hood = @hood, fender = @fender, right_fender = @right_fender, roof = @roof, engine = @engine, brakes = @brakes, transmission = @transmission, horn = @horn, suspension = @suspension, armor = @armor, turbo = @turbo, tire_smoke = @tire_smoke, xeon = @xeon, front_wheel = @front_wheel, back_wheel = @back_wheel, windowtint = @windowtint, bulletproof = @bulletproof WHERE plate = @plate",
-              { ['@steamid'] = steamid, ['@user_group'] = user_group, ['@vehicle_class'] = vehicle_class, ['@model'] = model, ['@bike'] = bike, ['@veh_state'] = veh_state, ['@plate'] = plate, ['@plate_index'] = plate_index, ['@primary_color'] = primary_color, ['@secondary_color'] = secondary_color, ['@pearl_color'] = pearl_color, ['@wheel_color'] = wheel_color, ['@wheeltype'] = wheeltype, ['@neon_r'] = neon_r, ['@neon_g'] = neon_g, ['@neon_b'] = neon_b, ['@neon_left'] = neon_left, ['@neon_right'] = neon_right, ['@neon_front'] = neon_front, ['@neon_back'] = neon_back, ['@smoke_r'] = smoke_r, ['@smoke_g'] = smoke_g, ['@smoke_b'] = smoke_b, ['@spoilers'] = spoilers, ['@front_bumper'] = front_bumper, ['@rear_bumper'] = rear_bumper, ['@side_skirt'] = side_skirt, ['@exhaust'] = exhaust, ['@frame'] = frame, ['@grille'] = grille, ['@hood'] = hood, ['@fender'] = fender, ['@right_fender'] = right_fender, ['@roof'] = roof, ['@engine'] = engine, ['@brakes'] = brakes, ['@transmission'] = transmission, ['@horn'] = horn, ['@suspension'] = suspension, ['@armor'] = armor, ['@turbo'] = turbo, ['@tire_smoke'] = tire_smoke, ['@xeon'] = xeon, ['@front_wheel'] = front_wheel, ['@back_wheel'] = back_wheel, ['@windowtint'] = windowtint, ['@bulletproof'] = bulletproof}, function()
-            end)
-          else
-            TriggerClientEvent("fx_customs:ResetVehicle", -1, result)
-            -- ResetVehicleInfo(result)
-          end
+      if (not result[1]) then
+        if not stolen then  
+          first_insert = false
+          MySQL.Async.execute("INSERT INTO fx_customs_cars ( steamid, user_group, vehicle_class, model, bike, veh_state, plate, plate_index, primary_color, secondary_color, pearl_color, wheel_color, wheeltype, neon_r, neon_g, neon_b, neon_left, neon_right, neon_front, neon_back, smoke_r, smoke_g, smoke_b, spoilers, front_bumper, rear_bumper, side_skirt, exhaust, frame, grille, hood, fender, right_fender, roof, engine, brakes, transmission, horn, suspension, armor, turbo, tire_smoke, xeon, front_wheel, back_wheel, windowtint, bulletproof) VALUES (@steamid, @user_group, @vehicle_class, @model, @bike, @veh_state, @plate, @plate_index, @primary_color, @secondary_color, @pearl_color, @wheel_color, @wheeltype, @neon_r, @neon_g, @neon_b, @neon_left, @neon_right, @neon_front, @neon_back, @smoke_r, @smoke_g, @smoke_b, @spoilers, @front_bumper, @rear_bumper, @side_skirt, @exhaust, @frame, @grille, @hood, @fender, @right_fender, @roof, @engine, @brakes, @transmission, @horn, @suspension, @armor, @turbo, @tire_smoke, @xeon, @front_wheel, @back_wheel, @windowtint, @bulletproof) ",
+              { ['@steamid'] = steamid, ['@user_group'] = user_group, ['@vehicle_class'] = vehicle_class, ['@model'] = model, ['@bike'] = bike, ['@veh_state'] = veh_state, ['@plate'] = plate, ['@plate_index'] = plate_index, ['@primary_color'] = primary_color, ['@secondary_color'] = secondary_color, ['@pearl_color'] = pearl_color, ['@wheel_color'] = wheel_color, ['@wheeltype'] = wheeltype, ['@neon_r'] = neon_r, ['@neon_g'] = neon_g, ['@neon_b'] = neon_b, ['@neon_left'] = neon_left, ['@neon_right'] = neon_right, ['@neon_front'] = neon_front, ['@neon_back'] = neon_back, ['@smoke_r'] = smoke_r, ['@smoke_g'] = smoke_g, ['@smoke_b'] = smoke_b, ['@spoilers'] = spoilers, ['@front_bumper'] = front_bumper, ['@rear_bumper'] = rear_bumper, ['@side_skirt'] = side_skirt, ['@exhaust'] = exhaust, ['@frame'] = frame, ['@grille'] = grille, ['@hood'] = hood, ['@fender'] = fender, ['@right_fender'] = right_fender, ['@roof'] = roof, ['@engine'] = engine, ['@brakes'] = brakes, ['@transmission'] = transmission, ['@horn'] = horn, ['@suspension'] = suspension, ['@armor'] = armor, ['@turbo'] = turbo, ['@tire_smoke'] = tire_smoke, ['@xeon'] = xeon, ['@front_wheel'] = front_wheel, ['@back_wheel'] = back_wheel, ['@windowtint'] = windowtint, ['@bulletproof'] = bulletproof}) 
         end
-      end)
+      end
+    end)
   end)
 end
 
-----------------------------------------------------
----------------[  FUNCTIONS     ]---------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------[  FUNCTIONS     ]---------------------------------------------------------------------------
 function Notify(input)
 
   local notification = { type = "pnotify"  }            -- Choices are (pnotify, normal)
@@ -70,67 +55,16 @@ function Notify(input)
   end  
 end
 
--- function ResetVehicleInfo(result)
---   for k,v in pairs(result) do
---     print("THIS RESULT RESETTING")
---     print(dump(v))
---     if v.primary_color ~= nil then
---       primary_color = v.primary_color
---     end
---     if v.secondary_color ~= nil then
---       secondary_color = v.secondary_color
---     end
---     if v.pearl_color ~= nil then
---       pearl_color = v.pearl_color
---     end
---     if v.wheel_color ~= nil then
---       wheel_color = v.wheel_color
---     end
---     if v.wheeltype ~= nil then
---       wheeltype = v.wheeltype
---     end
---     if v.neon_r ~= nil then
---       neon_r = v.neon_r
---       neon_g = v.neon_g
---       neon_b= v.neon_b
---     end
---     if v.neon_left ~= nil then
---       neon_left = v.neon_left
---     end
---     if v.neon_right ~= nil then
---       neon_right = v.neon_right
---     end
---     if v.neon_front ~= nil then
---       neon_front = v.neon_front
---     end
---     if v.neon_back ~= nil then
---       neon_back = v.neon_back
---     end
---     if v.xeon ~= nil then
---       xeon = v.xeon
---     end
---     if v.front_wheel ~= nil then
---       front_wheel = v.front_wheel
---     end
---     if v.back_wheel ~= nil then
---       back_wheel = v.back_wheel
---     end
---     if v.windowtint ~= nil then
---       windowtint = v.windowtint
---     end
---   end
--- end
-
 function UpdateVehicleInfo(source, input)
   if not preview then
-     TriggerEvent('es:getPlayerFromId', source, function(user)
+    TriggerEvent('es:getPlayerFromId', source, function(user)
       local steamid = user.getIdentifier(user)
       local user_group = user.getGroup(user)
       if input ~= nil then
-          for k,v in pairs(input) do
-            if v ~= nil then
-              if v.vehicle_name ~= nil then  
-              vehicle_name = v.vehicle_name 
+        for k,v in pairs(input) do
+          if v ~= nil then
+            if v.vehicle_name ~= nil then  
+            vehicle_name = v.vehicle_name 
             end
             if v.model ~= nil then
               model = v.model
@@ -356,26 +290,18 @@ function dump(o)
       return tostring(o)
    end
 end
+
+function GetVehicle(identifier)
+  return MySQL.Sync.fetchAll("SELECT * FROM fx_customs_cars WHERE steamid = @steamid AND plate = @plate", { ['@steamid'] = identifier, ['@plate'] = plate })
+end
+
+function UpdateDB(type,identifier,mod)
+  MySQL.Async.fetchAll("SELECT * FROM fx_customs_cars WHERE plate = @plate", { ['@plate'] = plate }, function (result)
+    MySQL.Sync.execute("UPDATE fx_customs_cars SET "..type.." = @mod WHERE steamid=@steamid AND plate = @plate",{['@mod']= mod,['@steamid']= identifier, ['@plate'] = plate})
+  end)
+end
 ----------------------------------------------------
----------------[  EVENTS    ]-------------------
-RegisterServerEvent('fx_customs:UpdateVeh')
-AddEventHandler('fx_customs:UpdateVeh', function(updateveh) 
-  local source = source
-  local vdata = updateveh
-  -- print(" source in update veh " .. tostring(source))
-  UpdateVehicleInfo(source, vdata)
-  AddVehicle(source)
-end)
-
-RegisterServerEvent('fx_customs:SetVehicle')
-AddEventHandler('fx_customs:SetVehicle', function(veh_data) 
-  local source = source
-  local vdata = veh_data
-  -- print(" source in Set veh " .. tostring(source))
-  UpdateVehicleInfo(source, vdata)
-  AddVehicle(source)
-end)
-
+---------------[  EVENTS    ]-----------------------
 RegisterServerEvent('fx_customs:Notify')
 AddEventHandler('fx_customs:Notify', function(text)
   Notify(text)
@@ -386,21 +312,71 @@ AddEventHandler('print', function(text)
     print(text)
 end)
 
+RegisterServerEvent('fx_customs:SetCurerentState') -- Triggered from client function SetVehicleInGarage()
+AddEventHandler('fx_customs:SetCurrentState', function(data) 
+  local source = source
+  TriggerEvent('es:getPlayerFromId', source, function(user)
+    local steamid = user.getIdentifier(user)
+    local result = GetVehicle(steamid)
+    TriggerClientEvent("fx_customs:SetOriginalMod", -1, result,data)
+  end)
+end)
+
+RegisterServerEvent('fx_customs:SetVehicle') -- Triggered from client function SetVehicleInGarage()
+AddEventHandler('fx_customs:SetVehicle', function(veh_data) 
+  local source = source
+  local vdata = veh_data
+  UpdateVehicleInfo(source, vdata)
+  AddVehicle(source)
+  TriggerEvent('es:getPlayerFromId', source, function(user)
+    local steamid = user.getIdentifier(user)
+    local result = GetVehicle(steamid)
+    if result[1] then
+    TriggerClientEvent("fx_customs:SetOriginalMod", -1, result,data)
+    end
+  end)
+end)
+
+RegisterServerEvent('fx_customs:UpdateVehicleInfo') -- Triggered from client Paint,Extra,Neon,SetVehicleMod
+AddEventHandler('fx_customs:UpdateVehicleInfo', function(data) 
+  local source = source
+  UpdateVehicleInfo(source, data)
+  TriggerEvent('es:getPlayerFromId', source, function(user)
+    local steamid = user.getIdentifier(user)
+    local result = GetVehicle(steamid)
+    TriggerClientEvent("fx_customs:SetOriginalMod", -1, result,data)
+  end)
+end)
+
+RegisterNetEvent('fx_customs:ResetMods')
+AddEventHandler('fx_customs:ResetMods', function(data)
+  preview = false
+  TriggerEvent('es:getPlayerFromId', source, function(user)
+    local steamid = user.getIdentifier(user)
+    local result = GetVehicle(steamid) -- LOOK INTO THIS   
+    TriggerClientEvent("fx_customs:SetVehicleMod", -1, data, preview, result)
+  end)
+end)
+
 RegisterNetEvent('fx_customs:PreviewMod')
 AddEventHandler('fx_customs:PreviewMod', function(data)
   preview = true
-  TriggerClientEvent("fx_customs:SetVehicleMod", -1, data, preview)
+  TriggerEvent('es:getPlayerFromId', source, function(user)
+    local steamid = user.getIdentifier(user)
+    local result = GetVehicle(steamid) -- LOOK INTO THIS   
+    TriggerClientEvent("fx_customs:SetVehicleMod", -1, data, preview, result)
+  end)
 end)
 
 RegisterServerEvent('fx_customs:ConfirmMod')
 AddEventHandler('fx_customs:ConfirmMod', function(data)
-  Wait(100)
   TriggerEvent('es:getPlayerFromId', source, function(user)
       local steamid = user.getIdentifier(user)
       local user_group = user.getGroup(user)
       preview = false
       local price = data.cost
       local paid = false
+      print("Triggered Confirm Mod")
       if data.confirmed ~= nil then
       local playerMoney = user.getMoney(user)
         if playerMoney >= price then
@@ -413,64 +389,102 @@ AddEventHandler('fx_customs:ConfirmMod', function(data)
                 local modtype = data.modtype
                 if modtype == 0 or modtype == 1 or modtype == 2 or modtype == 3 or modtype == 4 or modtype == 5 or modtype == 6 or modtype == 7 or modtype == 8 or modtype == 9 or modtype == 10 then
                   user.removeMoney(price)   
-                  TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview)
+                  TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview,result)
+                  if modtype == 0 then
+                    UpdateDB("spoilers",steamid,mod)
+                  elseif modtype == 1 then
+                    UpdateDB("front_bumper",steamid,mod)
+                  elseif modtype == 2 then
+                    UpdateDB("rear_bumper",steamid,mod)
+                  elseif modtype == 3 then
+                    UpdateDB("side_skirt",steamid,mod) 
+                  elseif modtype == 4 then
+                    UpdateDB("exhaust",steamid,mod)
+                  elseif modtype == 5 then
+                    UpdateDB("frame",steamid,mod)
+                  elseif modtype == 6 then
+                    UpdateDB("grille",steamid,mod)
+                  elseif modtype == 7 then
+                    UpdateDB("hood",steamid,mod) 
+                  elseif modtype == 8 then 
+                    UpdateDB("fender",steamid,mod) 
+                  elseif modtype == 9 then
+                    UpdateDB("right_fender",steamid,mod)
+                  elseif modtype == 10 then
+                    UpdateDB("roof",steamid,mod)
+                  end
                 elseif modtype == 11 then
                   if tonumber(mod) == tonumber(vmod.engine) then
                     Notify("You already own that engine mod!")
                   else
                     user.removeMoney(price)
-                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview)
+                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview,result)
+                    UpdateDB("engine",steamid,mod)
                   end
                 elseif modtype == 12 then
                   if tonumber(mod) == tonumber(vmod.brakes) then
                     Notify("You already own those brakes!")
                   else
                     user.removeMoney(price)
-                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview)
+                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview,result)
+                    UpdateDB("brakes",steamid,mod)
                   end
                 elseif modtype == 13 then
                   if tonumber(mod) == tonumber(vmod.transmission) then
                     Notify("You already own that transmission!")
                   else
                     user.removeMoney(price)
-                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview)
+                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview,result)
+                    UpdateDB("transmission",steamid,mod)
                   end
                 elseif modtype == 14 then
                   if tonumber(mod) == tonumber(vmod.horn) then
                     Notify("You already own that horn!")
                   else
                     user.removeMoney(price)
-                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview)
+                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview,result)
+                    UpdateDB("horn",steamid,mod)
                   end
                 elseif modtype == 15 then
                   if tonumber(mod) == tonumber(vmod.suspension) then
                     Notify("You already own that suspension!")
                   else
                     user.removeMoney(price)
-                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview)
+                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview,result)
+                    UpdateDB("suspension",steamid,mod)
                   end
                 elseif modtype == 16 then
                   if tonumber(mod) == tonumber(vmod.armor) then
                     Notify("You already own that vehicle plating!")
                   else
                     user.removeMoney(price)
-                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview)
+                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview,result)
+                    UpdateDB("armor",steamid,mod)
                   end 
                 elseif modtype == 23 or modtype == 24 then
+                  local wtype = data.wtype
                   if tonumber(vmod.bike) == 1 then
                     if tonumber(mod) == tonumber(vmod.front_wheel) then
                       Notify("You already own those wheels!")
                     elseif tonumber(mod) == tonumber(vmod.back_wheel) then
                       Notify("You already own those wheels!")
                     else  
-                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview)
+                      TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview,result)
+                      if modtype == 23 then
+                        UpdateDB("front_wheel",steamid,mod)
+                      elseif modtype == 24 then
+                        UpdateDB("back_wheel",steamid,mod)
+                      end
+                      UpdateDB("wheeltype",steamid,wtype)
                     end
                   else
                     if tonumber(mod) == tonumber(vmod.front_wheel) then
                       Notify("You already own those wheels!")
                     else
                       user.removeMoney(price)
-                      TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview)
+                      TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview,result)
+                      UpdateDB("front_wheel",steamid,mod)
+                      UpdateDB("wheeltype",steamid,wtype)
                     end
                   end
                 elseif data.turbo ~= nil then 
@@ -478,12 +492,14 @@ AddEventHandler('fx_customs:ConfirmMod', function(data)
                     Notify("You already bought this!")
                   else
                     user.removeMoney(price)
-                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview)
+                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview,result)
+                    UpdateDB("turbo",steamid,data.turbo)
                   end
                 elseif data.id ~= nil then
                   if set_extra ~= nil then
                     user.removeMoney(price)
-                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview)
+                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview,result)
+                    -- EXTRA NOT CURRENTLY SAVED TO DB
                   end
                 elseif data.burst ~= nil then 
                   local burst = data.burst
@@ -491,14 +507,16 @@ AddEventHandler('fx_customs:ConfirmMod', function(data)
                     Notify("You already have a this mod!")
                   else
                     user.removeMoney(price)
-                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview)
+                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview,result)
+                    UpdateDB("bulletproof",steamid,mod)
                   end
                 elseif data.xeon ~= nil then 
                   if tonumber(vmod.xeon) == tonumber(data.toggle) then
                     Notify("You already bought this!")
                   else
-                    ser.removeMoney(price)
-                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview)
+                    user.removeMoney(price)
+                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview,result)
+                    UpdateDB("xeon",steamid,data.xeon)
                   end
                 elseif data.tint ~= nil then 
                   local tint = data.tint
@@ -506,7 +524,8 @@ AddEventHandler('fx_customs:ConfirmMod', function(data)
                     Notify("You already have a this mod!")
                   else
                     user.removeMoney(price)
-                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview)
+                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview,result)
+                    UpdateDB("windowtint",steamid,data.tint)
                   end
                 elseif data.plateindex ~= nil then 
                   local plate = data.plateindex
@@ -514,7 +533,8 @@ AddEventHandler('fx_customs:ConfirmMod', function(data)
                     Notify("You already have a this mod!")
                   else
                     user.removeMoney(price)
-                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview)
+                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview,result)
+                    UpdateDB("plate_index",steamid,data.plateindex)
                   end     
                 elseif data.colorindex ~= nil then
                   local colorindex = data.colorindex
@@ -523,28 +543,33 @@ AddEventHandler('fx_customs:ConfirmMod', function(data)
                       Notify("You've already painted your vehicles body that color!")
                     else
                       user.removeMoney(price)
-                      TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview)
+                      TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview,result)
+                      UpdateDB("primary_color",steamid,colorindex)
                     end
                   elseif paintCar == 2 then -- Sets the Secondary Paint via a menu choice.
                     if tonumber(colorindex) == tonumber(vmod.secondary_color) then
                       Notify("You've already painted part of your vehicles body that color!")
                     else
                       user.removeMoney(price)
-                      TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview)
+                      TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview,result)
+                      UpdateDB("secondary_color",steamid,colorindex)
                     end   
                   elseif paintCar == 3 then -- Sets the Pearlsecent Paint via a menu choice.
                     if tonumber(colorindex) == tonumber(vmod.pearl_color) then
                       Notify("You already have that colored shimmer!")
                     else
                       user.removeMoney(price)
-                      TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview)
+                      TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview,result)
+                      UpdateDB("pearl_color",steamid,colorindex)
                     end       
                   elseif paintCar == 4 then -- Sets the Rim Paint via a menu choice.
                     if tonumber(colorindex) == tonumber(vmod.wheel_color) then
                       Notify("Your rims are already that color!")
                     else
                       user.removeMoney(price)
-                      TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview)
+                      print("Setting wheel color on server")
+                      TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview,result)
+                      UpdateDB("wheel_color",steamid,colorindex)
                     end             
                   end
                 elseif neonSide ~= nil or data.smoke ~= nil then
@@ -557,7 +582,16 @@ AddEventHandler('fx_customs:ConfirmMod', function(data)
                     Notify("Your tire smoke is already that color!")
                   elseif data.modtype == nil then
                     user.removeMoney(price)
-                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview)
+                    TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview,result)
+                    if r ~= nil and g ~= nil and b ~= nil then
+                        UpdateDB("neon_r",steamid,r)
+                        UpdateDB("neon_g",steamid,g)
+                        UpdateDB("neon_b",steamid,b)
+                    elseif tr ~= nil and tg ~= nil and tb ~= nil then
+                        UpdateDB("smoke_r",steamid,tr)
+                        UpdateDB("smoke_g",steamid,tg)
+                        UpdateDB("smoke_b",steamid,tb)
+                    end
                   end 
                 end 
               end
@@ -575,7 +609,7 @@ AddEventHandler('fx_customs:ConfirmMod', function(data)
         if veh_state < 1000 then
           user.removeMoney(price)
         end
-        TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview)
+        TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview,result)
       else
         Notify("You did not have enough cash for the purchase!")
       end
