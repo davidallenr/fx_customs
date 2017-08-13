@@ -1,8 +1,8 @@
-  -- @Date:   2017-07-331
+  -- @Date:   2017-08-13
   -- @Project: FX Customs
   -- @Owner: Jink Left
   -- @LICENSE: NO LICENSE/LICENSE
-  -- @Last modified time: 2017-07-31
+  -- @Last modified time: 2017-08-13
 ---------------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------[MYSQL ASYNC FUNCTION]--------------------------------------------------------------
 AddEventHandler('onMySQLReady', function ()
@@ -259,8 +259,14 @@ function UpdateVehicleInfo(source, input)
                 elseif v.paintCar == 4 then
                   paintCar = 4
                 end   
-                if v.neonSide ~= nil then
+                if v.neonSide == 0 then
+                  neonSide = 0
+                elseif v.neonSide == 1 then
                   neonSide = 1
+                elseif v.neonSide == 2 then
+                  neonSide = 2
+                elseif v.neonSide == 3 then
+                  neonSide = 3
                 end 
                 if v.setExtra ~= nil then
                   if v.setExtra == 1 then
@@ -328,11 +334,12 @@ AddEventHandler('fx_customs:SetVehicle', function(veh_data)
   local vdata = veh_data
   UpdateVehicleInfo(source, vdata)
   AddVehicle(source)
+  Wait(600)
   TriggerEvent('es:getPlayerFromId', source, function(user)
     local steamid = user.getIdentifier(user)
-    local result = GetVehicle(steamid)
+    local result = GetVehicle(steamid)    
     if result[1] then
-    TriggerClientEvent("fx_customs:SetOriginalMod", -1, result,data)
+      TriggerClientEvent("fx_customs:SetOriginalMod", -1, result)
     end
   end)
 end)
@@ -376,7 +383,6 @@ AddEventHandler('fx_customs:ConfirmMod', function(data)
       preview = false
       local price = data.cost
       local paid = false
-      print("Triggered Confirm Mod")
       if data.confirmed ~= nil then
       local playerMoney = user.getMoney(user)
         if playerMoney >= price then
@@ -567,7 +573,6 @@ AddEventHandler('fx_customs:ConfirmMod', function(data)
                       Notify("Your rims are already that color!")
                     else
                       user.removeMoney(price)
-                      print("Setting wheel color on server")
                       TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview,result)
                       UpdateDB("wheel_color",steamid,colorindex)
                     end             
@@ -587,6 +592,27 @@ AddEventHandler('fx_customs:ConfirmMod', function(data)
                         UpdateDB("neon_r",steamid,r)
                         UpdateDB("neon_g",steamid,g)
                         UpdateDB("neon_b",steamid,b)
+                        if tonumber(neonSide) == 1 then
+                          UpdateDB("neon_front", steamid, 1)
+                          UpdateDB("neon_left", steamid, 1)
+                          UpdateDB("neon_right", steamid, 1)
+                          UpdateDB("neon_back", steamid, 1)
+                        elseif tonumber(neonSide) == 2 then
+                          UpdateDB("neon_front", steamid, 1)
+                          UpdateDB("neon_left", steamid, 0)
+                          UpdateDB("neon_right", steamid, 0)
+                          UpdateDB("neon_back", steamid, 0)
+                        elseif tonumber(neonSide) == 3 then
+                          UpdateDB("neon_front", steamid, 0)
+                          UpdateDB("neon_left", steamid, 0)
+                          UpdateDB("neon_right", steamid, 0)
+                          UpdateDB("neon_back", steamid, 1)
+                        elseif tonumber(neonSide) == 0 then
+                          UpdateDB("neon_front", steamid, 0)
+                          UpdateDB("neon_left", steamid, 0)
+                          UpdateDB("neon_right", steamid, 0)
+                          UpdateDB("neon_back", steamid, 0)
+                        end
                     elseif tr ~= nil and tg ~= nil and tb ~= nil then
                         UpdateDB("smoke_r",steamid,tr)
                         UpdateDB("smoke_g",steamid,tg)
@@ -609,7 +635,7 @@ AddEventHandler('fx_customs:ConfirmMod', function(data)
         if veh_state < 1000 then
           user.removeMoney(price)
         end
-        TriggerClientEvent('fx_customs:SetVehicleMod',-1,data,preview,result)
+        TriggerClientEvent('fx_customs:RepairVehicle',-1,paid)
       else
         Notify("You did not have enough cash for the purchase!")
       end

@@ -1,8 +1,8 @@
-  -- @Date:   2017-08-08
+  -- @Date:   2017-08-13
   -- @Project: FX Customs
   -- @Owner: Jink Left
   -- @LICENSE: NO LICENSE/LICENSE
-  -- @Last modified time: 2017-08-08
+  -- @Last modified time: 2017-08-13
 ----------------------------------------------------
 --------------------[   DATA   ]--------------------
 local FirstJoinProper = false
@@ -20,7 +20,6 @@ local locations = {
   }
 
 local mods = {[1] = { name = "Spoilers", mod = 0 }, [2] = { name = "Front Bumper", mod = 1 }, [3] = { name = "Rear Bumper", mod = 2 }, [4] = { name = "Side Skirt", mod = 3 }, [5] = { name = "Exhaust", mod = 4 }, [6] = { name = "Roll Cage", mod = 5 }, [7] = { name = "Grille", mod = 6 }, [8] = { name = "Hood", mod = 7 }, [9] = { name = "Fender", mod = 8 }, [10] = { name = "Right Fender", mod = 9 }, [11] = { name = "Roof", mod = 10 }, }
-
 ----------------------------------------------------
 ---------------[	FUNCTIONS 		]---------------
 ----------------------------------------------------
@@ -301,18 +300,15 @@ function SetModSpecifics(data)
 	elseif side == "all" then
 		neonSide = 1
 	end
+
 	if paint == "primary" then -- Sets the Primary Paint via a menu choice. 
 		paintCar = 1
-		TriggerServerEvent("print","Setting paintcar 1")
 	elseif paint == "secondary" then -- Sets the Secondary Paint via a menu choice.
 		paintCar = 2
-		TriggerServerEvent("print","Setting paintcar 2")
 	elseif paint == "pearl" then -- Sets the Pearlsecent Paint via a menu choice.
 		paintCar = 3 
-		TriggerServerEvent("print","Setting paintcar 3")
 	elseif paint == "wheel" then -- Sets the Rim Paint via a menu choice.
 		paintCar = 4
-		TriggerServerEvent("print","Setting paintcar 4")
 	end
 	
 	if paintCar ~= nil then
@@ -339,8 +335,6 @@ local originaldata = result
 		    if v ~= nil then
 		    	if v.plate ~= nil then
 		    		o_plate = v.plate 
-		    		TriggerServerEvent("print","setting o plate")
-		    		TriggerServerEvent("print",tostring(o_plate))
 		    	end
 		    end
 		end
@@ -358,8 +352,8 @@ function SetDatabaseMods(result, data)
 		        if v.model ~= nil then
 		          o_model = v.model
 		        end
-		        if v.xeon_tog ~= nil then
-		          o_xeon = v.xeon_tog
+		        if v.xeon ~= nil then
+		          o_xeon = v.xeon
 		        end
 		        if v.bike ~= nil then
 		          o_bike = v.bike
@@ -367,58 +361,50 @@ function SetDatabaseMods(result, data)
 		        if v.plate_index ~= nil then 
 		          o_plate_index = v.plate_index
 		        end 
-		        if v.vehiclecol ~= nil then
-		          for k,v in pairs(v.vehiclecol) do
-		            if k == 1 then
-		              o_primary_color = v
-		            elseif k == 2 then
-		              o_secondary_color = v
-		            end
-		          end
-		        end
-		        if v.extracol ~= nil then
-		          for k,v in pairs(v.extracol) do
-		            if k == 1 then
-		              o_pearl_color = v
-		            elseif k == 2 then
-		              o_wheel_color = v
-		            end
-		          end
-		        end
 		        if v.wheeltype ~= nil then
 		          o_wheeltype = v.wheeltype
 		        end
-		        if v.neoncolor ~= nil then 
-		          for k,v in pairs(v.neoncolor) do
-		            if k == 1 then
-		              o_neon_r = v
-		            elseif k == 2 then
-		              o_neon_g = v
-		            elseif k == 3 then
-		              o_neon_b = v
-		            end
-		          end
-		        end
-		        if v.neonsides ~= nil then
-		          for k,v in pairs(v.neonsides) do
-		            if k == 1 then
-		              o_neon_left = v
-		            elseif k == 2 then
-		              o_neon_right = v
-		            elseif k == 3 then
-		              o_neon_front = v
-		            elseif k == 4 then
-		              o_neon_back = v
-		            end
-		          end
-		        end
 		        if v.front_wheel ~= nil then
 		          o_front_wheel = v.front_wheel
-		          TriggerServerEvent("print","setting o front wheel to :")
-		          TriggerServerEvent("print",tostring(o_front_wheel))
+		        end
+		        if v.back_wheel ~= nil then
+		          o_back_wheel = v.back_wheel
 		        end
 		        if v.windowtint ~= nil then 
 		          o_windowtint = v.windowtint
+		        end
+		        if v.primary_color ~= nil then 
+		          o_primary_color = v.primary_color
+		        end
+		        if v.secondary_color ~= nil then 
+		          o_secondary_color = v.secondary_color
+		        end
+		        if v.pearl_color ~= nil then 
+		          o_pearl_color = v.pearl_color
+		        end
+		        if v.wheel_color ~= nil then 
+		          o_wheel_color = v.wheel_color
+		        end
+		        if v.neon_r ~= nil then
+		        	o_neon_r = v.neon_r
+		        end
+		        if v.neon_g ~= nil then
+		        	o_neon_g = v.neon_g
+		        end
+		        if v.neon_b ~= nil then
+		        	o_neon_b = v.neon_b
+		        end
+		        if v.neon_front ~= nil then
+		        	o_neon_front = v.neon_front
+		        end
+		        if v.neon_left ~= nil then
+		        	o_neon_left = v.neon_left
+		        end
+		        if v.neon_right ~= nil then
+		        	o_neon_right = v.neon_right
+		        end
+		        if v.neon_back ~= nil then
+		        	o_neon_back = v.neon_back
 		        end
 			end
 		end
@@ -449,19 +435,39 @@ function SetVehicleMods(data,preview)
 
 	if data.reset and plate == o_plate then
 		SetVehicleModKit(veh, 0) -- Sets Modkit to be able to apply vehicle mods.
-		if data.wheels then
-			local hash = GetEntityModel(veh)
- 			local bike = IsThisModelABike(hash)
- 			if bike then
- 				SetVehicleWheelType(veh, tonumber(o_wheeltype))		
-				SetVehicleMod(veh, 23, tonumber(o_front_wheel))
-				SetVehicleMod(veh, 24, tonumber(o_back_wheel))
+		local hash = GetEntityModel(veh)
+		local bike = IsThisModelABike(hash)
+		if bike and o_front_wheel ~= nil and o_back_wheel ~= nil then
+			SetVehicleWheelType(veh, 6)		
+			SetVehicleMod(veh, 23, tonumber(o_front_wheel))
+			SetVehicleMod(veh, 24, tonumber(o_back_wheel))
+		elseif o_wheeltype ~= nil then
+			SetVehicleWheelType(veh, tonumber(o_wheeltype))		
+			SetVehicleMod(veh, 23, tonumber(o_front_wheel))
+		end
+
+		if o_primary_color ~= nil and o_secondary_color ~= nil and o_pearl_color ~= nil and o_wheel_color ~= nil then
+			SetVehicleColours(veh, tonumber(o_primary_color), tonumber(o_secondary_color))
+			SetVehicleExtraColours(veh, tonumber(o_pearl_color), tonumber(o_wheel_color))
+		end
+		if o_xeon ~= nil then -- Xeon headlights are a toggle triggered by the menu.
+			if tonumber(o_xeon) == 1 then
+				ToggleVehicleMod(veh, 22, true)
+			elseif tonumber(o_xeon) == 0 then
+				ToggleVehicleMod(veh, 22, false)
+			end
+		end
+		if o_windowtint ~= nil and not bike then
+			SetVehicleWindowTint(veh,  tonumber(o_windowtint))
+		end
+		if o_neon_r ~= nil and o_neon_g ~= nil and o_neon_b ~= nil and not bike then
+			if tonumber(o_neon_back) == 0 and tonumber(o_neon_front) == 0 and tonumber(o_neon_left) == 0 and tonumber(o_neon_right) == 0 then
+				SetVehicleNeonLightEnabled(veh, 0, false)
+				SetVehicleNeonLightEnabled(veh, 1, false)
+				SetVehicleNeonLightEnabled(veh, 2, false)
+				SetVehicleNeonLightEnabled(veh, 3, false)	
 			else
-				TriggerServerEvent("print","Data Reset")
-				TriggerServerEvent("print",tostring(o_wheeltype))
-				TriggerServerEvent("print",tostring(o_front_wheel))
-				SetVehicleWheelType(veh, tonumber(o_wheeltype))		
-				SetVehicleMod(veh, 23, tonumber(o_front_wheel))
+				SetVehicleNeonLightsColour(veh, tonumber(o_neon_r),tonumber(o_neon_g), tonumber(o_neon_b))
 			end
 		end
 	else
@@ -471,11 +477,9 @@ function SetVehicleMods(data,preview)
 				if mod ~= nil then
 					local vehMods = GetVehicleMod(veh, modtype)		
 					if wheeltype ~= nil then
-						TriggerServerEvent("print","in else statement")
 						SetVehicleWheelType(veh, wheeltype)
 						SetVehicleMod(veh, modtype, mod)
 					elseif vehMods == mod  and not preview then
-						TriggerServerEvent("print","Resetting mods")
 						SetVehicleMod(veh, modtype, -1)
 					else
 						SetVehicleMod(veh, modtype, mod)
@@ -483,7 +487,7 @@ function SetVehicleMods(data,preview)
 				end
 			end
 			if windowtint ~= nil then
-				SetVehicleWindowTint(veh,  windowtint)
+				SetVehicleWindowTint(veh, windowtint)
 			end
 			if tr ~= nil and tg ~= nil and tb ~= nil and data.smoke ~= nil then -- Tire Smoke is nested with neon R/G/B in an Elseif to prevent double setting the RGB of
 			 	if data.enabled == 1 then
@@ -577,7 +581,6 @@ function SetVehicleMods(data,preview)
 					for k, v in pairs(extracol) do
 						if k == 1 then
 							SetVehicleExtraColours(veh, v, colorIndex)
-							TriggerServerEvent('print',tostring(colorIndex))
 						end
 					end
 				end
@@ -646,7 +649,6 @@ Citizen.CreateThread(function()
 			   		if DoesEntityExist(veh) then
 				        drawTxt("Press ~b~HOME~w~ to enter ~b~Los Santos Customs ",4,1,0.5,0.8,1.0,255,255,255,255) -- DRAWS THE TEXT ON THE SCREEN
 				        if IsControlJustPressed(1, 213) and GetLastInputMethod(2) then -- HOME KEY IS  213 ON CONTROLS	 	        	
-				        	Citizen.Trace("You're Near LSC" .. tostring(currentGarage) .. " Near is : " .. tostring(near))
 			   				currentGarage = i
 				        	insidePosition = pos.inside
 				        	outsidePosition = pos.outside
@@ -678,7 +680,6 @@ end)
 RegisterNetEvent('fx_customs:LeaveGarage')
 AddEventHandler('fx_customs:LeaveGarage', function(data)
 	SetVehicleOutsideGarage()
-	ResetVehicleMods()
 end)
 
 RegisterNetEvent('fx_customs:SetModSpecifics') -- This event triggers how you want neons setup
@@ -689,8 +690,8 @@ AddEventHandler('fx_customs:SetModSpecifics', function(data)
 end)
 
 RegisterNetEvent('fx_customs:SetOriginalMod')
-AddEventHandler('fx_customs:SetOriginalMod', function(result,data)
-	SetDatabaseMods(result,data)
+AddEventHandler('fx_customs:SetOriginalMod', function(result)
+	SetDatabaseMods(result)
 end)
 
 RegisterNetEvent('fx_customs:SetVehicleMod')

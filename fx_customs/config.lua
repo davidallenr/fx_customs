@@ -1,8 +1,8 @@
-  -- @Date:   2017-08-08
+  -- @Date:   2017-08-13
   -- @Project: FX Customs
   -- @Owner: Jink Left
   -- @LICENSE: NO LICENSE/LICENSE
-  -- @Last modified time: 2017-08-08
+  -- @Last modified time: 2017-08-13
 -------------------------------------------
 ---------------[COST MENU]----------------
 cost = {
@@ -51,9 +51,9 @@ menu = {
       },
 
       buttons = {
-        { text = "Purchase Upgrades", menu = "fx_main" },
-        { text = "Purchase Vehicle Repairs", menu = "fx_repair" },
-        { text = "Close menu", close = true, eventClient = "fx_customs:LeaveGarage", data = { closed = true }},
+        { text = "Purchase Upgrades", hoverEventServer = "fx_customs:ResetMods", menu = "fx_main", data = { reset = true } },
+        { text = "Purchase Vehicle Repairs", hoverEventServer = "fx_customs:ResetMods", menu = "fx_repair", data = { reset = true } },
+        { text = "Close menu", hoverEventServer = "fx_customs:ResetMods", close = true, eventClient = "fx_customs:LeaveGarage", data = { reset = true, closed = true }},
       },
     },
 
@@ -140,7 +140,7 @@ extras2 = {
       },
 
       buttons = { 
-        { text = "Wheel Type", hoverEventServer = "fx_customs:ResetMods", menu = "wheeltype", data = { wheels = true, reset = true } },
+        { text = "Wheel Type", menu = "wheeltype" },
         { text = "Rim Color", menu = "classic" , eventClient = "fx_customs:SetModSpecifics", data = { paints = "wheel" }},
         { text = "Wheel Accessories", menu = "wheelaccessories" },
       },
@@ -157,13 +157,13 @@ extras2 = {
 
       buttons = { 
         
-        { text = "Sport", hoverEventServer = "fx_customs:ResetMods", menu = "sport", data = { wheels = true, reset = true } },
-        { text = "Muscle", hoverEventServer = "fx_customs:ResetMods", menu = "muscle", data = { wheels = true, reset = true } },
-        { text = "Lowrider", hoverEventServer = "fx_customs:ResetMods", menu = "lowrider", data = { wheels = true, reset = true } },
-        { text = "Suv", hoverEventServer = "fx_customs:ResetMods", menu = "suv", data = { wheels = true, reset = true } },
-        { text = "Offroad", hoverEventServer = "fx_customs:ResetwMods", menu = "offroad", data = { wheels = true, reset = true } },
-        { text = "Tuner", hoverEventServer = "fx_customs:ResetwMods", menu = "tuner", data = { wheels = true, reset = true } },
-        { text = "Highend", hoverEventServer = "fx_customs:ResetMods", menu = "highend", data = { wheels = true, reset = true } },
+        { text = "Sport", menu = "sport" },
+        { text = "Muscle", menu = "muscle" },
+        { text = "Lowrider", menu = "lowrider" },
+        { text = "Suv", menu = "suv" },
+        { text = "Offroad", menu = "offroad" },
+        { text = "Tuner", menu = "tuner" },
+        { text = "Highend", menu = "highend" },
       },
     },
 
@@ -191,7 +191,7 @@ extras2 = {
               { text = "Fiftynine", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = false, modtype = 23, mod = 6, confirmed = true , cost = cost['rims'].total} },
               { text = "Groundride", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = false, modtype = 23, mod = 13, confirmed = true , cost = cost['rims'].total} },
               { text = "Icekid", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = false, modtype = 23, mod = 18, confirmed = true , cost = cost['rims'].total} },
-              { text = "Inferno", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = false, modtype = 23, mod = false, confirmed = true , cost = cost['rims'].total} },
+              { text = "Inferno", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = false, modtype = 23, mod = 0, confirmed = true , cost = cost['rims'].total} },
               { text = "Lozspeed", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = false, modtype = 23, mod = 2, confirmed = true , cost = cost['rims'].total} },
               { text = "Mercie", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = false, modtype = 23, mod = 7, confirmed = true , cost = cost['rims'].total} },
               { text = "Organictyped", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = false, modtype = 23, mod = 9, confirmed = true , cost = cost['rims'].total} },
@@ -220,7 +220,7 @@ extras2 = {
               { text = "Stock", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 1, modtype = 23, mod = -1, confirmed = true , cost = cost['rims'].total} },
               { text = "Azrea", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 1, modtype = 23, mod = 4, confirmed = true , cost = cost['rims'].total} },
               { text = "Blacktop", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 1, modtype = 23, mod = 6, confirmed = true , cost = cost['rims'].total} },
-              { text = "Classicfive", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 1, modtype = 23, mod = false, confirmed = true , cost = cost['rims'].total} },
+              { text = "Classicfive", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 1, modtype = 23, mod = 0, confirmed = true , cost = cost['rims'].total} },
               { text = "Classicrod", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 1, modtype = 23, mod = 9, confirmed = true , cost = cost['rims'].total} },
               { text = "Dodman", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 1, modtype = 23, mod = 14, confirmed = true , cost = cost['rims'].total} },
               { text = "Dragspl", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 1, modtype = 23, mod = 7, confirmed = true , cost = cost['rims'].total} },
@@ -254,7 +254,7 @@ extras2 = {
               { text = "Classicrod", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 2, modtype = 23, mod = 10, confirmed = true , cost = cost['rims'].total} },
               { text = "Dollar", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 2, modtype = 23, mod = 11, confirmed = true , cost = cost['rims'].total} },
               { text = "Dukes", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 2, modtype = 23, mod = 12, confirmed = true , cost = cost['rims'].total} },
-              { text = "Flare", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 2, modtype = 23, mod = false, confirmed = true , cost = cost['rims'].total} },
+              { text = "Flare", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 2, modtype = 23, mod = 0, confirmed = true , cost = cost['rims'].total} },
               { text = "Freshmesh", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 2, modtype = 23, mod = 6, confirmed = true , cost = cost['rims'].total} },
               { text = "Gooch", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 2, modtype = 23, mod = 14, confirmed = true , cost = cost['rims'].total} },
               { text = "Leadsled", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 2, modtype = 23, mod = 7, confirmed = true , cost = cost['rims'].total} },
@@ -298,7 +298,7 @@ extras2 = {
               { text = "Splitsix", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 3, modtype = 23, mod = 14, confirmed = true , cost = cost['rims'].total} },
               { text = "Sunrise", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 3, modtype = 23, mod = 16, confirmed = true , cost = cost['rims'].total} },
               { text = "Supernova", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 3, modtype = 23, mod = 10, confirmed = true , cost = cost['rims'].total} },
-              { text = "Vip", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 3, modtype = 23, mod = false, confirmed = true , cost = cost['rims'].total} },
+              { text = "Vip", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 3, modtype = 23, mod = 0, confirmed = true , cost = cost['rims'].total} },
             },
           },
 
@@ -314,7 +314,7 @@ extras2 = {
           buttons = { 
 
               { text = "Stock", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 4, modtype = 23, mod = -1, confirmed = true , cost = cost['rims'].total} },
-              { text = "Raider", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 4, modtype = 23, mod = false, confirmed = true , cost = cost['rims'].total} },
+              { text = "Raider", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 4, modtype = 23, mod = 0, confirmed = true , cost = cost['rims'].total} },
               { text = "Mudslinger", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 4, modtype = 23, mod = 1, confirmed = true , cost = cost['rims'].total} },
               { text = "Nevis", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 4, modtype = 23, mod = 2, confirmed = true , cost = cost['rims'].total} },
               { text = "Cairngorm", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 4, modtype = 23, mod = 3, confirmed = true , cost = cost['rims'].total} },
@@ -343,7 +343,7 @@ extras2 = {
               { text = "Battlevill", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 5, modtype = 23, mod = 22, confirmed = true , cost = cost['rims'].total} },
               { text = "Chicane", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 5, modtype = 23, mod = 17, confirmed = true , cost = cost['rims'].total} },
               { text = "Chokadori", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 5, modtype = 23, mod = 16, confirmed = true , cost = cost['rims'].total} },
-              { text = "Cosmo", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 5, modtype = 23, mod = false, confirmed = true , cost = cost['rims'].total} },
+              { text = "Cosmo", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 5, modtype = 23, mod = 0, confirmed = true , cost = cost['rims'].total} },
               { text = "Countersteer", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 5, modtype = 23, mod = 12, confirmed = true , cost = cost['rims'].total} },
               { text = "Dishedeight", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 5, modtype = 23, mod = 19, confirmed = true , cost = cost['rims'].total} },
               { text = "Driffmeister", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 5, modtype = 23, mod = 4, confirmed = true , cost = cost['rims'].total} },
@@ -394,7 +394,7 @@ extras2 = {
               { text = "Lozspeedten", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 7, modtype = 23, mod = 13, confirmed = true , cost = cost['rims'].total} },
               { text = "Merciechlip", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 7, modtype = 23, mod = 6, confirmed = true , cost = cost['rims'].total} },
               { text = "Obeyrs", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 7, modtype = 23, mod = 7, confirmed = true , cost = cost['rims'].total} },
-              { text = "Shadow", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 7, modtype = 23, mod = false, confirmed = true , cost = cost['rims'].total} },
+              { text = "Shadow", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 7, modtype = 23, mod = 0, confirmed = true , cost = cost['rims'].total} },
               { text = "Solar", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 7, modtype = 23, mod = 10, confirmed = true , cost = cost['rims'].total} },
               { text = "Splitten", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 7, modtype = 23, mod = 11, confirmed = true , cost = cost['rims'].total} }, 
               { text = "Supagee", subText = cost['rims'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 7, modtype = 23, mod = 4, confirmed = true , cost = cost['rims'].total} },
@@ -499,7 +499,7 @@ wheels2 = {
         buttons = { 
 
             { text = "Stock", subText = cost['frontWheel'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 23, mod = -1, confirmed = true , cost = cost['frontWheel'].total} },
-            { text = "Speedway", subText = cost['frontWheel'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 23, mod = false, confirmed = true , cost = cost['frontWheel'].total} },
+            { text = "Speedway", subText = cost['frontWheel'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 23, mod = 0, confirmed = true , cost = cost['frontWheel'].total} },
             { text = "Streetspecial", subText = cost['frontWheel'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 23, mod = 1, confirmed = true , cost = cost['frontWheel'].total} },
             { text = "Racer", subText = cost['frontWheel'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 23, mod = 2, confirmed = true , cost = cost['frontWheel'].total} },
             { text = "Trackstar", subText = cost['frontWheel'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 23, mod = 3, confirmed = true , cost = cost['frontWheel'].total} },
@@ -527,7 +527,7 @@ wheels2 = {
         buttons = { 
 
             { text = "Stock", subText = cost['backWheel'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 24, mod = -1, confirmed = true , cost = cost['backWheel'].total} },
-            { text = "Speedway", subText = cost['backWheel'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 24, mod = false, confirmed = true , cost = cost['backWheel'].total} },
+            { text = "Speedway", subText = cost['backWheel'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 24, mod = 0, confirmed = true , cost = cost['backWheel'].total} },
             { text = "Streetspecial", subText = cost['backWheel'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 24, mod = 1, confirmed = true , cost = cost['backWheel'].total} },
             { text = "Racer", subText = cost['backWheel'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 24, mod = 2, confirmed = true , cost = cost['backWheel'].total} },
             { text = "Trackstar", subText = cost['backWheel'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { wtype = 6, modtype = 24, mod = 3, confirmed = true , cost = cost['backWheel'].total} },
@@ -573,7 +573,7 @@ accessories = {
         buttons = { 
 
             {text = "Stock Horn", subText = cost['horn'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 14, mod = -1, confirmed = true , cost = cost['horn'].total} },
-            {text = "Truck Horn", subText = cost['horn'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 14, mod = false, confirmed = true , cost = cost['horn'].total} },
+            {text = "Truck Horn", subText = cost['horn'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 14, mod = 0, confirmed = true , cost = cost['horn'].total} },
             {text = "Police Horn", subText = cost['horn'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 14, mod = 1, confirmed = true , cost = cost['horn'].total} },
             {text = "Clown Horn", subText = cost['horn'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 14, mod = 2, confirmed = true , cost = cost['horn'].total} },
             {text = "Musical Horn 1", subText = cost['horn'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 14, mod = 3, confirmed = true , cost = cost['horn'].total} },
@@ -643,9 +643,9 @@ paint = {
 
     buttons = {
 
-        { text = "Primary", hoverEventServer = "fx_customs:ResetMods", menu = "primary", eventClient = "fx_customs:SetModSpecifics", data = {category = 1, menupaint = true, paints = "primary" }},
-        { text = "Secondary", hoverEventServer = "fx_customs:ResetMods", menu = "secondary", eventClient = "fx_customs:SetModSpecifics", data = {category = 2, menupaint = true, paints = "secondary" }},
-        { text = "Pearlescent", hoverEventServer = "fx_customs:ResetMods", menu = "pearlescent", eventClient = "fx_customs:SetModSpecifics", data = {category = 3, menupaint = true, paints = "pearl" }},
+        { text = "Primary", menu = "primary", eventClient = "fx_customs:SetModSpecifics", data = { paints = "primary" }},
+        { text = "Secondary", menu = "secondary", eventClient = "fx_customs:SetModSpecifics", data = { paints = "secondary" }},
+        { text = "Pearlescent", menu = "pearlescent", eventClient = "fx_customs:SetModSpecifics", data = { paints = "pearl" }},
         { text = "Previous Menu", back = true },
       },
     },
@@ -992,7 +992,7 @@ paint = {
         buttons = {
 
             {text = "Stock Suspension", subText = cost['suspension'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 15, mod = -1, confirmed = true , cost = cost['suspension'].total} },
-            {text = "Lowered Suspension", subText = cost['suspension'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 15, mod = false, confirmed = true , cost = cost['suspension'].total} },
+            {text = "Lowered Suspension", subText = cost['suspension'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 15, mod = 0, confirmed = true , cost = cost['suspension'].total} },
             {text = "Street Suspension", subText = cost['suspension'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 15, mod = 1, confirmed = true , cost = cost['suspension'].total} },
             {text = "Sport Suspension", subText = cost['suspension'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 15, mod = 2, confirmed = true , cost = cost['suspension'].total} },
             {text = "Competition Suspension", subText = cost['suspension'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 15, mod = 3, confirmed = true , cost = cost['suspension'].total} },
@@ -1011,7 +1011,7 @@ paint = {
         buttons = {
 
             {text = "Stock Transmission", subText = cost['transmission'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 13, mod = -1, confirmed = true , cost = cost['transmission'].total} },
-            {text = "Street Transmission", subText = cost['transmission'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 13, mod = false, confirmed = true , cost = cost['transmission'].total} },
+            {text = "Street Transmission", subText = cost['transmission'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 13, mod = 0, confirmed = true , cost = cost['transmission'].total} },
             {text = "Sports Transmission", subText = cost['transmission'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 13, mod = 1, confirmed = true , cost = cost['transmission'].total} },
             {text = "Race Transmission", subText = cost['transmission'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 13, mod = 2, confirmed = true , cost = cost['transmission'].total} },
           },
@@ -1045,7 +1045,7 @@ paint = {
       buttons = {
 
           {text = "Stock Brakes", subText = cost['brakes'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 12, mod = -1, confirmed = true , cost = cost['brakes'].total} },
-          {text = "Street Brakes", subText = cost['brakes'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 12, mod = false, confirmed = true , cost = cost['brakes'].total} },
+          {text = "Street Brakes", subText = cost['brakes'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 12, mod = 0, confirmed = true , cost = cost['brakes'].total} },
           {text = "Sport Brakes", subText = cost['brakes'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 12, mod = 1, confirmed = true , cost = cost['brakes'].total} },
           {text = "Race Brakes", subText = cost['brakes'].display, eventServer = "fx_customs:ConfirmMod", data = { modtype = 12, mod = 2, confirmed = true , cost = cost['brakes'].total} }, 
         },
@@ -1063,7 +1063,7 @@ paint = {
       buttons = {
 
           {text = "EMS Upgrade, Level 1", subText = cost['engine'].display, eventServer = "fx_customs:ConfirmMod", data = { level = 1, modtype = 11, mod = -1, confirmed = true , cost = cost['engine'].total} },
-          {text = "EMS Upgrade, Level 2", subText = cost['engine'].display, eventServer = "fx_customs:ConfirmMod", data = { level = 2, modtype = 11, mod = false, confirmed = true , cost = cost['engine'].total} },
+          {text = "EMS Upgrade, Level 2", subText = cost['engine'].display, eventServer = "fx_customs:ConfirmMod", data = { level = 2, modtype = 11, mod = 0, confirmed = true , cost = cost['engine'].total} },
           {text = "EMS Upgrade, Level 3", subText = cost['engine'].display, eventServer = "fx_customs:ConfirmMod", data = { level = 3, modtype = 11, mod = 1, confirmed = true , cost = cost['engine'].total} },
           {text = "EMS Upgrade, Level 4", subText = cost['engine'].display, eventServer = "fx_customs:ConfirmMod", data = { level = 4, modtype = 11, mod = 2, confirmed = true , cost = cost['engine'].total} },
         },
@@ -1081,7 +1081,7 @@ paint = {
       buttons = { 
 
           {text = "None", subText = cost['armor'].display, eventServer = "fx_customs:ConfirmMod", data = { level = 0, modtype = 16, mod = -1, confirmed = true , cost = cost['armor'].total} },
-          {text = "Armor Upgrade 20%", subText = cost['armor'].display, eventServer = "fx_customs:ConfirmMod", data = {level = 1, modtype = 16, mod = false, confirmed = true , cost = cost['armor'].total} },
+          {text = "Armor Upgrade 20%", subText = cost['armor'].display, eventServer = "fx_customs:ConfirmMod", data = {level = 1, modtype = 16, mod = 0, confirmed = true , cost = cost['armor'].total} },
           {text = "Armor Upgrade 40%", subText = cost['armor'].display, eventServer = "fx_customs:ConfirmMod", data = { level = 2, modtype = 16, mod = 1, confirmed = true , cost = cost['armor'].total} },
           {text = "Armor Upgrade 60%", subText = cost['armor'].display, eventServer = "fx_customs:ConfirmMod", data = { level = 3, level = 0, modtype = 16, mod = 2, confirmed = true , cost = cost['armor'].total} },
           {text = "Armor Upgrade 80%", subText = cost['armor'].display, eventServer = "fx_customs:ConfirmMod", data = { level = 4, modtype = 16, mod = 3, confirmed = true , cost = cost['armor'].total} },
@@ -1193,7 +1193,7 @@ paint = {
       },
 
       buttons = { 
-        {text = "None", subText = cost['windowtint'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { tint = false, confirmed = true , cost = cost['windowtint'].total} },
+        {text = "None", subText = cost['windowtint'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { tint = 0, confirmed = true , cost = cost['windowtint'].total} },
         {text = "Pure Black", subText = cost['windowtint'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { tint = 1, confirmed = true , cost = cost['windowtint'].total} },
         {text = "Darksmoke", subText = cost['windowtint'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { tint = 2, confirmed = true , cost = cost['windowtint'].total} },
         {text = "Lightsmoke", subText = cost['windowtint'].display, hoverEventServer = "fx_customs:PreviewMod", eventServer = "fx_customs:ConfirmMod", data = { tint = 3, confirmed = true , cost = cost['windowtint'].total} },
