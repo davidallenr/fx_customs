@@ -1,8 +1,8 @@
-  -- @Date:   2017-08-13
+  -- @Date:   2017-08-14
   -- @Project: FX Customs
   -- @Owner: Jink Left
   -- @LICENSE: NO LICENSE/LICENSE
-  -- @Last modified time: 2017-08-13
+  -- @Last modified time: 2017-08-14
 ---------------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------[MYSQL ASYNC FUNCTION]--------------------------------------------------------------
 AddEventHandler('onMySQLReady', function ()
@@ -36,13 +36,13 @@ end
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ---------------------------------------------------------------------------[  FUNCTIONS     ]---------------------------------------------------------------------------
-function Notify(input)
+function Notify(text)
 
-  local notification = { type = "pnotify"  }            -- Choices are (pnotify, normal)
+  local notification = { type = "normal"  }            -- Choices are (pnotify, normal)
 
   if(notification.type == "pnotify") then
       TriggerClientEvent("pNotify:SendNotification", -1, {
-          text = "<strong> " .. input .." </strong> ",
+          text = "<strong> " .. text .." </strong> ",
                 type = "success",
                 progressBar = "false",
                 animation = {open = "gta_effects_fade_in", close = "gta_effects_fade_out", }, 
@@ -50,8 +50,8 @@ function Notify(input)
                 layout = "centerLeft",
                 queue = "top",
           })
-  elseif (notification.type == "normal") then 
-    TriggerEvent("chatMessage", "Server", { 0, 0, 0 }, input)
+  elseif (notification.type == "normal") then
+    TriggerClientEvent("fx_customs:NotifyClient",-1,"normal", text) 
   end  
 end
 
@@ -316,6 +316,25 @@ end)
 RegisterServerEvent('print')
 AddEventHandler('print', function(text)
     print(text)
+end)
+
+local tbl = {
+        [1] = {locked = false},
+        [2] = {locked = false},
+        [3] = {locked = false},
+        [4] = {locked = false},
+        [5] = {locked = false},
+        [6] = {locked = false},
+        [7] = {locked = false},
+        [8] = {locked = false},
+        [9] = {locked = false},
+        [10] = {locked = false},
+      }
+
+RegisterServerEvent('fx_customs:LockGarage')
+AddEventHandler('fx_customs:LockGarage', function(b,garage)
+  tbl[tonumber(garage)].locked = b
+  TriggerClientEvent('LockGarage',-1,tbl)
 end)
 
 RegisterServerEvent('fx_customs:SetCurerentState') -- Triggered from client function SetVehicleInGarage()

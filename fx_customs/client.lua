@@ -1,26 +1,31 @@
-  -- @Date:   2017-08-13
+  -- @Date:   2017-08-14
   -- @Project: FX Customs
   -- @Owner: Jink Left
   -- @LICENSE: NO LICENSE/LICENSE
-  -- @Last modified time: 2017-08-13
+  -- @Last modified time: 2017-08-14
 ----------------------------------------------------
 --------------------[   DATA   ]--------------------
 local FirstJoinProper = false
 local near = false
 local closed = false
 local insideGarage = false
-local currentGarage = 0
+local currentGarage = nil
 local insidePosition = {}
 local outsidePosition = {}
 local locations = {
-    [1] = { outside = { x = -362.796, y = -132.400, z = 38.252, heading = 71.187}, inside = {x = -337.386,y = -136.924,z = 38.573, heading = 269.455}},
-    [2] = { outside = { x = -1140.191, y = -1985.478, z = 12.729, heading = 315.290}, inside = {x = -1155.536,y = -2007.183,z = 12.744, heading = 155.413}},
-    [3] = { outside = { x = 716.464, y = -1088.869, z = 21.929, heading = 88.768}, inside = {x = 731.816,y = -1088.822,z = 21.733, heading = 269.318}},
-    [4] = { outside = { x = 1174.811, y = 2649.954, z = 37.371, heading = 0.450}, inside = {x = 1175.04,y = 2640.216,z = 37.321, heading = 182.402}},
+    [1] = { locked = false, outside = { x = -362.796, y = -132.400, z = 38.252, heading = 71.187}, inside = {x = -337.386,y = -136.924,z = 38.573, heading = 269.455}},
+    [2] = { locked = false, outside = { x = -1140.191, y = -1985.478, z = 12.729, heading = 315.290}, inside = {x = -1155.536,y = -2007.183,z = 12.744, heading = 155.413}},
+    [3] = { locked = false, outside = { x = 716.464, y = -1088.869, z = 21.929, heading = 88.768}, inside = {x = 731.816,y = -1088.822,z = 21.733, heading = 269.318}},
+    [4] = { locked = false, outside = { x = 1174.811, y = 2649.954, z = 37.371, heading = 0.450}, inside = {x = 1175.04,y = 2640.216,z = 37.321, heading = 182.402}},
+	[5] = { locked = false, outside = { x = 111.366, y = 6625.840, z = 31.787, heading = 269}, inside = {x = 111.366, y = 6625.840, z = 31.787, heading = 71}},
+	[6] = { locked = false, outside = { x = 1371.013, y = 3595.905, z = 34.895, heading = 155}, inside = {x = 1371.013, y = 3595.905, z = 34.895, heading = 311}},
+	[7] = { locked = false, outside = { x = -81.235, y = 6421.702, z = 31.490, heading = 269.768}, inside = {x = -81.235, y = 6421.702, z = 31.490, heading = 88}},
+	[8] = { locked = false, outside = { x = -199.087, y = -1383.172, z = 31.258, heading = 190}, inside = {x = -199.087, y = -1383.172, z = 31.258, heading = 11}},
+	[9] = { locked = false, outside = { x = -211.614, y = -1324.847, z = 30.890, heading = 270.187}, inside = {x = -211.614, y = -1324.847, z = 30.890, heading = 69.455}},
+	[10] = { locked = false, outside = { x = -1465.312, y = -923.037, z = 10.036, heading = 155.290}, inside = {x = -1465.312, y = -923.037, z = 10.036, heading = 315.413}},
   }
 
 local mods = {[1] = { name = "Spoilers", mod = 0 }, [2] = { name = "Front Bumper", mod = 1 }, [3] = { name = "Rear Bumper", mod = 2 }, [4] = { name = "Side Skirt", mod = 3 }, [5] = { name = "Exhaust", mod = 4 }, [6] = { name = "Roll Cage", mod = 5 }, [7] = { name = "Grille", mod = 6 }, [8] = { name = "Hood", mod = 7 }, [9] = { name = "Fender", mod = 8 }, [10] = { name = "Right Fender", mod = 9 }, [11] = { name = "Roof", mod = 10 }, }
-
 ----------------------------------------------------
 ---------------[	FUNCTIONS 		]---------------
 ----------------------------------------------------
@@ -249,7 +254,8 @@ function SetVehicleInGarage()
 			SetVehicleDoorsLocked(veh,4)
 			SetPlayerInvincible(GetPlayerIndex(),true)
 			SetEntityInvincible(veh,true)
-			SetEntityCollision(veh,false,false)		
+			SetEntityCollision(veh,false,false)	
+			TriggerServerEvent('fx_customs:LockGarage',true,currentGarage)	
       	end
 	end
 end
@@ -272,6 +278,7 @@ function SetVehicleOutsideGarage()
 	SetEntityCollision(veh,true,true)
 	FreezeEntityPosition(veh, false)
 	SetVehicleDoorsLocked(veh,0)
+	TriggerServerEvent('fx_customs:LockGarage',false, currentGarage)	
 	currentGarage = 0  
 end
 
@@ -617,10 +624,10 @@ function SetVehicleMods(data,preview)
 					SetVehicleExtra(veh, id, true)
 				end
 			end
-			if not preview and not data.menupaint then
-			    -- exports.ft_menuBuilder:Freeze(true) WORKING ON COOLDOWN FEATURE
-			    -- Citizen.Wait(1000)
-			    -- exports.ft_menuBuilder:Freeze(false) 
+			if not preview and not data.reset then
+			     -- exports.ft_menuBuilder:Freeze(true) 
+			     -- Citizen.Wait(1000)
+			     -- exports.ft_menuBuilder:Freeze(false) 
 				if damaged then
 					TriggerServerEvent("fx_customs:Notify", "We've applied your vehicle update maybe you might want a repair!")
 				else
@@ -648,13 +655,17 @@ Citizen.CreateThread(function()
 
 			    if distance < 5 and not near then
 			   		if DoesEntityExist(veh) then
-				        drawTxt("Press ~b~ENTER~w~ to enter ~b~Los Santos Customs ",4,1,0.5,0.8,1.0,255,255,255,255) -- DRAWS THE TEXT ON THE SCREEN
-				        if IsControlJustPressed(1, 201) and GetLastInputMethod(2) then -- ENTER KEY IS  201 ON CONTROLS	 	        	
-			   				currentGarage = i
-				        	insidePosition = pos.inside
-				        	outsidePosition = pos.outside
-				        	SetVehicleInGarage()
-	      				end
+			   			if not pos.locked then
+					        drawTxt("Press ~b~ENTER~w~ to enter ~b~Los Santos Customs ",4,1,0.5,0.8,1.0,255,255,255,255) -- DRAWS THE TEXT ON THE SCREEN
+					        if IsControlJustPressed(1, 201) and GetLastInputMethod(2) then -- ENTER KEY IS  201 ON CONTROLS	 	        	
+				   				currentGarage = i
+					        	insidePosition = pos.inside
+					        	outsidePosition = pos.outside
+					        	SetVehicleInGarage()
+		      				end
+		      			else
+		      				drawTxt("~r~Locked, please wait",4,1,0.5,0.8,1.0,255,255,255,255)
+		      			end
 			    	end
 	      		end
 		    end	
@@ -671,6 +682,22 @@ AddEventHandler('playerSpawned', function(spawn)
     AddBlips()
     firstspawn = 1
   end
+end)
+
+RegisterNetEvent('LockGarage')
+AddEventHandler('LockGarage', function(tbl)
+	for i, garage in ipairs(tbl) do
+		locations[i].locked = garage.locked
+	end
+end)
+
+RegisterNetEvent('fx_customs:NotifyClient')
+AddEventHandler('fx_customs:NotifyClient', function(style, text)
+	if style == "normal" then
+	 	SetNotificationTextEntry('STRING')
+	    AddTextComponentString(text)
+	    DrawNotification(false, false)
+	end
 end)
 
 RegisterNetEvent('fx_customs:OriginalState')
